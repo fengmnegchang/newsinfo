@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+     
+   <TabHost
+        android:id="@android:id/tabhost"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </FrameLayout>
+    </TabHost>
+    
+   <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radio1"
+            style="@style/tab_child"
+            android:checked="true"
+            android:drawableTop="@drawable/selector_tab_main2"
+            android:text="首页"/>
+
+        <RadioButton
+            android:id="@+id/radio2"
+            style="@style/tab_child"
+            android:drawableTop="@drawable/selector_tab_main2"
+            android:text="健康养生" />
+        <RadioButton
+            android:id="@+id/radio3"
+            style="@style/tab_child"
+            android:drawableTop="@drawable/selector_tab_main2"
+            android:text="应用号" />
+    </RadioGroup>
+</LinearLayout>
