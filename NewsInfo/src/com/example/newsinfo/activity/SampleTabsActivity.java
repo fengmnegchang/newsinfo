@@ -1,11 +1,5 @@
 package com.example.newsinfo.activity;
 
-import com.example.newsinfo.R;
-import com.example.newsinfo.R.id;
-import com.example.newsinfo.R.layout;
-import com.example.newsinfo.fragment.TestFragment;
-import com.example.newsinfo.indicator.TabPageIndicator;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,8 +7,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.example.newsinfo.R;
+import com.example.newsinfo.fragment.NewsFragment;
+import com.example.newsinfo.indicator.TabPageIndicator;
+
 public class SampleTabsActivity extends FragmentActivity {
-    private static final String[] CONTENT = new String[] { "Recent", "Artists", "Albums", "Songs", "Playlists", "Genres" };
+    private static final String[] CONTENT = new String[] { "首页", "热点", "社会", "股票", "美女", "漫画",
+    	 "搞笑", "科技", "互联网", "财经", "军事", "体育"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class SampleTabsActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return TestFragment.newInstance(CONTENT[position % CONTENT.length]);
+            return NewsFragment.newInstance(CONTENT[position % CONTENT.length]);
         }
 
         @Override

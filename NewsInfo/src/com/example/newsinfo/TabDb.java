@@ -43,7 +43,7 @@ public class TabDb {
 //        return clz;  
 //    }  
     public static Class[] getActivitys(){  
-        Class[] clz={SampleTabsActivity.class,SampleTabsActivity.class,AppWebActivity.class};  
+        Class[] clz={SampleTabsActivity.class,AppWebActivity.class,AppWebActivity.class};  
         return clz;  
     } 
 }

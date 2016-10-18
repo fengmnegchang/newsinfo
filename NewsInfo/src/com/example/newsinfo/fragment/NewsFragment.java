@@ -1,56 +1,53 @@
-/**
- *****************************************************************************************************************************************************************************
- * 
- * @author :fengguangjing
- * @createTime:2016-10-17下午3:44:11
- * @version:4.2.4
- * @modifyTime:
- * @modifyAuthor:
- * @description:
- *****************************************************************************************************************************************************************************
- */
 package com.example.newsinfo.fragment;
 
-import android.app.Activity;
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.TextView;
+import android.widget.ListView;
 
-/**
- ***************************************************************************************************************************************************************************** 
- * 
- * @author :fengguangjing
- * @createTime:2016-10-17下午3:44:11
- * @version:4.2.4
- * @modifyTime:
- * @modifyAuthor:
- * @description:
- ***************************************************************************************************************************************************************************** 
- */
-public class NewsFragment extends Fragment {
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-	}
+import com.example.newsinfo.R;
+import com.example.newsinfo.adapter.NewsAdapter;
+import com.example.newsinfo.bean.NewsBean;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		TextView tvTitle = new TextView(super.getActivity());
-		tvTitle.setText("新闻");
-		tvTitle.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		tvTitle.setGravity(Gravity.CENTER);
-		tvTitle.setTextSize(30);
-		return tvTitle;
-	}
+public final class NewsFragment extends Fragment {
+    private static final String KEY_CONTENT = "TestFragment:Content";
 
-	@Override
-	public void setArguments(Bundle args) {
-		super.setArguments(args);
-	}
+    public static NewsFragment newInstance(String content) {
+    	NewsFragment fragment = new NewsFragment();
+        fragment.mContent = content;
+        return fragment;
+    }
 
+    private String mContent = "";
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if ((savedInstanceState != null) && savedInstanceState.containsKey(KEY_CONTENT)) {
+            mContent = savedInstanceState.getString(KEY_CONTENT);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_news_list, null);
+        ListView listview = (ListView) view.findViewById(R.id.listview);
+        ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+        list.add(new NewsBean());
+        list.add(new NewsBean());
+        list.add(new NewsBean());
+        NewsAdapter mNewsAdapter = new NewsAdapter(getActivity(),list);
+        listview.setAdapter(mNewsAdapter);
+        return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_CONTENT, mContent);
+    }
 }
