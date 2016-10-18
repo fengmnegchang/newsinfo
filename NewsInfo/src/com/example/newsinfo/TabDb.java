@@ -11,6 +11,9 @@
  */
 package com.example.newsinfo;
 
+import com.example.newsinfo.activity.AppWebActivity;
+import com.example.newsinfo.activity.SampleTabsActivity;
+
 /**
  *****************************************************************************************************************************************************************************
  * 
@@ -40,7 +43,7 @@ public class TabDb {
 //        return clz;  
 //    }  
     public static Class[] getActivitys(){  
-        Class[] clz={NewsActivity.class,SampleTabsDefault.class,AppWebActivity.class};  
+        Class[] clz={SampleTabsActivity.class,SampleTabsActivity.class,AppWebActivity.class};  
         return clz;  
     } 
 }
