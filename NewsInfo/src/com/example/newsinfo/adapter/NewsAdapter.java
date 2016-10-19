@@ -94,14 +94,30 @@ public class NewsAdapter extends BaseAdapter {
 			txt_content.setText(bean.getSummary());
 			txt_other.setText(bean.getOther());
 			try {
-				mImageLoader.DisplayImage(bean.getImage_urls().get(0), img_icon);
+				//http://i1.go2yd.com/image.php?url=0EguvefACT&type=thumbnail_200x140 
+				if(bean.getImage_urls().get(0).contains("http:") || bean.getImage_urls().get(0).contains("https:") ){
+					mImageLoader.DisplayImage(bean.getImage_urls().get(0), img_icon);
+				}else{
+					mImageLoader.DisplayImage("http://i1.go2yd.com/image.php?url="+bean.getImage_urls().get(0)+"&type=thumbnail_200x140", img_icon);
+				}
+				
 				if(bean.getImage_urls().size()>=1){
-					mImageLoader.DisplayImage(bean.getImage_urls().get(1), img_icon1);
+					if(bean.getImage_urls().get(1).contains("http:") || bean.getImage_urls().get(1).contains("https:") ){
+						mImageLoader.DisplayImage(bean.getImage_urls().get(1), img_icon1);
+					}else{
+						mImageLoader.DisplayImage("http://i1.go2yd.com/image.php?url="+bean.getImage_urls().get(1)+"&type=thumbnail_200x140", img_icon1);
+					}
+//					mImageLoader.DisplayImage(bean.getImage_urls().get(1), img_icon1);
 				}else{
 					img_icon1.setVisibility(View.INVISIBLE);
 				}
 				if(bean.getImage_urls().size()>=2){
-					mImageLoader.DisplayImage(bean.getImage_urls().get(2), img_icon2);
+					if(bean.getImage_urls().get(2).contains("http:") || bean.getImage_urls().get(2).contains("https:") ){
+						mImageLoader.DisplayImage(bean.getImage_urls().get(2), img_icon2);
+					}else{
+						mImageLoader.DisplayImage("http://i1.go2yd.com/image.php?url="+bean.getImage_urls().get(2)+"&type=thumbnail_200x140", img_icon2);
+					}
+//					mImageLoader.DisplayImage(bean.getImage_urls().get(2), img_icon2);
 				}else{
 					img_icon2.setVisibility(View.INVISIBLE);
 					img_icon1.setVisibility(View.INVISIBLE);
@@ -122,7 +138,12 @@ public class NewsAdapter extends BaseAdapter {
 			txt_other.setText(bean.getOther());
 			
 			if(bean.getImage_urls().size()>0){
-				mImageLoader.DisplayImage(bean.getImage_urls().get(0), img_icon);
+				if(bean.getImage_urls().get(0).contains("http:") || bean.getImage_urls().get(0).contains("https:") ){
+					mImageLoader.DisplayImage(bean.getImage_urls().get(0), img_icon);
+				}else{
+					mImageLoader.DisplayImage("http://i1.go2yd.com/image.php?url="+bean.getImage_urls().get(0)+"&type=thumbnail_200x140", img_icon);
+				}
+//				mImageLoader.DisplayImage(bean.getImage_urls().get(0), img_icon);
 			}else{
 				img_icon.setVisibility(View.GONE);
 			}

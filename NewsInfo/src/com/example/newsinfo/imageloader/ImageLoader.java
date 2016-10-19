@@ -131,22 +131,22 @@ public class ImageLoader {
 		}
 	}
 
-	public File getCache(String path) {
-		File f = null;
-		try {
-			String local_file = Environment.getExternalStorageDirectory()
-					.getAbsolutePath() + "/com.fgj.jcodecraeer/";
-			f = new File(local_file);
-			if (!f.exists()) {
-				f.mkdirs();
-			}
-			path = path.replace("http://www.jcodecraeer.com/", "");
-			local_file = f.getAbsolutePath() + "/" + path;
-			f = new File(local_file);
-		} catch (Exception e) {
-		}
-		return f;
-	}
+//	public File getCache(String path) {
+//		File f = null;
+//		try {
+//			String local_file = Environment.getExternalStorageDirectory()
+//					.getAbsolutePath() + "/com.fgj.jcodecraeer/";
+//			f = new File(local_file);
+//			if (!f.exists()) {
+//				f.mkdirs();
+//			}
+//			path = path.replace("http://www.jcodecraeer.com/", "");
+//			local_file = f.getAbsolutePath() + "/" + path;
+//			f = new File(local_file);
+//		} catch (Exception e) {
+//		}
+//		return f;
+//	}
 
 	public  void saveBitmap(Bitmap bitmap, String path) {
 		try {

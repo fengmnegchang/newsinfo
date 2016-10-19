@@ -14,7 +14,7 @@ import com.example.newsinfo.indicator.TabPageIndicator;
 public class SampleTabsActivity extends FragmentActivity {
     private static final String[] CONTENT = new String[] { "首页", "热点", "社会", "股票", "美女", "漫画",
     	 "搞笑", "科技", "互联网", "财经", "军事", "体育"};
-    private static final String[] URL = new String[] {"http://www.yidianzixun.com/", 
+    private static final String[] URL = new String[] {"http://www.yidianzixun.com/home?page=channel&id=hot", 
     	"http://www.yidianzixun.com/home?page=channel&id=hot", 
     	"http://www.yidianzixun.com/home?page=channel&keyword=%E7%A4%BE%E4%BC%9A",
     	"http://www.yidianzixun.com/home?page=channel&keyword=%E8%82%A1%E7%A5%A8", 
