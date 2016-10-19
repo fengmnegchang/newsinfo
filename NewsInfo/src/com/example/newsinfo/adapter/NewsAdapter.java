@@ -81,7 +81,7 @@ public class NewsAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		NewsBean  bean = (NewsBean) getItem(position);
 		View view;
-		if(bean.getImgurlList().size()>1){
+		if(bean.getImage_urls().size()>1){
 			view = LayoutInflater.from(mContext).inflate(R.layout.item_imgs_news, null);
 			ImageView img_icon = (ImageView) view.findViewById(R.id.img_icon);
 			ImageView img_icon1 = (ImageView) view.findViewById(R.id.img_icon1);
@@ -91,17 +91,17 @@ public class NewsAdapter extends BaseAdapter {
 			TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
 			
 			txt_title.setText(bean.getTitle());
-			txt_content.setText(bean.getContent());
+			txt_content.setText(bean.getSummary());
 			txt_other.setText(bean.getOther());
 			try {
-				mImageLoader.DisplayImage(bean.getImgurlList().get(0), img_icon);
-				if(bean.getImgurlList().size()>=1){
-					mImageLoader.DisplayImage(bean.getImgurlList().get(1), img_icon1);
+				mImageLoader.DisplayImage(bean.getImage_urls().get(0), img_icon);
+				if(bean.getImage_urls().size()>=1){
+					mImageLoader.DisplayImage(bean.getImage_urls().get(1), img_icon1);
 				}else{
 					img_icon1.setVisibility(View.INVISIBLE);
 				}
-				if(bean.getImgurlList().size()>=2){
-					mImageLoader.DisplayImage(bean.getImgurlList().get(2), img_icon2);
+				if(bean.getImage_urls().size()>=2){
+					mImageLoader.DisplayImage(bean.getImage_urls().get(2), img_icon2);
 				}else{
 					img_icon2.setVisibility(View.INVISIBLE);
 					img_icon1.setVisibility(View.INVISIBLE);
@@ -118,11 +118,11 @@ public class NewsAdapter extends BaseAdapter {
 			TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
 			
 			txt_title.setText(bean.getTitle());
-			txt_content.setText(bean.getContent());
+			txt_content.setText(bean.getSummary());
 			txt_other.setText(bean.getOther());
 			
-			if(bean.getImgurlList().size()>0){
-				mImageLoader.DisplayImage(bean.getImgurlList().get(0), img_icon);
+			if(bean.getImage_urls().size()>0){
+				mImageLoader.DisplayImage(bean.getImage_urls().get(0), img_icon);
 			}else{
 				img_icon.setVisibility(View.GONE);
 			}

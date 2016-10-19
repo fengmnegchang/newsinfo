@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,10 +22,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.adapter.NewsAdapter;
 import com.example.newsinfo.bean.NewsBean;
+import com.example.newsinfo.json.NewsBeanJson;
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -40,9 +49,10 @@ public final class NewsFragment extends Fragment {
     String  href = "http://www.yidianzixun.com/home?page=channel&id=hot";
     int pageNo =1;
     
-    public static NewsFragment newInstance(String content) {
+    public static NewsFragment newInstance(String content,String href) {
     	NewsFragment fragment = new NewsFragment();
         fragment.mContent = content;
+        fragment.href = href;
         return fragment;
     }
 
@@ -60,7 +70,7 @@ public final class NewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_list, null);
         mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.pull_refresh_list);
-        mPullRefreshListView.setMode(Mode.PULL_FROM_START);
+        mPullRefreshListView.setMode(Mode.BOTH);
         mNewsAdapter = new NewsAdapter(getActivity(),newsBeanList);
      // Set a listener to be invoked when the list should be refreshed.
  		mPullRefreshListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
@@ -71,16 +81,13 @@ public final class NewsFragment extends Fragment {
  				// Update the LastUpdatedLabel
  				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
  				// Do work to refresh the list here.
-     			new GetDataTask().execute();
+ 				if(mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START){
+ 					new GetDataTask().execute();
+ 				}else if(mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_END){
+ 					volleyJson();
+ 				}
  			}
  		});
- 		
- 		new Handler().postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				mPullRefreshListView.setRefreshing(true);
-			}
-		}, 1000);
         mPullRefreshListView.setAdapter(mNewsAdapter);
      // Do work to refresh the list here.
         return view;
@@ -94,8 +101,9 @@ public final class NewsFragment extends Fragment {
 			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 			try {
 				//解析网络标签
-				list = parseList(href,pageNo);
+			list = parseList(href);
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			return list.toArray(new NewsBean[0]);
 		}
@@ -107,9 +115,6 @@ public final class NewsFragment extends Fragment {
 				newsBeanList.clear();
 				newsBeanList.addAll(Arrays.asList(result));
 				pageNo = 1;
-			}else if(mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_END){
-				newsBeanList.addAll(Arrays.asList(result));
-				pageNo++;
 			}
 			mNewsAdapter.notifyDataSetChanged();
 			// Call onRefreshComplete when the list has been refreshed.
@@ -124,11 +129,45 @@ public final class NewsFragment extends Fragment {
         outState.putString(KEY_CONTENT, mContent);
     }
     
-    public ArrayList<NewsBean>  parseList(String href, final int pageNo){
+    
+    /**
+     * 请求网络数据
+     *  **http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword&display=%E7%83%AD%E7%82%B9&word_type=token&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up
+				 * &cstart=10&cend=20&version=999999&infinite=true
+				 * cstart=20&cend=30
+     */
+    public void volleyJson() {
+		String JSONDataUrl = "http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword&display=%E7%83%AD%E7%82%B9&word_type=token&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&cstart=10&cend=20&version=999999&infinite=true";
+		RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl, null,
+                 new Response.Listener<JSONObject>() {
+                       @Override
+                       public void onResponse(JSONObject response) {
+                             System.out.println("response="+response);
+                             Gson gson = new Gson();
+                             NewsBeanJson mNewsBeanJson = gson.fromJson(response.toString(), NewsBeanJson.class);
+                             if(mNewsBeanJson!=null && mNewsBeanJson.getResult()!=null && mNewsBeanJson.getResult().size()>0){
+                 				newsBeanList.addAll(mNewsBeanJson.getResult());
+                 				pageNo ++;
+                 				mNewsAdapter.notifyDataSetChanged();
+                             }
+                             mPullRefreshListView.onRefreshComplete();
+                        }
+                  },
+                  new Response.ErrorListener() {
+                       @Override
+                       public void onErrorResponse(VolleyError arg0) {
+                             System.out.println("sorry,Error");
+                             mPullRefreshListView.onRefreshComplete();
+                       }
+                  });
+        requestQueue.add(jsonObjectRequest);
+	}
+
+	public ArrayList<NewsBean>  parseList(String href){
 		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 		try {
 			href = makeURL(href, new HashMap<String, Object>(){{
-			    put("PageNo", pageNo);
 		    }});
 			Log.i("url","url = " + href);
 		    
@@ -163,7 +202,7 @@ public final class NewsFragment extends Fragment {
 				    //3imageurl = background-image:url('http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/07pb1QpTNho&type=thumbnail_200x140');
 				    //;nexthref = http://www.yidianzixun.com//home?page=article&id=0Ehnnyy6&up=403
 				    Log.i(TAG, i+"nexthref = "+nexthref);
-				    bean.setNexthref(nexthref);
+				    bean.setUrl(nexthref);
 				    } catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -182,7 +221,7 @@ public final class NewsFragment extends Fragment {
 						    imgurlList.add(imageurl.replace("background-image:url('", "").replace("');", ""));
 				    	}
 				    }
-				    bean.setImgurlList(imgurlList);
+				    bean.setImage_urls(imgurlList);
 				    /**<a href="/home?page=article&amp;id=0EhdcsUn&amp;up=1514" target="_blank">强台风来袭 三沙岛礁“扶树哥”火了</a></h3>
 				     * <div class="article-imgs">
 				     * <a style="background-image:url('http://i1.go2yd.com/image.php?url=0EhdcstMtm&amp;type=thumbnail_200x140');" href="/home?page=article&amp;id=0EhdcsUn&amp;up=1514" target="_blank" class="article-img"></a>
@@ -211,7 +250,7 @@ public final class NewsFragment extends Fragment {
 			    	Element p = contentElement.select("div.article-nofloat p").first();
 			    	String content = p.text();
 				    Log.i(TAG,  i+"content = "+content);
-				    bean.setContent(content);
+				    bean.setSummary(content);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -248,5 +287,31 @@ public final class NewsFragment extends Fragment {
 			//url.append(URLEncoder.encode(String.valueOf(params.get(name)), UTF_8));
 		}
 		return url.toString().replace("?&", "?");
+	}
+    
+    /* (non-Javadoc)
+     * @see android.support.v4.app.Fragment#setUserVisibleHint(boolean)
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+    	// TODO Auto-generated method stub
+    	super.setUserVisibleHint(isVisibleToUser);
+    	if(mContent.equals("首页")){
+    		isVisibleToUser = true;
+		}
+    	initUI(isVisibleToUser);
+    }
+    
+    protected void initUI(final boolean isVisibleToUser) {
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				if (mPullRefreshListView == null || getActivity() == null || !isVisibleToUser) {
+					initUI(isVisibleToUser);
+				} else {
+					mPullRefreshListView.setRefreshing(true);
+				}
+			}
+		}, 500);
 	}
 }
