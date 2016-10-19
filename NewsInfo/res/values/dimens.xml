@@ -13,4 +13,15 @@
     <dimen name="common_text_size_small_2">10dp</dimen>
     <dimen name="common_text_size_small_3">12dp</dimen>
     <dimen name="page_margin_width">12dp</dimen>
+    
+    
+    <dimen name="indicator_right_padding">10dp</dimen>
+    <dimen name="indicator_corner_radius">12dp</dimen>
+    <dimen name="indicator_internal_padding">4dp</dimen>
+    <dimen name="header_footer_left_right_padding">24dp</dimen>
+    <dimen name="header_footer_top_bottom_padding">12dp</dimen>
+    
+    
+    <dimen name="litpic_width">100dip</dimen> 
+    <dimen name="litpic_height">180dip</dimen> 
 </resources>
