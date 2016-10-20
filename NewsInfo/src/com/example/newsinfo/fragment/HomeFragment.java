@@ -43,9 +43,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-public final class NewsFragment extends Fragment {
-	private static final String TAG = NewsFragment.class.getSimpleName();
-	private static final String KEY_CONTENT = "TestFragment:Content";
+public final class HomeFragment extends Fragment {
+	private static final String TAG = HomeFragment.class.getSimpleName();
+	private static final String KEY_CONTENT = "HomeFragment:Content";
 	PullToRefreshListView mPullRefreshListView;
 	ArrayList<NewsBean> newsBeanList = new ArrayList<NewsBean>();
 	NewsAdapter mNewsAdapter;
@@ -54,8 +54,8 @@ public final class NewsFragment extends Fragment {
 	int pageNo = 1;
 	String JSONDataUrl;
 
-	public static NewsFragment newInstance(String content, String href, String JSONDataUrl) {
-		NewsFragment fragment = new NewsFragment();
+	public static HomeFragment newInstance(String content, String href, String JSONDataUrl) {
+		HomeFragment fragment = new HomeFragment();
 		fragment.mContent = content;
 		fragment.href = href;
 		fragment.JSONDataUrl = JSONDataUrl;
@@ -77,7 +77,7 @@ public final class NewsFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_news_list, null);
 		mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.pull_refresh_list);
 		mPullRefreshListView.setMode(Mode.BOTH);
-		mNewsAdapter = new NewsAdapter(getActivity(), newsBeanList,mContent);
+		mNewsAdapter = new NewsAdapter(getActivity(), newsBeanList, mContent);
 		// Set a listener to be invoked when the list should be refreshed.
 		mPullRefreshListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			@Override
@@ -97,9 +97,9 @@ public final class NewsFragment extends Fragment {
 		mPullRefreshListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent = new Intent();		
+				Intent intent = new Intent();
 				intent.setClass(getActivity(), WebViewActivity.class);
-				intent.putExtra("NEWSBEAN", newsBeanList.get((int)id));
+				intent.putExtra("NEWSBEAN", newsBeanList.get((int) id));
 				startActivity(intent);
 			}
 		});
@@ -213,172 +213,119 @@ public final class NewsFragment extends Fragment {
 			Elements beanElements = masthead.select("div.article");
 
 			/**
-			 * <div data-docid="{{docid}}" class="article article-pic"> <a
-			 * href="/home?page=article&id={{docid}}&up={{up}}" target="_blank"
-			 * class="article-pic-item"><img src="{{image}}"> </a> <div
-			 * class="article-nofloat"> <div class="article-info"> <div
-			 * class="article-opts"> <div data-docid="{{docid}}"
-			 * data-datatype="0" class="slide-del"></div> <div
-			 * data-docid="{{docid}}" data-datatype="0"
-			 * class="slide-like ">{{like}}</div><a
-			 * href="/home?page=article&id={{docid}}&up={{up}}#comment"
-			 * target="_blank" class="slide-comment">{{comment_count}}</a> <div
-			 * data-sharetitle="{{title}}" data-shareimage="{{image}}"
-			 * data-shareurl="http://www.yidianzixun.com/article/{{docid}}?s=4"
-			 * class="slide-share">转发</div> </div><span
-			 * class="article-source">{{source}}</span><span
-			 * class="article-date">{{date}}</span> <div class="clear"></div>
-			 * </div> </div> </div>
+			 * <div data-docid="0EiPGidw" class="article"><a style=
+			 * "background-image:url(http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/07r6NzSCPmy&amp;type=thumbnail_200x140);"
+			 * href="/home?page=article&amp;id=0EiPGidw&amp;up=1875"
+			 * target="_blank" class="article-img"></a><div
+			 * class="article-nofloat "><h3><a
+			 * href="/home?page=article&amp;id=0EiPGidw&amp;up=1875"
+			 * target="_blank">靠一条铁链上下山！悬崖上的中国村落</a></h3>
+			 * <p>
+			 * 而百丈悬崖上的铁链是上下山唯一的路，稍有不慎便会命丧崖底。这里就是链子崖，位于湖北省宜昌市秭归县屈原镇的长江西陵峡南岸，
+			 * </p>
+			 * <div class="article-info"><div class="article-opts"><div
+			 * data-docid="0EiPGidw" data-datatype="0"
+			 * class="slide-del"></div><div data-docid="0EiPGidw"
+			 * data-datatype="0" class="slide-like ">41</div><a
+			 * href="/home?page=article&amp;id=0EiPGidw&amp;1875#comment"
+			 * target="_blank" class="slide-comment">4</a><div
+			 * data-sharetitle="靠一条铁链上下山！悬崖上的中国村落" data-shareimage=""
+			 * data-shareurl="http://www.yidianzixun.com/article/0EiPGidw?s=4"
+			 * class="slide-share">转发</div></div><span
+			 * class="article-source">东方网</span><span
+			 * class="article-date">2016-10-20 11:00:00</span><div
+			 * class="clear"></div></div></div><div class="clear"></div></div>
 			 */
 
-			/**
-			 * <div data-docid="0EhiwNzx" class="article article-pic">
-			 * <a href="/home?page=article&amp;id=0EhiwNzx&amp;up=3535" target="_blank" class="article-pic-item">
-			 * <img src="http://static.yidianzixun.com/beauty/imgs/i_000cETSS.jpg"></a><
-			 * div class="article-nofloat">
-			 * <div class="article-info"><div class="article-opts"><div data-docid="0EhiwNzx" data-datatype="0" class="slide-del"></div>
-			 * <div data-docid="0EhiwNzx" data-datatype="0" class="slide-like ">99</div>
-			 * <a href="/home?page=article&amp;id=0EhiwNzx&amp;up=3535#comment" target="_blank" class="slide-comment">2</a>
-			 * <div data-sharetitle="看到眼神心都化了，别总惦记往下看" data-shareimage="" data-shareurl="http://www.yidianzixun.com/article/0EhiwNzx?s=4" class="slide-share">转发</div>
-			 * </div><span class="article-source">一点资讯</span>
-			 * <span class="article-date">2016-10-19 11:26:36</span><div class="clear"></div></div></div></div>
-			 */
-			//美女标签
-			Elements picElements = masthead.select("div.article-pic");
-			if (picElements != null && picElements.size() > 0) {
-				for (int i = 0; i < picElements.size(); i++) {
-					NewsBean bean = new NewsBean();
-					try {
-						// 图片
-						Element imageElement = picElements.get(i);
-						Element astyle = imageElement.select("a").first();
-						String nexthref = UrlUtils.YI_DIAN_ZI_XUN + astyle.attr("href");
-						Log.i(TAG, i + "nexthref = " + nexthref);
-						bean.setUrl(nexthref);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					
-					try {
-						// 图片
-						//<img src="http://static.yidianzixun.com/beauty/imgs/i_000cETSS.jpg">
-						Element imageElement = beanElements.get(i);
-						Elements aElements = imageElement.select("img");
-						ArrayList<String> imgurlList = new ArrayList<String>();
-						for (int y = 0; y < aElements.size(); y++) {
-							Element astyle = aElements.get(y);
-							String imageurl = astyle.attr("src");
-							if (imageurl != null && imageurl.length() >= 0 ) {
-								Log.i(TAG, i + "=====" + y + "imageurl=" + imageurl);
-								imgurlList.add(imageurl);
-							}
-						}
-						bean.setImage_urls(imgurlList);
-					}catch (Exception e) {
-						e.printStackTrace();
-					}
-						
-					try {
-						// 其他
-						Element otherElement = beanElements.get(i);
-						Element otherE = otherElement.select("div.article-info").first();
-						String other = otherE.text();
-						Log.i(TAG, i + "other = " + other);
-						bean.setOther(other);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					list.add(bean);
+			// 其他标签
+			// 解析文件
+			for (int i = 0; i < beanElements.size(); i++) {
+				NewsBean bean = new NewsBean();
+				try {
+					// 图片
+					Element imageElement = beanElements.get(i);
+					Element astyle = imageElement.select("a").first();
+					String nexthref = UrlUtils.YI_DIAN_ZI_XUN + astyle.attr("href");
+					/**
+					 * <a style=
+			 * "background-image:url(http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/07r6NzSCPmy&amp;type=thumbnail_200x140);"
+			 * href="/home?page=article&amp;id=0EiPGidw&amp;up=1875"
+			 * target="_blank" class="article-img"></a>
+					 */
+					Log.i(TAG, i + "nexthref = " + nexthref);
+					bean.setUrl(nexthref);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			} else {
-				//其他标签
-				// 解析文件
-				for (int i = 0; i < beanElements.size(); i++) {
-					NewsBean bean = new NewsBean();
-					try {
-						// 图片
-						Element imageElement = beanElements.get(i);
-						Element astyle = imageElement.select("a").first();
-						String nexthref = UrlUtils.YI_DIAN_ZI_XUN + astyle.attr("href");
-						// 3imageurl =
-						// background-image:url('http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/07pb1QpTNho&type=thumbnail_200x140');
-						// ;nexthref =
-						// http://www.yidianzixun.com//home?page=article&id=0Ehnnyy6&up=403
-						Log.i(TAG, i + "nexthref = " + nexthref);
-						bean.setUrl(nexthref);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
 
-					try {
-						// 图片
-						Element imageElement = beanElements.get(i);
-						Elements aElements = imageElement.select("a");
-						ArrayList<String> imgurlList = new ArrayList<String>();
-						for (int y = 0; y < aElements.size(); y++) {
-							Element astyle = aElements.get(y);
-							// 5=====0imageurl =
-							String imageurl = astyle.attr("style");
-							if (imageurl != null && imageurl.length() >= 0 && imageurl.contains("background-image")) {
-								Log.i(TAG, i + "=====" + y + "imageurl=" + imageurl);
-								imgurlList.add(imageurl.replace("background-image:url('", "").replace("');", ""));
-							}
+				try {
+					// 图片
+					Element imageElement = beanElements.get(i);
+					Elements aElements = imageElement.select("a");
+					ArrayList<String> imgurlList = new ArrayList<String>();
+					for (int y = 0; y < aElements.size(); y++) {
+						Element astyle = aElements.get(y);
+						// 5=====0imageurl =
+						String imageurl = astyle.attr("style");
+						if (imageurl != null && imageurl.length() >= 0 && imageurl.contains("background-image")) {
+							Log.i(TAG, i + "=====" + y + "imageurl=" + imageurl);
+							imgurlList.add(imageurl.replace("background-image:url(", "").replace(");", "").replace("http://i1.go2yd.com/image.php?url=", ""));
 						}
-						bean.setImage_urls(imgurlList);
-						/**
-						 * <a href=
-						 * "/home?page=article&amp;id=0EhdcsUn&amp;up=1514"
-						 * target="_blank">强台风来袭 三沙岛礁“扶树哥”火了</a></h3> <div
-						 * class="article-imgs"> <a style=
-						 * "background-image:url('http://i1.go2yd.com/image.php?url=0EhdcstMtm&amp;type=thumbnail_200x140');"
-						 * href="/home?page=article&amp;id=0EhdcsUn&amp;up=1514"
-						 * target="_blank" class="article-img"></a> <a style=
-						 * "background-image:url('http://i1.go2yd.com/image.php?url=0EhdcsdCQl&amp;type=thumbnail_200x140');"
-						 * href="/home?page=article&amp;id=0EhdcsUn&amp;up=1514"
-						 * target="_blank" class="article-img"></a> <a style=
-						 * "background-image:url('http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/07pLmw496GG&amp;type=thumbnail_200x140');"
-						 * href="/home?page=article&amp;id=0EhdcsUn&amp;up=1514"
-						 * target="_blank" class="article-img"></a> </div>
-						 **/
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
-
-					try {
-						// 标题
-						Element titleElement = beanElements.get(i);
-						Element h3 = titleElement.select("h3 a").first();
-						String title = h3.text();
-						Log.i(TAG, i + "title = " + title);
-						bean.setTitle(title);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-					try {
-						// 内容
-						Element contentElement = beanElements.get(i);
-						Element p = contentElement.select("div.article-nofloat p").first();
-						String content = p.text();
-						Log.i(TAG, i + "content = " + content);
-						bean.setSummary(content);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-					try {
-						// 其他
-						Element otherElement = beanElements.get(i);
-						Element otherE = otherElement.select("div.article-info").first();
-						String other = otherE.text();
-						Log.i(TAG, i + "other = " + other);
-						bean.setOther(other);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					list.add(bean);
+					bean.setImage_urls(imgurlList);
+					/**
+					 * <a href= "/home?page=article&amp;id=0EhdcsUn&amp;up=1514"
+					 * target="_blank">强台风来袭 三沙岛礁“扶树哥”火了</a></h3> <div
+					 * class="article-imgs"> <a style=
+					 * "background-image:url('http://i1.go2yd.com/image.php?url=0EhdcstMtm&amp;type=thumbnail_200x140');"
+					 * href="/home?page=article&amp;id=0EhdcsUn&amp;up=1514"
+					 * target="_blank" class="article-img"></a> <a style=
+					 * "background-image:url('http://i1.go2yd.com/image.php?url=0EhdcsdCQl&amp;type=thumbnail_200x140');"
+					 * href="/home?page=article&amp;id=0EhdcsUn&amp;up=1514"
+					 * target="_blank" class="article-img"></a> <a style=
+					 * "background-image:url('http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/07pLmw496GG&amp;type=thumbnail_200x140');"
+					 * href="/home?page=article&amp;id=0EhdcsUn&amp;up=1514"
+					 * target="_blank" class="article-img"></a> </div>
+					 **/
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
+
+				try {
+					// 标题
+					Element titleElement = beanElements.get(i);
+					Element h3 = titleElement.select("h3 a").first();
+					String title = h3.text();
+					Log.i(TAG, i + "title = " + title);
+					bean.setTitle(title);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				try {
+					// 内容
+					Element contentElement = beanElements.get(i);
+					Element p = contentElement.select("div.article-nofloat p").first();
+					String content = p.text();
+					Log.i(TAG, i + "content = " + content);
+					bean.setSummary(content);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				try {
+					// 其他
+					Element otherElement = beanElements.get(i);
+					Element otherE = otherElement.select("div.article-info").first();
+					String other = otherE.text();
+					Log.i(TAG, i + "other = " + other);
+					bean.setOther(other);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				list.add(bean);
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -411,6 +358,7 @@ public final class NewsFragment extends Fragment {
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		// TODO Auto-generated method stub
 		super.setUserVisibleHint(isVisibleToUser);
+		isVisibleToUser = true;
 		initUI(isVisibleToUser);
 	}
 

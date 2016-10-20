@@ -37,8 +37,8 @@ import com.example.newsinfo.bean.NewsBean;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class AppWebActivity extends Activity {
-	private static final String TAG = AppWebActivity.class.getSimpleName();
+public class WebViewActivity extends Activity {
+	private static final String TAG = WebViewActivity.class.getSimpleName();
 	private WebView webview;
 	/*
 	 * (non-Javadoc)
