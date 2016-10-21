@@ -12,11 +12,9 @@
 package com.example.newsinfo.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -24,7 +22,6 @@ import android.webkit.WebViewClient;
 
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
-import com.example.newsinfo.bean.NewsBean;
 
 /**
  ***************************************************************************************************************************************************************************** 
@@ -37,8 +34,8 @@ import com.example.newsinfo.bean.NewsBean;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class WebViewActivity extends Activity {
-	private static final String TAG = WebViewActivity.class.getSimpleName();
+public class YiDianZiXunActivity extends Activity {
+	private static final String TAG = YiDianZiXunActivity.class.getSimpleName();
 	private WebView webview;
 
 	/*
@@ -51,8 +48,6 @@ public class WebViewActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_app_web);
-		Intent intent = getIntent();
-		NewsBean bean = (NewsBean) intent.getSerializableExtra("NEWSBEAN");
 		webview = (WebView) findViewById(R.id.webview);
 		WebSettings webSettings = webview.getSettings();
 		webSettings.setJavaScriptEnabled(true);
@@ -61,11 +56,7 @@ public class WebViewActivity extends Activity {
 		webview.setWebViewClient(mWebViewClientBase);
 		webview.setWebChromeClient(mWebChromeClientBase);
 
-		if (bean != null) {
-			setTitle(bean.getTitle());
-			Log.i(TAG, "url===" + bean.getUrl());
-			webview.loadUrl(bean.getUrl());
-		}
+		webview.loadUrl(UrlUtils.YI_DIAN_ZI_XUN);
 	}
 
 	private WebViewClientBase mWebViewClientBase = new WebViewClientBase();
@@ -129,7 +120,7 @@ public class WebViewActivity extends Activity {
 		}
 
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -144,5 +135,4 @@ public class WebViewActivity extends Activity {
 			super.onBackPressed();
 		}
 	}
-
 }

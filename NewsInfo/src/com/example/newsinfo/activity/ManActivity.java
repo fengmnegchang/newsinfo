@@ -37,8 +37,8 @@ import com.example.newsinfo.bean.NewsBean;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class WebViewActivity extends Activity {
-	private static final String TAG = WebViewActivity.class.getSimpleName();
+public class ManActivity extends Activity {
+	private static final String TAG = ManActivity.class.getSimpleName();
 	private WebView webview;
 
 	/*
@@ -51,8 +51,7 @@ public class WebViewActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_app_web);
-		Intent intent = getIntent();
-		NewsBean bean = (NewsBean) intent.getSerializableExtra("NEWSBEAN");
+
 		webview = (WebView) findViewById(R.id.webview);
 		WebSettings webSettings = webview.getSettings();
 		webSettings.setJavaScriptEnabled(true);
@@ -61,11 +60,7 @@ public class WebViewActivity extends Activity {
 		webview.setWebViewClient(mWebViewClientBase);
 		webview.setWebChromeClient(mWebChromeClientBase);
 
-		if (bean != null) {
-			setTitle(bean.getTitle());
-			Log.i(TAG, "url===" + bean.getUrl());
-			webview.loadUrl(bean.getUrl());
-		}
+		webview.loadUrl(UrlUtils.MAN);
 	}
 
 	private WebViewClientBase mWebViewClientBase = new WebViewClientBase();
@@ -129,7 +124,7 @@ public class WebViewActivity extends Activity {
 		}
 
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -144,5 +139,4 @@ public class WebViewActivity extends Activity {
 			super.onBackPressed();
 		}
 	}
-
 }

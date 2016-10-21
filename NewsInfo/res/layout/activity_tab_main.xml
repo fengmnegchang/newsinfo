@@ -40,11 +40,11 @@
             android:id="@+id/radio2"
             style="@style/tab_child"
             android:drawableTop="@drawable/selector_tab_main2"
-            android:text="健康养生" />
+            android:text="一点资讯" />
         <RadioButton
             android:id="@+id/radio3"
             style="@style/tab_child"
             android:drawableTop="@drawable/selector_tab_main2"
-            android:text="应用号" />
+            android:text="男人装" />
     </RadioGroup>
 </LinearLayout>

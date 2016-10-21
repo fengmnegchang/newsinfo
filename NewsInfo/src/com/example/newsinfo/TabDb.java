@@ -11,8 +11,9 @@
  */
 package com.example.newsinfo;
 
-import com.example.newsinfo.activity.WebViewActivity;
+import com.example.newsinfo.activity.ManActivity;
 import com.example.newsinfo.activity.SampleTabsActivity;
+import com.example.newsinfo.activity.YiDianZiXunActivity;
 
 /**
  *****************************************************************************************************************************************************************************
@@ -27,7 +28,7 @@ import com.example.newsinfo.activity.SampleTabsActivity;
  */
 public class TabDb {
 	public static String[] getTabsTxt(){  
-        String[] tabs={"首页","健康养生","应用号"};  
+        String[] tabs={"首页","一点资讯","男人装"};  
         return tabs;  
     }  
     public static int[] getTabsImg(){  
@@ -43,7 +44,7 @@ public class TabDb {
 //        return clz;  
 //    }  
     public static Class[] getActivitys(){  
-        Class[] clz={SampleTabsActivity.class,WebViewActivity.class,WebViewActivity.class};  
+        Class[] clz={SampleTabsActivity.class,YiDianZiXunActivity.class,ManActivity.class};  
         return clz;  
     } 
 }
