@@ -43,7 +43,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-public final class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment {
 	private static final String TAG = NewsFragment.class.getSimpleName();
 	private static final String KEY_CONTENT = "TestFragment:Content";
 	PullToRefreshListView mPullRefreshListView;

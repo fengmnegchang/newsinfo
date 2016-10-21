@@ -12,6 +12,8 @@
 package com.example.padandphonedemo;
 
 import com.example.newsinfo.R;
+import com.example.newsinfo.fragment.HomeFragment;
+import com.example.newsinfo.fragment.NewsFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -27,15 +29,15 @@ import android.support.v4.app.FragmentActivity;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class SoundActivity extends FragmentActivity {
+public class NewsActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sound_activity);
+		setContentView(R.layout.news_activity);
 		// Check that the activity is using the layout version with
 		// the fragment_container FrameLayout
-		if (findViewById(R.id.sound_fragment) != null) {
+		if (findViewById(R.id.news_fragment) != null) {
 
 			// However, if we're being restored from a previous state,
 			// then we don't need to do anything and should return or else
@@ -45,12 +47,23 @@ public class SoundActivity extends FragmentActivity {
 			}
 
 			String title = getIntent().getStringExtra("TITLE");
+			String url = getIntent().getStringExtra("URL");
+			String jsondataurl = getIntent().getStringExtra("JSON_DATA_URL");
 			// Create an instance of ExampleFragment
 			// In case this activity was started with special instructions from
 			// an Intent,
 			// pass the Intent's extras to the fragment as arguments
 			// Add the fragment to the 'fragment_container' FrameLayout
-			getSupportFragmentManager().beginTransaction().add(R.id.sound_fragment, SoundFragment.newInstance(title)).commit();
+			if(title.equals("首页")){
+				HomeFragment fragment = HomeFragment.newInstance(title,url,jsondataurl);
+				fragment.setUserVisibleHint(true);
+				getSupportFragmentManager().beginTransaction().add(R.id.news_fragment,fragment ).commit();
+			}else{
+				NewsFragment fragment = NewsFragment.newInstance(title,url,jsondataurl);
+				fragment.setUserVisibleHint(true);
+				getSupportFragmentManager().beginTransaction().add(R.id.news_fragment,fragment ).commit();
+			}
+			
 		}
 	}
 

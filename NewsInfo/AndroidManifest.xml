@@ -50,7 +50,7 @@
             android:label="@string/app_name" 
             />
           <activity
-            android:name="com.example.padandphonedemo.SoundActivity"
+            android:name="com.example.padandphonedemo.NewsActivity"
             android:label="@string/app_name" 
             />
            
