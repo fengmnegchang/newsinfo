@@ -6,9 +6,9 @@
      
    <TabHost
         android:id="@android:id/tabhost"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="50dp"
          >
 
         <TabWidget
@@ -19,39 +19,54 @@
 
         <FrameLayout
             android:id="@android:id/tabcontent"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="match_parent" >
         </FrameLayout>
     </TabHost>
     
    <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
         <RadioButton
             android:id="@+id/radio1"
             style="@style/tab_child"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:checked="true"
-            android:drawableTop="@drawable/selector_tab_main2"
+            android:gravity="center"
+            android:drawableLeft="@drawable/selector_tab_main2"
             android:text="首页"/>
 
         <RadioButton
             android:id="@+id/radio2"
             style="@style/tab_child"
-            android:drawableTop="@drawable/selector_tab_main2"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:drawableLeft="@drawable/selector_tab_main2"
             android:text="一点资讯" />
         <RadioButton
             android:id="@+id/radio3"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
             style="@style/tab_child"
-            android:drawableTop="@drawable/selector_tab_main2"
+            android:drawableLeft="@drawable/selector_tab_main2"
             android:text="男人装" />
         <RadioButton
             android:id="@+id/radio4"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
             style="@style/tab_child"
-            android:drawableTop="@drawable/selector_tab_main2"
+            android:drawableLeft="@drawable/selector_tab_main2"
             android:text="PAD" />
     </RadioGroup>
 </RelativeLayout>

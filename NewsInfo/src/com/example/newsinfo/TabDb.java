@@ -14,6 +14,7 @@ package com.example.newsinfo;
 import com.example.newsinfo.activity.ManActivity;
 import com.example.newsinfo.activity.SampleTabsActivity;
 import com.example.newsinfo.activity.YiDianZiXunActivity;
+import com.example.padandphonedemo.MainActivity;
 
 /**
  *****************************************************************************************************************************************************************************
@@ -28,15 +29,15 @@ import com.example.newsinfo.activity.YiDianZiXunActivity;
  */
 public class TabDb {
 	public static String[] getTabsTxt(){  
-        String[] tabs={"首页","一点资讯","男人装"};  
+        String[] tabs={"首页","一点资讯","男人装","PAD"};  
         return tabs;  
     }  
     public static int[] getTabsImg(){  
-        int[] ids={R.drawable.returnhome,R.drawable.tab_app_new,R.drawable.tab_app_new};  
+        int[] ids={R.drawable.returnhome,R.drawable.tab_app_new,R.drawable.tab_app_new,R.drawable.tab_app_new};  
         return ids;  
     }  
     public static int[] getTabsImgLight(){  
-        int[] ids={R.drawable.returnhome_h,R.drawable.tab_app_new_h,R.drawable.tab_app_new_h};  
+        int[] ids={R.drawable.returnhome_h,R.drawable.tab_app_new_h,R.drawable.tab_app_new_h,R.drawable.tab_app_new_h};  
         return ids;  
     }  
 //    public static Class[] getFragments(){  
@@ -44,7 +45,7 @@ public class TabDb {
 //        return clz;  
 //    }  
     public static Class[] getActivitys(){  
-        Class[] clz={SampleTabsActivity.class,YiDianZiXunActivity.class,ManActivity.class};  
+        Class[] clz={SampleTabsActivity.class,YiDianZiXunActivity.class,ManActivity.class,MainActivity.class};  
         return clz;  
     } 
 }
