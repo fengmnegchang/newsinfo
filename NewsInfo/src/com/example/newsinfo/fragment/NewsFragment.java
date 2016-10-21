@@ -100,6 +100,7 @@ public class NewsFragment extends Fragment {
 				Intent intent = new Intent();		
 				intent.setClass(getActivity(), WebViewActivity.class);
 				intent.putExtra("NEWSBEAN", newsBeanList.get((int)id));
+				intent.putExtra("TITLE", mContent);
 				startActivity(intent);
 			}
 		});

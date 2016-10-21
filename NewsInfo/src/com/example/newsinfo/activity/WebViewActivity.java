@@ -53,6 +53,7 @@ public class WebViewActivity extends Activity {
 		setContentView(R.layout.activity_app_web);
 		Intent intent = getIntent();
 		NewsBean bean = (NewsBean) intent.getSerializableExtra("NEWSBEAN");
+		
 		webview = (WebView) findViewById(R.id.webview);
 		WebSettings webSettings = webview.getSettings();
 		webSettings.setJavaScriptEnabled(true);
@@ -62,9 +63,23 @@ public class WebViewActivity extends Activity {
 		webview.setWebChromeClient(mWebChromeClientBase);
 
 		if (bean != null) {
+			String title = getIntent().getStringExtra("TITLE");
 			setTitle(bean.getTitle());
-			Log.i(TAG, "url===" + bean.getUrl());
-			webview.loadUrl(bean.getUrl());
+			if("美女".equals(title)){
+				//http://www.yidianzixun.com/home?page=article&id=0EizmRvp&up=2515
+				if(bean.getUrl()!=null){
+					Log.i(TAG, "url===" + bean.getUrl());
+					webview.loadUrl(bean.getUrl());
+				}else{
+					String url = "http://www.yidianzixun.com/home?page=article&id="+bean.getItemid()+"&up="+bean.getUp();
+					Log.i(TAG, "url===" + url);
+					webview.loadUrl(url);
+				}
+			}else{
+				Log.i(TAG, "url===" + bean.getUrl());
+				webview.loadUrl(bean.getUrl());
+			}
+			
 		}
 	}
 
