@@ -12,9 +12,9 @@
 package com.example.padandphonedemo;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.newsinfo.R;
-import com.example.newsinfo.activity.SampleTabsActivity;
-import com.example.newsinfo.fragment.HomeFragment;
-import com.example.newsinfo.fragment.NewsFragment;
 
 /**
  ***************************************************************************************************************************************************************************** 
@@ -103,12 +100,12 @@ public class MenuFragment extends Fragment implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View view, int index, long arg3) {
 		if (isTwoPane) {
-			Fragment fragment = null;
-			fragment = new SoundFragment();
+			Fragment fragment = SoundFragment.newInstance(menuItems[index]);
 			getFragmentManager().beginTransaction().replace(R.id.details_layout, fragment).commit();
 		} else {
 			Intent intent = null;
 			intent = new Intent(getActivity(), SoundActivity.class);
+			intent.putExtra("TITLE", menuItems[index]);
 			startActivity(intent);
 		}
 	}

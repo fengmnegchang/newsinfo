@@ -6,10 +6,9 @@
     android:baselineAligned="false"
     android:orientation="horizontal"
     >
-
-    <fragment
-        android:id="@+id/left_fragment"
-        android:name="com.example.padandphonedemo.MenuFragment"
+ 
+    <FrameLayout
+        android:id="@+id/menu_fragment"
         android:layout_width="0dip"
         android:layout_height="fill_parent"
         android:layout_weight="1" />
