@@ -131,22 +131,21 @@ public class ImageLoader {
 		}
 	}
 
-//	public File getCache(String path) {
-//		File f = null;
-//		try {
-//			String local_file = Environment.getExternalStorageDirectory()
-//					.getAbsolutePath() + "/com.fgj.jcodecraeer/";
-//			f = new File(local_file);
-//			if (!f.exists()) {
-//				f.mkdirs();
-//			}
-//			path = path.replace("http://www.jcodecraeer.com/", "");
-//			local_file = f.getAbsolutePath() + "/" + path;
-//			f = new File(local_file);
-//		} catch (Exception e) {
-//		}
-//		return f;
-//	}
+	public File getCache(String path) {
+		File f = null;
+		try {
+			String local_file = Environment.getExternalStorageDirectory()
+					.getAbsolutePath() + "/一点资讯/";
+			f = new File(local_file);
+			if (!f.exists()) {
+				f.mkdirs();
+			}
+			local_file = f.getAbsolutePath() + "/" + path;
+			f = new File(local_file);
+		} catch (Exception e) {
+		}
+		return f;
+	}
 
 	public  void saveBitmap(Bitmap bitmap, String path) {
 		try {
@@ -154,9 +153,9 @@ public class ImageLoader {
 					Environment.MEDIA_MOUNTED)) {
 				return;
 			}
-			String filepath = path.replace("http://www.jcodecraeer.com/", "");
+			String filepath = path;
 			String local_file = Environment.getExternalStorageDirectory()
-					.getAbsolutePath() + "/com.fgj.jcodecraeer/"+filepath;
+					.getAbsolutePath() + "/一点资讯/"+filepath;
 			File f = new File(local_file);
 			if (!f.exists()) {
 				f.mkdirs();

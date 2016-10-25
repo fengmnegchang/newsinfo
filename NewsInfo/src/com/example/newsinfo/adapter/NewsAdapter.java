@@ -94,7 +94,7 @@ public class NewsAdapter extends BaseAdapter {
 		NewsBean bean = (NewsBean) getItem(position);
 		View view;
 		if (mContent.equals("美女")) {
-			view = LayoutInflater.from(mContext).inflate(R.layout.item_meinv_news, null);
+			view = LayoutInflater.from(mContext).inflate(R.layout.adapter_item_meinv_news, null);
 			ImageView img_icon = (ImageView) view.findViewById(R.id.img_icon);
 			TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
 			txt_other.setText(bean.getOther());
@@ -107,7 +107,7 @@ public class NewsAdapter extends BaseAdapter {
 			}
 		} else {
 			if (bean.getImage_urls().size() > 1) {
-				view = LayoutInflater.from(mContext).inflate(R.layout.item_imgs_news, null);
+				view = LayoutInflater.from(mContext).inflate(R.layout.adapter_item_imgs_news, null);
 				ImageView img_icon = (ImageView) view.findViewById(R.id.img_icon);
 				ImageView img_icon1 = (ImageView) view.findViewById(R.id.img_icon1);
 				ImageView img_icon2 = (ImageView) view.findViewById(R.id.img_icon2);
@@ -154,7 +154,7 @@ public class NewsAdapter extends BaseAdapter {
 				}
 
 			} else {
-				view = LayoutInflater.from(mContext).inflate(R.layout.item_news, null);
+				view = LayoutInflater.from(mContext).inflate(R.layout.adapter_item_news, null);
 				ImageView img_icon = (ImageView) view.findViewById(R.id.img_icon);
 				TextView txt_title = (TextView) view.findViewById(R.id.txt_title);
 				TextView txt_content = (TextView) view.findViewById(R.id.txt_content);

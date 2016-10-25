@@ -17,10 +17,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
@@ -61,6 +63,7 @@ public class ManActivity extends Activity {
 		webview.setWebChromeClient(mWebChromeClientBase);
 
 		webview.loadUrl(UrlUtils.MAN);
+		((TextView)findViewById(R.id.search_title)).setVisibility(View.GONE);
 	}
 
 	private WebViewClientBase mWebViewClientBase = new WebViewClientBase();

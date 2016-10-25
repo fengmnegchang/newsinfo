@@ -20,8 +20,10 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
+        android:id="@+id/edit_search"
         android:layout_toLeftOf="@+id/owner_logo"
         android:layout_toRightOf="@+id/yidian_img"
+        android:layout_marginRight="40dp"
         android:background="@drawable/edittext_shape"
         android:hint="大家都在搜：动力"
         android:padding="5dp" />
@@ -33,5 +35,15 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:src="@drawable/navi_profile_default" />
+    
+    <ImageView
+        android:id="@+id/search_btn"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/search_searchagain_icon_nt" 
+        android:visibility="gone"
+        />
 
 </RelativeLayout>

@@ -21,6 +21,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
@@ -64,7 +65,7 @@ public class WebViewActivity extends Activity {
 
 		if (bean != null) {
 			String title = getIntent().getStringExtra("TITLE");
-			setTitle(bean.getTitle());
+			((TextView)findViewById(R.id.search_title)).setText(bean.getTitle());
 			if("美女".equals(title)){
 				//http://www.yidianzixun.com/home?page=article&id=0EizmRvp&up=2515
 				if(bean.getUrl()!=null){
