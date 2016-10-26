@@ -56,6 +56,6 @@
             android:id="@+id/radio4"
             style="@style/tab_child"
             android:drawableTop="@drawable/selector_tab_main2"
-            android:text="PAD" />
+            android:text="频道" />
     </RadioGroup>
 </RelativeLayout>

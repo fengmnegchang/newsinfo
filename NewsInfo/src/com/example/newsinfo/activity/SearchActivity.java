@@ -128,9 +128,12 @@ public class SearchActivity extends CommonActivity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				String jsondataurl = "http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword&word_type=token&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&version=999999&infinite=true";
+				jsondataurl = jsondataurl + "&display=" + list.get((int) id).getKeyword();
 				Intent intent = new Intent();
 				intent.setClass(SearchActivity.this, SearchResultActivity.class);
 				intent.putExtra("NEWSBEAN", list.get((int) id));
+				intent.putExtra("JSON_DATA_URL", jsondataurl);
 				startActivity(intent);
 			}
 		});

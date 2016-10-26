@@ -73,6 +73,7 @@ public class SearchResultActivity extends CommonActivity {
 		super.initValue();
 		setRightNone();
 		bean = (NewsBean) getIntent().getSerializableExtra("NEWSBEAN");
+		String jsondataurl = getIntent().getStringExtra("JSON_DATA_URL");
 		((TextView) findViewById(R.id.text_title)).setText(bean.getTitle());
 		// Check that the activity is using the layout version with
 		// the fragment_container FrameLayout
@@ -86,8 +87,9 @@ public class SearchResultActivity extends CommonActivity {
 			// pass the Intent's extras to the fragment as arguments
 			// Add the fragment to the 'fragment_container' FrameLayout
 			// /home?page=channel&keyword=%E9%9D%92%E4%BA%91%E5%BF%97
-			String jsondataurl = "http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword&word_type=token&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&version=999999&infinite=true";
-			jsondataurl = jsondataurl + "&display=" + bean.getKeyword();
+			//http://www.yidianzixun.com/api/q/?path=channel|news-list-for-channel&channel_id=t96&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&cstart=10&cend=20&version=999999&infinite=true
+//			String jsondataurl = "http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword&word_type=token&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&version=999999&infinite=true";
+//			jsondataurl = jsondataurl + "&display=" + bean.getKeyword();
 			NewsFragment fragment = NewsFragment.newInstance(bean.getTitle(), bean.getUrl(), jsondataurl);// &display=%E7%BE%8E%E5%AE%B9
 			fragment.setUserVisibleHint(true);
 			getSupportFragmentManager().beginTransaction().add(R.id.search_fragment, fragment).commit();

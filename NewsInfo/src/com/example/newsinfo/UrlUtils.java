@@ -25,5 +25,5 @@ package com.example.newsinfo;
 public class UrlUtils {
 	public static final String  YI_DIAN_ZI_XUN= "http://www.yidianzixun.com";
 	public static final String  MAN = "http://enrz.com/";
-
+	public static final String  CHANNEL_LIST= "http://www.yidianzixun.com/home?page=channellist";
 }

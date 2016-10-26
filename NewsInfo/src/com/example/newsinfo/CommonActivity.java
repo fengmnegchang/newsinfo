@@ -256,5 +256,15 @@ public class CommonActivity extends BaseActivity {
 			search_btn.setVisibility(View.GONE);
 		}
 	}
+	
+	/***
+	 * 隐藏左边按钮
+	 */
+	public void setLeftNone() {
+		if (isExtendsCommonActivity) {
+			back_img.setVisibility(View.GONE);
+			yidian_img.setVisibility(View.GONE);
+		}
+	}
 
 }
