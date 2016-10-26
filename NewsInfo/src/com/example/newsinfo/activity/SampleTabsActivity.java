@@ -1,23 +1,19 @@
 package com.example.newsinfo.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.EditText;
 
+import com.example.newsinfo.CommonActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.fragment.HomeFragment;
 import com.example.newsinfo.fragment.NewsFragment;
 import com.example.newsinfo.indicator.TabPageIndicator;
 
-public class SampleTabsActivity extends FragmentActivity {
+public class SampleTabsActivity extends CommonActivity {
 	public static final String[] CONTENT = new String[] { "首页", "热点", "社会", "股票", "美女", "漫画", "搞笑", "科技", "互联网", "财经", "军事", "体育", "趣图", "汽车", "健康", "时尚", "科学" };
 	public static final String[] URL = new String[] { "http://www.yidianzixun.com/home", "http://www.yidianzixun.com/home?page=channel&id=hot",
 			"http://www.yidianzixun.com/home?page=channel&keyword=%E7%A4%BE%E4%BC%9A", "http://www.yidianzixun.com/home?page=channel&keyword=%E8%82%A1%E7%A5%A8",
@@ -51,13 +47,16 @@ public class SampleTabsActivity extends FragmentActivity {
 			"http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword&display=%E7%A7%91%E5%AD%A6&word_type=token&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&version=999999&infinite=true"
 
 	};
-	private EditText editSearch;
 
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.simple_tabs);
+		setCommonActivityLeftCanBack(false);
+		setCommonActivityCenterEditSearch(true);
+		setCommonActivityRightSearch(false);
+		
+		addContentView(R.layout.activity_simple_tabs);
 
 		FragmentPagerAdapter adapter = new GoogleMusicAdapter(getSupportFragmentManager());
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
@@ -66,17 +65,6 @@ public class SampleTabsActivity extends FragmentActivity {
 		TabPageIndicator indicator = (TabPageIndicator) findViewById(R.id.indicator);
 		indicator.setViewPager(pager);
 
-		editSearch = (EditText) findViewById(R.id.edit_search);
-		editSearch.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(SampleTabsActivity.this, SearchActivity.class);
-				startActivity(intent);
-
-			}
-		});
 	}
 
 	class GoogleMusicAdapter extends FragmentPagerAdapter {

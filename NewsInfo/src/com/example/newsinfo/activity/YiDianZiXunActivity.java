@@ -11,17 +11,15 @@
  */
 package com.example.newsinfo.activity;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
-import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
 
+import com.example.newsinfo.CommonActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 
@@ -36,7 +34,7 @@ import com.example.newsinfo.UrlUtils;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class YiDianZiXunActivity extends Activity {
+public class YiDianZiXunActivity extends CommonActivity {
 	private static final String TAG = YiDianZiXunActivity.class.getSimpleName();
 	private WebView webview;
 
@@ -49,8 +47,32 @@ public class YiDianZiXunActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setExtendsCommonActivity(false);
 		setContentView(R.layout.activity_app_web);
+		init();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.example.newsinfo.CommonActivity#findView()
+	 */
+	@Override
+	protected void findView() {
+		// TODO Auto-generated method stub
+		super.findView();
 		webview = (WebView) findViewById(R.id.webview);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.example.newsinfo.CommonActivity#initValue()
+	 */
+	@Override
+	protected void initValue() {
+		// TODO Auto-generated method stub
+		super.initValue();
 		WebSettings webSettings = webview.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setSupportZoom(true);
@@ -59,7 +81,6 @@ public class YiDianZiXunActivity extends Activity {
 		webview.setWebChromeClient(mWebChromeClientBase);
 
 		webview.loadUrl(UrlUtils.YI_DIAN_ZI_XUN);
-		((TextView)findViewById(R.id.search_title)).setVisibility(View.GONE);
 	}
 
 	private WebViewClientBase mWebViewClientBase = new WebViewClientBase();
@@ -123,7 +144,7 @@ public class YiDianZiXunActivity extends Activity {
 		}
 
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 

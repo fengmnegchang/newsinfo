@@ -3,18 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#39f"
-    android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/search_title"
-        android:layout_width="match_parent"
-        android:textSize="18sp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="@android:color/background_light"
-        android:layout_height="40dp" />
 
     <FrameLayout
         android:id="@+id/search_fragment"

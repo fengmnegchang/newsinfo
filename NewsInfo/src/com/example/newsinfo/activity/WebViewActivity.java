@@ -17,12 +17,14 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
+import com.example.newsinfo.CommonActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.NewsBean;
@@ -38,7 +40,7 @@ import com.example.newsinfo.bean.NewsBean;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class WebViewActivity extends Activity {
+public class WebViewActivity extends CommonActivity {
 	private static final String TAG = WebViewActivity.class.getSimpleName();
 	private WebView webview;
 
@@ -51,21 +53,46 @@ public class WebViewActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_app_web);
+		setCommonActivityLeftCanBack(true);
+		setCommonActivityCenterEditSearch(false);
+		setCommonActivityRightSearch(false);
+		addContentView(R.layout.activity_app_web);
+		
+		
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonActivity#findView()
+	 */
+	@Override
+	protected void findView() {
+		// TODO Auto-generated method stub
+		super.findView();
+		webview = (WebView) findViewById(R.id.webview);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonActivity#initValue()
+	 */
+	@Override
+	protected void initValue() {
+		// TODO Auto-generated method stub
+		super.initValue();
 		Intent intent = getIntent();
 		NewsBean bean = (NewsBean) intent.getSerializableExtra("NEWSBEAN");
 		
-		webview = (WebView) findViewById(R.id.webview);
+		
 		WebSettings webSettings = webview.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setSupportZoom(true);
 		webSettings.setUseWideViewPort(true);
 		webview.setWebViewClient(mWebViewClientBase);
 		webview.setWebChromeClient(mWebChromeClientBase);
-
+		setRightNone();
 		if (bean != null) {
 			String title = getIntent().getStringExtra("TITLE");
-			((TextView)findViewById(R.id.search_title)).setText(bean.getTitle());
+			((TextView)findViewById(R.id.text_title)).setText(bean.getTitle());
 			if("美女".equals(title)){
 				//http://www.yidianzixun.com/home?page=article&id=0EizmRvp&up=2515
 				if(bean.getUrl()!=null){
@@ -80,8 +107,8 @@ public class WebViewActivity extends Activity {
 				Log.i(TAG, "url===" + bean.getUrl());
 				webview.loadUrl(bean.getUrl());
 			}
-			
 		}
+		
 	}
 
 	private WebViewClientBase mWebViewClientBase = new WebViewClientBase();
@@ -158,6 +185,22 @@ public class WebViewActivity extends Activity {
 			webview.goBack();
 		} else {
 			super.onBackPressed();
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonActivity#onClick(android.view.View)
+	 */
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.back_img:
+			onBackPressed();
+			break;
+		default:
+			super.onClick(v);
+			break;
 		}
 	}
 

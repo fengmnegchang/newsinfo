@@ -23,7 +23,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,6 +37,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.example.newsinfo.CommonActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.adapter.SearchAdapter;
@@ -58,13 +58,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class SearchActivity extends Activity {
+public class SearchActivity extends CommonActivity {
 	private static final String TAG = SearchActivity.class.getSimpleName();
 	PullToRefreshGridView gridview;
 	SearchAdapter searchAdapter;
 	ArrayList<NewsBean> list = new ArrayList<NewsBean>();
-	ImageView search_btn,owner_logo;
-	EditText edit_search;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -74,42 +72,45 @@ public class SearchActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_search);
-		search_btn = (ImageView) findViewById(R.id.search_btn);
-		owner_logo = (ImageView) findViewById(R.id.owner_logo);
-		edit_search = (EditText) findViewById(R.id.edit_search);
-		search_btn.setVisibility(View.VISIBLE);
-		owner_logo.setVisibility(View.GONE);
-		search_btn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			   //http://www.yidianzixun.com/home?page=channel&keyword=%E5%AE%9E%E7%9B%98
-				String search = edit_search.getText().toString();
-				if(search.length()>0){
-					NewsBean bean = new NewsBean();
-					try {
-						bean.setKeyword(URLEncoder.encode(search, "UTF-8"));
-						bean.setUrl(UrlUtils.YI_DIAN_ZI_XUN+"/home?page=channel&keyword="+URLEncoder.encode(search, "UTF-8"));
-						bean.setTitle(search);
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					Intent intent = new Intent();
-					intent.setClass(SearchActivity.this, SearchResultActivity.class);
-					intent.putExtra("NEWSBEAN", bean );
-					startActivity(intent);
-				}
-				
-			}
-		});
+		setCommonActivityLeftCanBack(true);
+		setCommonActivityCenterEditSearch(true);
+		setCommonActivityRightSearch(true);
 		
-		searchAdapter = new SearchAdapter(this, list);
+		addContentView(R.layout.activity_search);
 		
+		
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonActivity#findView()
+	 */
+	@Override
+	protected void findView() {
+		// TODO Auto-generated method stub
+		super.findView();
 		gridview = (PullToRefreshGridView) findViewById(R.id.gridview);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonActivity#initValue()
+	 */
+	@Override
+	protected void initValue() {
+		// TODO Auto-generated method stub
+		super.initValue();
+		searchAdapter = new SearchAdapter(this, list);
 		gridview.setAdapter(searchAdapter);
 		gridview.setMode(Mode.PULL_FROM_START);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonActivity#bindEvent()
+	 */
+	@Override
+	protected void bindEvent() {
+		// TODO Auto-generated method stub
+		super.bindEvent();
+		search_btn.setOnClickListener(this);
 		gridview.setOnRefreshListener(new OnRefreshListener<GridView>() {
 
 			@Override
@@ -140,6 +141,41 @@ public class SearchActivity extends Activity {
 				gridview.setRefreshing(true);
 			}
 		}, 500);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonActivity#onClick(android.view.View)
+	 */
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.search_btn:
+			//http://www.yidianzixun.com/home?page=channel&keyword=%E5%AE%9E%E7%9B%98
+			String search = edit_search.getText().toString();
+			if(search.length()>0){
+				NewsBean bean = new NewsBean();
+				try {
+					bean.setKeyword(URLEncoder.encode(search, "UTF-8"));
+					bean.setUrl(UrlUtils.YI_DIAN_ZI_XUN+"/home?page=channel&keyword="+URLEncoder.encode(search, "UTF-8"));
+					bean.setTitle(search);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				Intent intent = new Intent();
+				intent.setClass(SearchActivity.this, SearchResultActivity.class);
+				intent.putExtra("NEWSBEAN", bean );
+				startActivity(intent);
+			}
+			break;
+		case R.id.edit_search:// 搜索框
+			break;
+		default:
+			super.onClick(v);
+			break;
+		}
 	}
 
 	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
@@ -334,22 +370,6 @@ public class SearchActivity extends Activity {
 		}
 
 		return list;
-	}
-
-	private String makeURL(String p_url, Map<String, Object> params) {
-		StringBuilder url = new StringBuilder(p_url);
-		if (url.indexOf("?") < 0)
-			url.append('?');
-		for (String name : params.keySet()) {
-			url.append('&');
-			url.append(name);
-			url.append('=');
-			url.append(String.valueOf(params.get(name)));
-			// 不做URLEncoder处理
-			// url.append(URLEncoder.encode(String.valueOf(params.get(name)),
-			// UTF_8));
-		}
-		return url.toString().replace("?&", "?");
 	}
 
 }
