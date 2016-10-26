@@ -155,56 +155,52 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 			// Call onRefreshComplete when the list has been refreshed.
 			mPullRefreshListView.onRefreshComplete();
 
-			if (isFirst) {
-
-				// 将点点加入到ViewGroup中
-				tips = new ImageView[pagerList.size()];
-				for (int i = 0; i < tips.length; i++) {
-					ImageView imageView = new ImageView(getActivity());
-					imageView.setLayoutParams(new LayoutParams(10, 10));
-					tips[i] = imageView;
-					if (i == 0) {
-						tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
-					} else {
-						tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
-					}
-
-					LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-					layoutParams.leftMargin = 5;
-					layoutParams.rightMargin = 5;
-					group.addView(imageView, layoutParams);
+			// 将点点加入到ViewGroup中
+			group.removeAllViews();
+			tips = new ImageView[pagerList.size()];
+			for (int i = 0; i < tips.length; i++) {
+				ImageView imageView = new ImageView(getActivity());
+				imageView.setLayoutParams(new LayoutParams(10, 10));
+				tips[i] = imageView;
+				if (i == 0) {
+					tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
+				} else {
+					tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
 				}
 
-				// 将图片装载到数组中
-				mImageViews = new ImageView[pagerList.size()];
-				for (int i = 0; i < mImageViews.length; i++) {
-					ImageView imageView = new ImageView(getActivity());
-					mImageViews[i] = imageView;
-					final NewsBean bean = pagerList.get(i);
-					imageView.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							Intent intent = new Intent();
-							intent.setClass(getActivity(), WebViewActivity.class);
-							intent.putExtra("NEWSBEAN", bean);
-							startActivity(intent);
-						}
-					});
-					// imageView.setBackgroundResource(imgIdArray[i]);
-					mImageLoader.DisplayImage(bean.getImage(), imageView);
-				}
-
-				// 设置Adapter
-				viewPager.setAdapter(new ViewPagerAdapter());
-				// 设置监听，主要是设置点点的背景
-				viewPager.setOnPageChangeListener(HomeFragment.this);
-				// 设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左滑动
-				viewPager.setCurrentItem((mImageViews.length) * 100);
-				viewPager.setVisibility(View.VISIBLE);
-				group.setVisibility(View.VISIBLE);
-				
-				isFirst = false;
+				LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+				layoutParams.leftMargin = 5;
+				layoutParams.rightMargin = 5;
+				group.addView(imageView, layoutParams);
 			}
+
+			// 将图片装载到数组中
+			mImageViews = new ImageView[pagerList.size()];
+			for (int i = 0; i < mImageViews.length; i++) {
+				ImageView imageView = new ImageView(getActivity());
+				mImageViews[i] = imageView;
+				final NewsBean bean = pagerList.get(i);
+				imageView.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent();
+						intent.setClass(getActivity(), WebViewActivity.class);
+						intent.putExtra("NEWSBEAN", bean);
+						startActivity(intent);
+					}
+				});
+				// imageView.setBackgroundResource(imgIdArray[i]);
+				mImageLoader.DisplayImage(bean.getImage(), imageView);
+			}
+
+			// 设置Adapter
+			viewPager.setAdapter(new ViewPagerAdapter());
+			// 设置监听，主要是设置点点的背景
+			viewPager.setOnPageChangeListener(HomeFragment.this);
+			// 设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左滑动
+			viewPager.setCurrentItem((mImageViews.length) * 100);
+			viewPager.setVisibility(View.VISIBLE);
+			group.setVisibility(View.VISIBLE);
 			super.onPostExecute(result);
 		}
 	}
@@ -215,7 +211,6 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 		outState.putString(KEY_CONTENT, mContent);
 	}
 
- 
 	public ArrayList<NewsBean> parseList(String href) {
 		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 		try {
@@ -263,6 +258,7 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 			 * src="http://si1.go2yd.com/get-image/07qxXjC4AzI"><div
 			 * class="slide-front anim"><h2>丹麦农夫打造世界岛</h2></div></a></div><
 			 */
+			pagerList.clear();
 			for (int i = 0; i < tabpannelElements.size(); i++) {
 				NewsBean bean = new NewsBean();
 				try {
@@ -543,7 +539,6 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 			}
 			return mImageViews[position % mImageViews.length];
 		}
-		
 
 	}
 }
