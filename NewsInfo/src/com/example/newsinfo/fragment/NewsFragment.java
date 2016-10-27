@@ -159,7 +159,7 @@ public class NewsFragment extends Fragment {
 		if (pageNo > 0) {
 			JSONDataUrl = JSONDataUrl + "&cstart=" + pageNo * 10 + "&cend=" + (pageNo + 1) * 10;
 		}
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl, null, new Response.Listener<JSONObject>() {
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl,UrlUtils.getHeaders(), null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
 				System.out.println("response=" + response);

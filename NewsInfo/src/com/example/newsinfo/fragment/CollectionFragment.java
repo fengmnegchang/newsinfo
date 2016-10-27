@@ -54,7 +54,7 @@ public class CollectionFragment extends Fragment {
 	// 热点
 	String href = UrlUtils.PROFILE;
 	int pageNo = 1;
-	String JSONDataUrl;
+	String JSONDataUrl="http://www.yidianzixun.com/api/q?path=interact|get-like&fields=title&fields=image&fields=source&fields=date&fields=channel_name&&fields=summary&fields=comment_count&fields=url&fields=like&max-related=10&infinite=true&fields=is_like&always_summary=true&count=10&last_docid=0E0dtaGQ";
 
 	public static CollectionFragment newInstance(NewsBean newsBean) {
 		CollectionFragment fragment = new CollectionFragment();
@@ -159,7 +159,7 @@ public class CollectionFragment extends Fragment {
 		if (pageNo > 0) {
 			JSONDataUrl = JSONDataUrl + "&cstart=" + pageNo * 10 + "&cend=" + (pageNo + 1) * 10;
 		}
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl, null, new Response.Listener<JSONObject>() {
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl, UrlUtils.getHeaders(),null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
 				System.out.println("response=" + response);

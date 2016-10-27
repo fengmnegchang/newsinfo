@@ -23,6 +23,7 @@ import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.fragment.CollectionFragment;
+import com.example.newsinfo.fragment.OwnerPinDaoFragment;
 import com.example.newsinfo.indicator.TabPageIndicator;
 
 public class OwnerTabsActivity extends CommonFragmentActivity {
@@ -92,7 +93,12 @@ public class OwnerTabsActivity extends CommonFragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			return CollectionFragment.newInstance(channelList.get(position));
+			if(position==0){
+				return CollectionFragment.newInstance(channelList.get(position));
+			}else{
+				return OwnerPinDaoFragment.newInstance(channelList.get(position));
+			}
+			
 		}
 
 		@Override
