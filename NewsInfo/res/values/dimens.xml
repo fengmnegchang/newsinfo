@@ -27,6 +27,6 @@
     
     <dimen name="new_image_width">150dip</dimen> 
     <dimen name="new_image_height">125dip</dimen> 
-    <dimen name="new_meinv_image_height">600dip</dimen> 
+    <dimen name="new_meinv_image_height">500dip</dimen> 
     <dimen name="home_image_height">200dip</dimen> 
 </resources>

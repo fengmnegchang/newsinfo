@@ -3,6 +3,7 @@ package com.example.newsinfo.activity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,22 +22,22 @@ import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.NewsBean;
-import com.example.newsinfo.fragment.PinDaoFragment;
+import com.example.newsinfo.fragment.CollectionFragment;
 import com.example.newsinfo.indicator.TabPageIndicator;
 
-public class PinDaoTabsActivity extends CommonFragmentActivity {
-	public static final String TAG = PinDaoTabsActivity.class.getSimpleName();
+public class OwnerTabsActivity extends CommonFragmentActivity {
+	public static final String TAG = OwnerTabsActivity.class.getSimpleName();
 	ArrayList<NewsBean> channelList = new ArrayList<NewsBean>();
 	FragmentPagerAdapter adapter;
 	TabPageIndicator indicator ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setCommonActivityLeftCanBack(false);
+		setCommonActivityLeftCanBack(true);
 		setCommonActivityCenterEditSearch(false);
 		setCommonActivityRightSearch(false);
 
-		addContentView(R.layout.activity_pindao_tabs,UrlUtils.STATUS_TAB_ACTIVITY_MARGIN_TOP);
+		addContentView(R.layout.activity_owner_tabs,UrlUtils.NONE_STATUS_TAB_ACTIVITY_MARGIN_TOP);
 
 	}
 
@@ -60,10 +61,8 @@ public class PinDaoTabsActivity extends CommonFragmentActivity {
 	protected void initValue() {
 		// TODO Auto-generated method stub
 		super.initValue();
-		text_title.setText("频道");
 		setRightNone();
-		setLeftNone();
-		
+		text_title.setText("个人主页");
 		adapter = new GoogleMusicAdapter(getSupportFragmentManager());
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
 		pager.setAdapter(adapter);
@@ -93,7 +92,7 @@ public class PinDaoTabsActivity extends CommonFragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			return PinDaoFragment.newInstance(channelList.get(position));
+			return CollectionFragment.newInstance(channelList.get(position));
 		}
 
 		@Override
@@ -114,7 +113,7 @@ public class PinDaoTabsActivity extends CommonFragmentActivity {
 			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 			try {
 				// 解析网络标签
-				list = parseList(UrlUtils.CHANNEL_LIST);
+				list = parseList(UrlUtils.PROFILE);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -138,17 +137,15 @@ public class PinDaoTabsActivity extends CommonFragmentActivity {
 				}
 			});
 			Log.i("url", "url = " + href);
-			 
 			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies())
 					.timeout(10000).get();
-			Element masthead = doc.select("div.channellist").first();
-			Elements beanElements = masthead.select("div.cate-box");
-
+			Element masthead = doc.select("ul.profile-nav").first();
+			Elements beanElements = masthead.select("li");
 			// 解析文件
 			for (int i = 0; i < beanElements.size(); i++) {
 				NewsBean bean = new NewsBean();
 				try {
-					Element imageElement = beanElements.get(i).select("h3").first();
+					Element imageElement = beanElements.get(i).select("li").first();
 					String title = imageElement.text();
 					Log.i(TAG, i + "title = " + title);
 					bean.setTitle(title);

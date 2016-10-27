@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.newsinfo.activity.OwnerTabsActivity;
 import com.example.newsinfo.activity.SearchActivity;
 
 /**
@@ -186,13 +187,17 @@ public class CommonFragmentActivity extends BaseFragmentActivity {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
+		Intent intent;
 		switch (v.getId()) {
 		case R.id.edit_search:// 搜索框
-			Intent intent = new Intent();
+			intent = new Intent();
 			intent.setClass(CommonFragmentActivity.this, SearchActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.owner_logo:// 我
+		    intent = new Intent();
+			intent.setClass(CommonFragmentActivity.this, OwnerTabsActivity.class);
+			startActivity(intent);
 			break;
 		case R.id.search_btn:// 右边搜索
 			break;

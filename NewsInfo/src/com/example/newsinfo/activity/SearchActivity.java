@@ -16,6 +16,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -336,7 +337,8 @@ public class SearchActivity extends CommonFragmentActivity {
 			 * </ul>
 			 * </div></div></div>
 			 */
-			Document doc = Jsoup.connect(href).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31").timeout(10000).get();
+			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies())
+					.timeout(10000).get();
 			Element masthead = doc.select("div.search-wrapper").first();
 			Elements beanElements = masthead.select("li");
 

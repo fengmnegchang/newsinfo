@@ -14,6 +14,7 @@ package com.example.newsinfo.fragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -151,8 +152,8 @@ public class PinDaoFragment extends Fragment {
 				}
 			});
 			Log.i("url", "url = " + href);
-
-			Document doc = Jsoup.connect(href).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31").timeout(10000).get();
+			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies())
+					.timeout(10000).get();
 			Element masthead = doc.select("div.channellist").first();
 			Elements beanElements = masthead.select("div.cate-box");
 

@@ -238,55 +238,92 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 			 * </div> </div> <div class="clear"></div> </div>
 			 */
 
-			Document doc = Jsoup.connect(href).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31").timeout(10000).get();
-			Element tabcontent = doc.select("div.tab-content").first();
-			// 图片导航
-			Elements tabpannelElements = tabcontent.select("div.tab-pannel");
 			/**
-			 * <div class="tab-pannel"><a href="http://download.yidianzixun.com"
-			 * target="_blank" class="slide-wrapper"><img src=
-			 * "http://staticimg.yidianzixun.com/s/editor/201601/BGQX3NO1y.png"
-			 * ><div class="slide-front anim"><h2>一点资讯客户端下载</h2>
-			 * </div></a></div><div class="tab-pannel"><a
-			 * href="http://www.yidianzixun.com/0EiCsTCa" target="_blank"
-			 * class="slide-wrapper"><img
-			 * src="http://si1.go2yd.com/get-image/07qxcVnr9Q8"><div
-			 * class="slide-front anim"><h2>菲总统表态“不来硬的”：中国对南海有历史权利</h2>
-			 * </div></a></div><div class="tab-pannel"><a
-			 * href="http://www.yidianzixun.com/0EhfIAAl" target="_blank"
-			 * class="slide-wrapper"><img
-			 * src="http://si1.go2yd.com/get-image/07qxXjC4AzI"><div
-			 * class="slide-front anim"><h2>丹麦农夫打造世界岛</h2></div></a></div><
+			 * JSESSIONID=
+			 * dc4dcbc5ecf258792d24c12faf0b8bb9d050763e38b8b0d2b43bf2d8cdd1640a;
+			 * captcha=s%3Af075e21f410e9e2739aebd21d4817b45.QQ%2
+			 * Bq05pDslaDGkdJFV0uL3ZZQBXtbqf36wYrGsvuQx8;
+			 * Hm_lvt_15fafbae2b9b11d280c79eff3b840e45
+			 * =1477272275,1477358473,1477445179,1477531397;
+			 * Hm_lpvt_15fafbae2b9b11d280c79eff3b840e45=1477538812;
+			 * CNZZDATA1255169715
+			 * =1908767344-1456467599-http%253A%252F%252Fwww.yidianzixun
+			 * .com%252F%7C1477536295;
+			 * cn_9a154edda337ag57c050_dplus=%7B%22distinct_id
+			 * %22%3A%20%221531c6fb95869
+			 * -0a7506d4a-304a4d7d-1aeaa0-1531c6fb959c4%
+			 * 22%2C%22%E6%9D%A5%E6%BA%90
+			 * %E6%B8%A0%E9%81%93%22%3A%20%22%22%2C%22%
+			 * 24session_id%22%3A%201456470997
+			 * %2C%22%24initial_time%22%3A%20%221456467599
+			 * %22%2C%22%24initial_referrer
+			 * %22%3A%20%22http%3A%2F%2Fwww.yidianzixun
+			 * .com%2Fhome%3Fpage%3Dchannel
+			 * %26keyword%3D%25E4%25BA%2592%25E8%2581
+			 * %2594%25E7%25BD%2591%22%2C%22
+			 * %24initial_referring_domain%22%3A%20%
+			 * 22www.yidianzixun.com%22%2C%22%
+			 * 24_sessionid%22%3A%200%2C%22%24_sessionTime%22%3A%201477538873%2C%22%24dp%22%3A%200%2C%22%24_sessionPVTime%22%3A%201477538873%2C%22initial_view_time%22%3A%20%221468565764%22%2C%22initial_referrer%22%3A%20%22http%3A%2F%2Fwww.yidianzixun.com%2Fhome%22%2C%22initial_referrer_domain%22%3A%20%22www.yidianzixun.com%22%2C%22%24recent_outside_referrer%22%3A%20%22%24direct%22
+			 * % 7 D
 			 */
-			pagerList.clear();
-			for (int i = 0; i < tabpannelElements.size(); i++) {
-				NewsBean bean = new NewsBean();
-				try {
-					// 图片
-					Element imageElement = tabpannelElements.get(i);
-					Element astyle = imageElement.select("a").first();
-					String nexthref = astyle.attr("href");
-					Log.i(TAG, i + "nexthref = " + nexthref);
-					bean.setUrl(nexthref);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent)
+//					.cookies(UrlUtils.getCookies())
+					.timeout(10000).get();
+			try {
 
-				try {
-					// 图片
-					Element imageElement = tabpannelElements.get(i);
-					Element astyle = imageElement.select("img").first();
-					String imageurl = astyle.attr("src");
-					if (imageurl != null && imageurl.length() >= 0) {
-						Log.i(TAG, i + "=====" + "imageurl=" + imageurl);
-						bean.setImage(imageurl);
+				Element tabcontent = doc.select("div.tab-content").first();
+				// 图片导航
+				Elements tabpannelElements = tabcontent.select("div.tab-pannel");
+				/**
+				 * <div class="tab-pannel"><a
+				 * href="http://download.yidianzixun.com" target="_blank"
+				 * class="slide-wrapper"><img src=
+				 * "http://staticimg.yidianzixun.com/s/editor/201601/BGQX3NO1y.png"
+				 * ><div class="slide-front anim"><h2>一点资讯客户端下载</h2>
+				 * </div></a></div><div class="tab-pannel"><a
+				 * href="http://www.yidianzixun.com/0EiCsTCa" target="_blank"
+				 * class="slide-wrapper"><img
+				 * src="http://si1.go2yd.com/get-image/07qxcVnr9Q8"><div
+				 * class="slide-front anim"><h2>菲总统表态“不来硬的”：中国对南海有历史权利</h2>
+				 * </div></a></div><div class="tab-pannel"><a
+				 * href="http://www.yidianzixun.com/0EhfIAAl" target="_blank"
+				 * class="slide-wrapper"><img
+				 * src="http://si1.go2yd.com/get-image/07qxXjC4AzI"><div
+				 * class="slide-front anim"><h2>丹麦农夫打造世界岛</h2></div></a></div><
+				 */
+				pagerList.clear();
+				for (int i = 0; i < tabpannelElements.size(); i++) {
+					NewsBean bean = new NewsBean();
+					try {
+						// 图片
+						Element imageElement = tabpannelElements.get(i);
+						Element astyle = imageElement.select("a").first();
+						String nexthref = astyle.attr("href");
+						Log.i(TAG, i + "nexthref = " + nexthref);
+						bean.setUrl(nexthref);
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				pagerList.add(bean);
-			}
 
+					try {
+						// 图片
+						Element imageElement = tabpannelElements.get(i);
+						Element astyle = imageElement.select("img").first();
+						String imageurl = astyle.attr("src");
+						if (imageurl != null && imageurl.length() >= 0) {
+							Log.i(TAG, i + "=====" + "imageurl=" + imageurl);
+							bean.setImage(imageurl);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					pagerList.add(bean);
+				}
+
+			} catch (Exception e) {
+				pagerList.add(new NewsBean());
+				e.printStackTrace();
+			}
 			Element sections = doc.select("div.sections").first();
 			/**
 			 * <div data-docid="0EiPGidw" class="article"><a style=
