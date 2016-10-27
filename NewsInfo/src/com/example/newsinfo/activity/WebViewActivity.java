@@ -11,6 +11,8 @@
  */
 package com.example.newsinfo.activity;
 
+import java.net.URL;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -98,6 +100,8 @@ public class WebViewActivity extends CommonFragmentActivity {
 		webSettings.setUseWideViewPort(true);
 		webview.setWebViewClient(mWebViewClientBase);
 		webview.setWebChromeClient(mWebChromeClientBase);
+//		webSettings.setUserAgentString(UrlUtils.userAgent);
+		
 		setRightNone();
 		if (bean != null) {
 			String title = getIntent().getStringExtra("TITLE");
