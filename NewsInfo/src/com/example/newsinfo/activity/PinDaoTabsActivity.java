@@ -17,14 +17,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
-import com.example.newsinfo.CommonActivity;
+import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.fragment.PinDaoFragment;
 import com.example.newsinfo.indicator.TabPageIndicator;
 
-public class PinDaoTabsActivity extends CommonActivity {
+public class PinDaoTabsActivity extends CommonFragmentActivity {
 	public static final String TAG = PinDaoTabsActivity.class.getSimpleName();
 	ArrayList<NewsBean> channelList = new ArrayList<NewsBean>();
 	FragmentPagerAdapter adapter;
@@ -36,7 +36,7 @@ public class PinDaoTabsActivity extends CommonActivity {
 		setCommonActivityCenterEditSearch(false);
 		setCommonActivityRightSearch(false);
 
-		addContentView(R.layout.activity_pindao_tabs);
+		addContentView(R.layout.activity_pindao_tabs,UrlUtils.STATUS_TAB_ACTIVITY_MARGIN_TOP);
 
 	}
 

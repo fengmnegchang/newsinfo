@@ -11,7 +11,6 @@
  */
 package com.example.newsinfo.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -24,7 +23,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.example.newsinfo.CommonActivity;
+import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.NewsBean;
@@ -40,7 +39,7 @@ import com.example.newsinfo.bean.NewsBean;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class WebViewActivity extends CommonActivity {
+public class WebViewActivity extends CommonFragmentActivity {
 	private static final String TAG = WebViewActivity.class.getSimpleName();
 	private WebView webview;
 
@@ -56,7 +55,7 @@ public class WebViewActivity extends CommonActivity {
 		setCommonActivityLeftCanBack(true);
 		setCommonActivityCenterEditSearch(false);
 		setCommonActivityRightSearch(false);
-		addContentView(R.layout.activity_app_web);
+		addContentView(R.layout.activity_app_web,UrlUtils.NONE_STATUS_TAB_ACTIVITY_MARGIN_TOP);
 		
 		
 	}

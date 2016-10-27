@@ -15,15 +15,19 @@ import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.newsinfo.activity.SearchActivity;
@@ -39,7 +43,7 @@ import com.example.newsinfo.activity.SearchActivity;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class CommonActivity extends BaseActivity {
+public class CommonFragmentActivity extends BaseFragmentActivity {
 	protected ImageView yidian_img;// 左边logo
 	protected EditText edit_search;// 搜索框
 	protected ImageView owner_logo;// 我logo
@@ -47,6 +51,7 @@ public class CommonActivity extends BaseActivity {
 	protected ImageView back_img;// 左边返回
 	protected TextView text_title;// 中间
 	protected View lay_content;// 内容
+	protected RelativeLayout lay_title_bar;
 
 	/**
 	 * 是否继承CommonActivity 默认true
@@ -76,7 +81,6 @@ public class CommonActivity extends BaseActivity {
 	protected void onCreate(@Nullable Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
-
 		if (isExtendsCommonActivity) {
 			setContentView(R.layout.activity_common);
 		}
@@ -85,13 +89,13 @@ public class CommonActivity extends BaseActivity {
 	/**
 	 * 添加view
 	 */
-	public void addContentView(int layoutResID) {
+	public void addContentView(int layoutResID,int topMargin) {
 		if (isExtendsCommonActivity) {
 			LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			lay_content = mLayoutInflater.inflate(layoutResID, null);
 			FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 			lp.gravity = Gravity.TOP | Gravity.LEFT;
-			lp.topMargin = (int) ScreenUtils.getIntToDip(this, 55);
+			lp.topMargin = (int) ScreenUtils.getIntToDip(this, topMargin);
 			addContentView(lay_content, lp);
 			init();
 		}
@@ -113,6 +117,7 @@ public class CommonActivity extends BaseActivity {
 			search_btn = (ImageView) findViewById(R.id.search_btn);
 			back_img = (ImageView) findViewById(R.id.back_img);
 			text_title = (TextView) findViewById(R.id.text_title);
+			
 		}
 	}
 
@@ -184,7 +189,7 @@ public class CommonActivity extends BaseActivity {
 		switch (v.getId()) {
 		case R.id.edit_search:// 搜索框
 			Intent intent = new Intent();
-			intent.setClass(CommonActivity.this, SearchActivity.class);
+			intent.setClass(CommonFragmentActivity.this, SearchActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.owner_logo:// 我

@@ -16,7 +16,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,14 +29,11 @@ import android.os.Handler;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 
-import com.example.newsinfo.CommonActivity;
+import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.adapter.SearchAdapter;
@@ -58,7 +54,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class SearchActivity extends CommonActivity {
+public class SearchActivity extends CommonFragmentActivity {
 	private static final String TAG = SearchActivity.class.getSimpleName();
 	PullToRefreshGridView gridview;
 	SearchAdapter searchAdapter;
@@ -76,7 +72,7 @@ public class SearchActivity extends CommonActivity {
 		setCommonActivityCenterEditSearch(true);
 		setCommonActivityRightSearch(true);
 		
-		addContentView(R.layout.activity_search);
+		addContentView(R.layout.activity_search,UrlUtils.NONE_STATUS_TAB_ACTIVITY_MARGIN_TOP);
 		
 		
 	}

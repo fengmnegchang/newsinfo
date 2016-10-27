@@ -1,24 +1,22 @@
 package com.example.newsinfo.activity;
 
 
-import com.example.newsinfo.R;
-import com.example.newsinfo.TabDb;
-import com.example.newsinfo.R.id;
-import com.example.newsinfo.R.layout;
-
 import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
+
+import com.example.newsinfo.R;
+import com.example.newsinfo.TabDb;
 
 public class MainTabActivity extends  TabActivity implements  OnCheckedChangeListener {
 	private  TabHost tabHost;
@@ -27,6 +25,11 @@ public class MainTabActivity extends  TabActivity implements  OnCheckedChangeLis
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		 //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+ 
 		setContentView(R.layout.activity_tab_main);
 		mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
 		mRadioGroup.setOnCheckedChangeListener(this);

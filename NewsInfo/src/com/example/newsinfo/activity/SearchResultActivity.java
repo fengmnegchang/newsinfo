@@ -12,11 +12,11 @@
 package com.example.newsinfo.activity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
-import com.example.newsinfo.CommonActivity;
+import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
+import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.fragment.NewsFragment;
 
@@ -31,7 +31,7 @@ import com.example.newsinfo.fragment.NewsFragment;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class SearchResultActivity extends CommonActivity {
+public class SearchResultActivity extends CommonFragmentActivity {
 	NewsBean bean;
 
 	/*
@@ -47,7 +47,7 @@ public class SearchResultActivity extends CommonActivity {
 		setCommonActivityCenterEditSearch(false);
 		setCommonActivityRightSearch(false);
 
-		addContentView(R.layout.activity_search_result);
+		addContentView(R.layout.activity_search_result,UrlUtils.NONE_STATUS_TAB_ACTIVITY_MARGIN_TOP);
 		
 	}
 

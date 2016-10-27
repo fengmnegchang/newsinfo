@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/img_icon"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="@dimen/new_meinv_image_height"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:scaleType="fitCenter" />

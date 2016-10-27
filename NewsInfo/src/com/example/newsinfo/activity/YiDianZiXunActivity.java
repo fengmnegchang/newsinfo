@@ -19,7 +19,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.example.newsinfo.CommonActivity;
+import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 
@@ -34,7 +34,7 @@ import com.example.newsinfo.UrlUtils;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class YiDianZiXunActivity extends CommonActivity {
+public class YiDianZiXunActivity extends CommonFragmentActivity {
 	private static final String TAG = YiDianZiXunActivity.class.getSimpleName();
 	private WebView webview;
 

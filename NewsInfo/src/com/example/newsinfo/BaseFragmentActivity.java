@@ -28,7 +28,7 @@ import android.view.View.OnClickListener;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class BaseActivity extends FragmentActivity implements OnClickListener {
+public class BaseFragmentActivity extends FragmentActivity implements OnClickListener {
 
 	/*
 	 * (non-Javadoc)
