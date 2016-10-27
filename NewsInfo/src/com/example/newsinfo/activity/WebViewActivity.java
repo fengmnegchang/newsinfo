@@ -11,12 +11,15 @@
  */
 package com.example.newsinfo.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -57,9 +60,16 @@ public class WebViewActivity extends CommonFragmentActivity {
 		setCommonActivityRightSearch(false);
 		addContentView(R.layout.activity_app_web,UrlUtils.NONE_STATUS_TAB_ACTIVITY_MARGIN_TOP);
 		
-		
 	}
 	
+	public static void synCookies(Context context, String url) {  
+	    CookieSyncManager.createInstance(context);  
+	    CookieManager cookieManager = CookieManager.getInstance();  
+	    cookieManager.setAcceptCookie(true);  
+	    cookieManager.removeSessionCookie();//移除  
+	    cookieManager.setCookie(url, UrlUtils.getWebCookies());//cookies是在HttpClient中获得的cookie  
+	    CookieSyncManager.getInstance().sync();  
+	}  
 	
 	/* (non-Javadoc)
 	 * @see com.example.newsinfo.CommonActivity#findView()
@@ -103,6 +113,7 @@ public class WebViewActivity extends CommonFragmentActivity {
 					webview.loadUrl(url);
 				}
 			}else{
+				synCookies(WebViewActivity.this,bean.getUrl());
 				Log.i(TAG, "url===" + bean.getUrl());
 				webview.loadUrl(bean.getUrl());
 			}

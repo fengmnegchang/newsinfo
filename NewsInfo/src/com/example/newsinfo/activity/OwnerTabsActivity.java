@@ -3,13 +3,13 @@ package com.example.newsinfo.activity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +17,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
@@ -24,22 +27,31 @@ import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.fragment.CollectionFragment;
 import com.example.newsinfo.fragment.OwnerPinDaoFragment;
+import com.example.newsinfo.imageloader.ImageLoader;
 import com.example.newsinfo.indicator.TabPageIndicator;
+import com.example.newsinfo.widget.CircleImageView;
 
 public class OwnerTabsActivity extends CommonFragmentActivity {
 	public static final String TAG = OwnerTabsActivity.class.getSimpleName();
 	ArrayList<NewsBean> channelList = new ArrayList<NewsBean>();
 	FragmentPagerAdapter adapter;
-	TabPageIndicator indicator ;
+	TabPageIndicator indicator;
+	ImageView back_img;// 左边返回
+	ImageView image_settings;
+	TextView text_settings;// 设置
+
+	CircleImageView image_logo;
+	TextView text_name;
+	NewsBean ownerBean;
+	NewsBean settingsBean;
+	ImageLoader mImageLoader;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setCommonActivityLeftCanBack(true);
-		setCommonActivityCenterEditSearch(false);
-		setCommonActivityRightSearch(false);
-
-		addContentView(R.layout.activity_owner_tabs,UrlUtils.NONE_STATUS_TAB_ACTIVITY_MARGIN_TOP);
-
+		setExtendsCommonActivity(false);
+		setContentView(R.layout.activity_owner_tabs);
+		init();
 	}
 
 	/*
@@ -51,6 +63,12 @@ public class OwnerTabsActivity extends CommonFragmentActivity {
 	protected void findView() {
 		// TODO Auto-generated method stub
 		super.findView();
+		back_img = (ImageView) findViewById(R.id.back_img);
+		image_settings = (ImageView) findViewById(R.id.image_settings);
+		text_settings = (TextView) findViewById(R.id.text_settings);
+
+		image_logo = (CircleImageView) findViewById(R.id.image_logo);
+		text_name = (TextView) findViewById(R.id.text_name);
 	}
 
 	/*
@@ -62,16 +80,16 @@ public class OwnerTabsActivity extends CommonFragmentActivity {
 	protected void initValue() {
 		// TODO Auto-generated method stub
 		super.initValue();
-		setRightNone();
-		text_title.setText("个人主页");
 		adapter = new GoogleMusicAdapter(getSupportFragmentManager());
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
 		pager.setAdapter(adapter);
 
 		indicator = (TabPageIndicator) findViewById(R.id.indicator);
 		indicator.setViewPager(pager);
-		
 
+		mImageLoader = new ImageLoader(this);
+		mImageLoader.setRequiredSize(5 * (int) getResources().getDimension(R.dimen.litpic_width));
+		
 		new GetDataTask().execute();
 	}
 
@@ -84,6 +102,37 @@ public class OwnerTabsActivity extends CommonFragmentActivity {
 	protected void bindEvent() {
 		// TODO Auto-generated method stub
 		super.bindEvent();
+		back_img.setOnClickListener(this);
+		image_settings.setOnClickListener(this);
+		text_settings.setOnClickListener(this);
+		image_logo.setOnClickListener(this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.example.newsinfo.CommonFragmentActivity#onClick(android.view.View)
+	 */
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		super.onClick(v);
+		switch (v.getId()) {
+		case R.id.image_settings:
+		case R.id.text_settings:
+		case R.id.image_logo:
+			if(settingsBean!=null){
+				Intent intent = new Intent();
+				intent.setClass(this, WebViewActivity.class);
+				intent.putExtra("NEWSBEAN", settingsBean);
+				intent.putExtra("TITLE", "账号设置");
+				startActivity(intent);
+			}
+			break;
+		default:
+			break;
+		}
 	}
 
 	class GoogleMusicAdapter extends FragmentPagerAdapter {
@@ -93,12 +142,12 @@ public class OwnerTabsActivity extends CommonFragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			if(position==0){
+			if (position == 0) {
 				return CollectionFragment.newInstance(channelList.get(position));
-			}else{
+			} else {
 				return OwnerPinDaoFragment.newInstance(channelList.get(position));
 			}
-			
+
 		}
 
 		@Override
@@ -131,6 +180,11 @@ public class OwnerTabsActivity extends CommonFragmentActivity {
 			channelList.addAll(Arrays.asList(result));
 			adapter.notifyDataSetChanged();
 			indicator.notifyDataSetChanged();
+			//更新ui
+			if(ownerBean!=null){
+//				mImageLoader.DisplayImage(ownerBean.getImage(), image_logo);
+				text_name.setText(ownerBean.getTitle());
+			}
 			super.onPostExecute(result);
 		}
 	}
@@ -143,8 +197,7 @@ public class OwnerTabsActivity extends CommonFragmentActivity {
 				}
 			});
 			Log.i("url", "url = " + href);
-			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies())
-					.timeout(10000).get();
+			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies()).timeout(10000).get();
 			Element masthead = doc.select("ul.profile-nav").first();
 			Elements beanElements = masthead.select("li");
 			// 解析文件
@@ -161,6 +214,29 @@ public class OwnerTabsActivity extends CommonFragmentActivity {
 
 				list.add(bean);
 			}
+
+			// 解析个人信息
+			/**
+			 * <div class="profile-hd"><a href="/home?page=profile-modify"
+			 * class="settings">编辑我的资料</a><a
+			 * href="/home?page=profile-modify"><img src=
+			 * "http://i1.go2yd.com/avatar/h3rd/group1/M02/D6/B8/CmUCBlgESSGAHHeqAAAm-_zpfeE1322387.jpg"
+			 * ></a><h2>御守</h2></div>
+			 */
+			
+			settingsBean = new NewsBean();
+			Element ownerElement = doc.select("div.profile-hd").first();
+			Element aElement = ownerElement.select("a").first();
+			settingsBean.setUrl(UrlUtils.YI_DIAN_ZI_XUN+aElement.attr("href"));
+			settingsBean.setTitle(aElement.text());
+			
+			ownerBean = new NewsBean();
+			Element anextElement = aElement.nextElementSibling();
+			Element imgElement = anextElement.select("img").first();
+			ownerBean.setImage(imgElement.attr("src"));
+			
+			ownerBean.setTitle(ownerElement.select("h2").first().text());
+			ownerBean.setUrl(aElement.attr("href"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
