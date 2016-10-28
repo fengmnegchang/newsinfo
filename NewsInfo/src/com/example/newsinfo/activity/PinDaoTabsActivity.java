@@ -23,7 +23,18 @@ import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.fragment.PinDaoFragment;
 import com.example.newsinfo.indicator.TabPageIndicator;
-
+/**
+ * 
+ *****************************************************************************************************************************************************************************
+ * 频道页面
+ * @author :fengguangjing
+ * @createTime:2016-10-28上午10:35:55
+ * @version:4.2.4
+ * @modifyTime:
+ * @modifyAuthor:
+ * @description:
+ *****************************************************************************************************************************************************************************
+ */
 public class PinDaoTabsActivity extends CommonFragmentActivity {
 	public static final String TAG = PinDaoTabsActivity.class.getSimpleName();
 	ArrayList<NewsBean> channelList = new ArrayList<NewsBean>();
@@ -139,7 +150,7 @@ public class PinDaoTabsActivity extends CommonFragmentActivity {
 			});
 			Log.i("url", "url = " + href);
 			 
-			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies())
+			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent).cookies(SettingsActivity.getCookies())
 					.timeout(10000).get();
 			Element masthead = doc.select("div.channellist").first();
 			Elements beanElements = masthead.select("div.cate-box");

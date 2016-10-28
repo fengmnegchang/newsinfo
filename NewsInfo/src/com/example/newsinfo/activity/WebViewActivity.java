@@ -11,8 +11,6 @@
  */
 package com.example.newsinfo.activity;
 
-import java.net.URL;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -35,7 +33,7 @@ import com.example.newsinfo.bean.NewsBean;
 
 /**
  ***************************************************************************************************************************************************************************** 
- * 
+ * 内嵌webview页面
  * @author :fengguangjing
  * @createTime:2016-10-17下午5:20:10
  * @version:4.2.4
@@ -69,7 +67,7 @@ public class WebViewActivity extends CommonFragmentActivity {
 	    CookieManager cookieManager = CookieManager.getInstance();  
 	    cookieManager.setAcceptCookie(true);  
 	    cookieManager.removeSessionCookie();//移除  
-	    cookieManager.setCookie(url, UrlUtils.getWebCookies());//cookies是在HttpClient中获得的cookie  
+	    cookieManager.setCookie(url, SettingsActivity.getWebCookies());//cookies是在HttpClient中获得的cookie  
 	    CookieSyncManager.getInstance().sync();  
 	}  
 	

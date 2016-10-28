@@ -18,6 +18,18 @@ import android.widget.TextView;
 import com.example.newsinfo.R;
 import com.example.newsinfo.TabDb;
 
+/**
+ * 
+ *****************************************************************************************************************************************************************************
+ * 主tab页面
+ * @author :fengguangjing
+ * @createTime:2016-10-28上午10:35:02
+ * @version:4.2.4
+ * @modifyTime:
+ * @modifyAuthor:
+ * @description:
+ *****************************************************************************************************************************************************************************
+ */
 public class MainTabActivity extends  TabActivity implements  OnCheckedChangeListener {
 	private  TabHost tabHost;
 	RadioGroup mRadioGroup;

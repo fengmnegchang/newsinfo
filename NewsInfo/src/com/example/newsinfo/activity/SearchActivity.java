@@ -16,7 +16,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -46,7 +45,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
 /**
  ***************************************************************************************************************************************************************************** 
- * 
+ * 搜索页面
  * @author :fengguangjing
  * @createTime:2016-10-25下午2:47:49
  * @version:4.2.4
@@ -337,7 +336,7 @@ public class SearchActivity extends CommonFragmentActivity {
 			 * </ul>
 			 * </div></div></div>
 			 */
-			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies())
+			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent).cookies(SettingsActivity.getCookies())
 					.timeout(10000).get();
 			Element masthead = doc.select("div.search-wrapper").first();
 			Elements beanElements = masthead.select("li");

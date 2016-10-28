@@ -118,7 +118,7 @@ public class CommonFragmentActivity extends BaseFragmentActivity {
 			search_btn = (ImageView) findViewById(R.id.search_btn);
 			back_img = (ImageView) findViewById(R.id.back_img);
 			text_title = (TextView) findViewById(R.id.text_title);
-			
+			lay_title_bar = (RelativeLayout) findViewById(R.id.lay_title_bar);
 		}
 	}
 

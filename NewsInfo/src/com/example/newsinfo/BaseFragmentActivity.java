@@ -13,11 +13,14 @@ package com.example.newsinfo;
 
 import java.util.Map;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
+
 
 /**
  ***************************************************************************************************************************************************************************** 
@@ -31,7 +34,9 @@ import android.view.View.OnClickListener;
  ***************************************************************************************************************************************************************************** 
  */
 public class BaseFragmentActivity extends FragmentActivity implements OnClickListener {
-
+	public static final String SHARE_NAME = "NEWS_INFO_PROJECT";
+	public static final String IS_FIRST_IN = "is_first_in";
+	public SharedPreferences mSharedPreferences;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -41,7 +46,7 @@ public class BaseFragmentActivity extends FragmentActivity implements OnClickLis
 	protected void onCreate(@Nullable Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
-		
+		mSharedPreferences =  getSharedPreferences(SHARE_NAME, Context.MODE_PRIVATE);
 	}
 
 	protected void init() {

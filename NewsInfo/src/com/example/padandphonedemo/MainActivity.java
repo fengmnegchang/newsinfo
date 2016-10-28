@@ -4,7 +4,18 @@ import com.example.newsinfo.R;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-
+/**
+ * 
+ *****************************************************************************************************************************************************************************
+ * pad phone适配页面
+ * @author :fengguangjing
+ * @createTime:2016-10-28上午10:36:30
+ * @version:4.2.4
+ * @modifyTime:
+ * @modifyAuthor:
+ * @description:
+ *****************************************************************************************************************************************************************************
+ */
 public class MainActivity extends FragmentActivity {
 
 	@Override

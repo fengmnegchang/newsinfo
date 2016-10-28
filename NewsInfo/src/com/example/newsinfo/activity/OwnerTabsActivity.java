@@ -30,7 +30,18 @@ import com.example.newsinfo.fragment.OwnerPinDaoFragment;
 import com.example.newsinfo.imageloader.ImageLoader;
 import com.example.newsinfo.indicator.TabPageIndicator;
 import com.example.newsinfo.widget.CircleImageView;
-
+/**
+ * 
+ *****************************************************************************************************************************************************************************
+ * wo页面 
+ * @author :fengguangjing
+ * @createTime:2016-10-28上午10:35:45
+ * @version:4.2.4
+ * @modifyTime:
+ * @modifyAuthor:
+ * @description:
+ *****************************************************************************************************************************************************************************
+ */
 public class OwnerTabsActivity extends CommonFragmentActivity {
 	public static final String TAG = OwnerTabsActivity.class.getSimpleName();
 	ArrayList<NewsBean> channelList = new ArrayList<NewsBean>();
@@ -118,12 +129,18 @@ public class OwnerTabsActivity extends CommonFragmentActivity {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		super.onClick(v);
+		Intent intent;
 		switch (v.getId()) {
 		case R.id.image_settings:
+			intent = new Intent();
+			intent.setClass(this, SettingsActivity.class);
+			intent.putExtra("CHANNEL", "OwnerTabsActivity");
+			startActivity(intent);
+			break;
 		case R.id.text_settings:
 		case R.id.image_logo:
 			if(settingsBean!=null){
-				Intent intent = new Intent();
+				intent = new Intent();
 				intent.setClass(this, WebViewActivity.class);
 				intent.putExtra("NEWSBEAN", settingsBean);
 				intent.putExtra("TITLE", "账号设置");
@@ -197,7 +214,7 @@ public class OwnerTabsActivity extends CommonFragmentActivity {
 				}
 			});
 			Log.i("url", "url = " + href);
-			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies()).timeout(10000).get();
+			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent).cookies(SettingsActivity.getCookies()).timeout(10000).get();
 			Element masthead = doc.select("ul.profile-nav").first();
 			Elements beanElements = masthead.select("li");
 			// 解析文件

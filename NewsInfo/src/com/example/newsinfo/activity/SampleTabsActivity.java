@@ -13,7 +13,18 @@ import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.fragment.HomeFragment;
 import com.example.newsinfo.fragment.NewsFragment;
 import com.example.newsinfo.indicator.TabPageIndicator;
-
+/**
+ * 
+ *****************************************************************************************************************************************************************************
+ * 首页tab页面 废弃
+ * @author :fengguangjing
+ * @createTime:2016-10-28上午10:35:20
+ * @version:4.2.4
+ * @modifyTime:
+ * @modifyAuthor:
+ * @description:
+ *****************************************************************************************************************************************************************************
+ */
 public class SampleTabsActivity extends CommonFragmentActivity {
 	public static final String[] CONTENT = new String[] { "首页", "热点", "社会", "股票", "美女", "漫画", "搞笑", "科技", "互联网", "财经", "军事", "体育", "趣图", "汽车", "健康", "时尚", "科学" };
 	public static final String[] URL = new String[] { 

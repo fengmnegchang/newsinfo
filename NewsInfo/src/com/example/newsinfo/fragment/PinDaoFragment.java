@@ -14,7 +14,6 @@ package com.example.newsinfo.fragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,8 +37,8 @@ import android.widget.GridView;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.activity.PinDaoTabsActivity;
-import com.example.newsinfo.activity.SearchActivity;
 import com.example.newsinfo.activity.SearchResultActivity;
+import com.example.newsinfo.activity.SettingsActivity;
 import com.example.newsinfo.adapter.PinDaoAdapter;
 import com.example.newsinfo.bean.NewsBean;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -49,7 +48,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
 /**
  ***************************************************************************************************************************************************************************** 
- * 
+ * 频道
  * @author :fengguangjing
  * @createTime:2016-10-21下午2:48:41
  * @version:4.2.4
@@ -152,7 +151,7 @@ public class PinDaoFragment extends Fragment {
 				}
 			});
 			Log.i("url", "url = " + href);
-			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies())
+			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent).cookies(SettingsActivity.getCookies())
 					.timeout(10000).get();
 			Element masthead = doc.select("div.channellist").first();
 			Elements beanElements = masthead.select("div.cate-box");

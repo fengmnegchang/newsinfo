@@ -6,7 +6,6 @@
     android:fitsSystemWindows="true" >
 
     <include
-        android:id="@+id/lay_titlebar"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         layout="@layout/layout_titlebar" />

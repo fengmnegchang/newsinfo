@@ -23,9 +23,19 @@ import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.fragment.HomeFragment;
 import com.example.newsinfo.fragment.NewsFragment;
-import com.example.newsinfo.fragment.PinDaoFragment;
 import com.example.newsinfo.indicator.TabPageIndicator;
-
+/**
+ * 
+ *****************************************************************************************************************************************************************************
+ * 首页tab页面 动态数据
+ * @author :fengguangjing
+ * @createTime:2016-10-28上午10:35:33
+ * @version:4.2.4
+ * @modifyTime:
+ * @modifyAuthor:
+ * @description:
+ *****************************************************************************************************************************************************************************
+ */
 public class DynamicTabsActivity extends CommonFragmentActivity {
 	public static final String TAG = DynamicTabsActivity.class.getSimpleName();
 	ArrayList<NewsBean> channelList = new ArrayList<NewsBean>();
@@ -142,7 +152,7 @@ public class DynamicTabsActivity extends CommonFragmentActivity {
 			});
 			Log.i("url", "url = " + href);
 
-			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies()).timeout(10000).get();
+			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent).cookies(SettingsActivity.getCookies()).timeout(10000).get();
 			Element masthead = doc.select("div.top-bar-nav-items").first();
 			Elements beanElements = masthead.select("li");
 

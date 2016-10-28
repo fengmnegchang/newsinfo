@@ -33,6 +33,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
+import com.example.newsinfo.activity.SettingsActivity;
 import com.example.newsinfo.activity.WebViewActivity;
 import com.example.newsinfo.adapter.NewsAdapter;
 import com.example.newsinfo.bean.NewsBean;
@@ -42,7 +43,18 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
+/**
+ * 
+ *****************************************************************************************************************************************************************************
+ * 收藏
+ * @author :fengguangjing
+ * @createTime:2016-10-28上午10:36:57
+ * @version:4.2.4
+ * @modifyTime:
+ * @modifyAuthor:
+ * @description:
+ *****************************************************************************************************************************************************************************
+ */
 public class CollectionFragment extends Fragment {
 	private static final String TAG = CollectionFragment.class.getSimpleName();
 	private static final String KEY_CONTENT = "CollectionFragment:Content";
@@ -159,7 +171,7 @@ public class CollectionFragment extends Fragment {
 		if (pageNo > 0) {
 			JSONDataUrl = JSONDataUrl + "&cstart=" + pageNo * 10 + "&cend=" + (pageNo + 1) * 10;
 		}
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl, UrlUtils.getHeaders(),null, new Response.Listener<JSONObject>() {
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl, SettingsActivity.getHeaders(),null, new Response.Listener<JSONObject>() {
 			@Override
 			public void onResponse(JSONObject response) {
 				System.out.println("response=" + response);
@@ -209,7 +221,7 @@ public class CollectionFragment extends Fragment {
 			 * </div> </div> <div class="clear"></div> </div>
 			 */
 
-			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent).cookies(UrlUtils.getCookies())
+			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent).cookies(SettingsActivity.getCookies())
 					.timeout(10000).get();
 			Element masthead = doc.select("div.main-section").first();
 			Elements beanElements = masthead.select("li.article");

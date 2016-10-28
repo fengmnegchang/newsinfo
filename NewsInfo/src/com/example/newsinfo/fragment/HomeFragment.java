@@ -33,6 +33,7 @@ import android.widget.ListView;
 
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
+import com.example.newsinfo.activity.SettingsActivity;
 import com.example.newsinfo.activity.WebViewActivity;
 import com.example.newsinfo.adapter.NewsAdapter;
 import com.example.newsinfo.bean.NewsBean;
@@ -41,7 +42,18 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
+/**
+ * 
+ *****************************************************************************************************************************************************************************
+ * 首页
+ * @author :fengguangjing
+ * @createTime:2016-10-28上午10:37:13
+ * @version:4.2.4
+ * @modifyTime:
+ * @modifyAuthor:
+ * @description:
+ *****************************************************************************************************************************************************************************
+ */
 public final class HomeFragment extends Fragment implements OnPageChangeListener {
 	private static final String TAG = HomeFragment.class.getSimpleName();
 	private static final String KEY_CONTENT = "HomeFragment:Content";
@@ -272,8 +284,8 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 			 * 24_sessionid%22%3A%200%2C%22%24_sessionTime%22%3A%201477538873%2C%22%24dp%22%3A%200%2C%22%24_sessionPVTime%22%3A%201477538873%2C%22initial_view_time%22%3A%20%221468565764%22%2C%22initial_referrer%22%3A%20%22http%3A%2F%2Fwww.yidianzixun.com%2Fhome%22%2C%22initial_referrer_domain%22%3A%20%22www.yidianzixun.com%22%2C%22%24recent_outside_referrer%22%3A%20%22%24direct%22
 			 * % 7 D
 			 */
-			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent)
-					.cookies(UrlUtils.getCookies())
+			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent)
+					.cookies(SettingsActivity.getCookies())
 					.timeout(10000).get();
 			try {
 
@@ -327,6 +339,7 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 				}
 
 			} catch (Exception e) {
+				pagerList.clear();
 				pagerList.add(new NewsBean());
 				e.printStackTrace();
 			}
