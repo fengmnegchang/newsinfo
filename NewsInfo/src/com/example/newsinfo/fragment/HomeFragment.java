@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,6 +32,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.activity.SettingsActivity;
@@ -38,6 +45,8 @@ import com.example.newsinfo.activity.WebViewActivity;
 import com.example.newsinfo.adapter.NewsAdapter;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.imageloader.ImageLoader;
+import com.example.newsinfo.json.NewsBeanJson;
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -112,7 +121,7 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 		mImageLoader = new ImageLoader(getActivity());
 		mImageLoader.setRequiredSize(5 * (int) getActivity().getResources().getDimension(R.dimen.litpic_width));
 
-		mPullRefreshListView.setMode(Mode.PULL_FROM_START);
+		mPullRefreshListView.setMode(Mode.BOTH);
 		mNewsAdapter = new NewsAdapter(getActivity(), newsBeanList, mContent);
 		// Set a listener to be invoked when the list should be refreshed.
 		mPullRefreshListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
@@ -122,7 +131,12 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 				// Update the LastUpdatedLabel
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 				// Do work to refresh the list here.
-				new GetDataTask().execute();
+//				new GetDataTask().execute();
+				if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
+					new GetDataTask().execute();
+				} else if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_END) {
+					volleyJson();
+				}
 			}
 		});
 		mPullRefreshListView.setAdapter(mNewsAdapter);
@@ -140,6 +154,45 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 		return view;
 	}
 
+	
+	/**
+	 * 请求网络数据
+	 * **http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword
+	 * &display
+	 * =%E7%83%AD%E7%82%B9&word_type=token&fields=docid&fields=category&fields
+	 * =date
+	 * &fields=image&fields=image_urls&fields=like&fields=source&fields=title
+	 * &fields=url&fields=comment_count&fields=summary&fields=up
+	 * &cstart=10&cend=20&version=999999&infinite=true cstart=20&cend=30
+	 */
+	public void volleyJson() {
+		RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+		if (pageNo > 0) {
+			JSONDataUrl = JSONDataUrl + "&cstart=" + pageNo * 10 + "&cend=" + (pageNo + 1) * 10;
+		}
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl,SettingsActivity.getHeaders(), null, new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				System.out.println("response=" + response);
+				Gson gson = new Gson();
+				NewsBeanJson mNewsBeanJson = gson.fromJson(response.toString(), NewsBeanJson.class);
+				if (mNewsBeanJson != null && mNewsBeanJson.getResult() != null && mNewsBeanJson.getResult().size() > 0) {
+					newsBeanList.addAll(mNewsBeanJson.getResult());
+					pageNo++;
+					mNewsAdapter.notifyDataSetChanged();
+				}
+				mPullRefreshListView.onRefreshComplete();
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError arg0) {
+				System.out.println("sorry,Error");
+				mPullRefreshListView.onRefreshComplete();
+			}
+		});
+		requestQueue.add(jsonObjectRequest);
+	}
+	
 	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
 
 		@Override
