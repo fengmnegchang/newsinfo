@@ -25,6 +25,8 @@
         android:layout_marginLeft="10dp"
         android:text="王宝强坐红车抵达法院 穿黑衣表情严肃"
         android:textSize="16sp"
+        android:textColor="@color/text_color_black"
+        android:typeface="sans"
         />
     <TextView
         android:id="@+id/txt_content"
@@ -36,6 +38,7 @@
         android:layout_marginTop="8dp"
         android:text="10月18日下午，王宝强起诉马蓉离婚，以及马蓉起诉王宝强名誉侵权两个案件相继在朝阳法院开庭审理。王宝强不仅提出要求孩子抚"
         android:textSize="14sp"
+        android:textColor="@color/text_color_777"
         />
 		<TextView
         android:id="@+id/txt_other"
@@ -47,5 +50,6 @@
         android:layout_below="@+id/txt_content"
         android:text="拍者2016-10-18 14:11:00"
         android:textSize="12sp"
+        android:textColor="@color/text_color_999"
         />
 </RelativeLayout>

@@ -25,4 +25,7 @@
     <color name="tab_indicator_text_unselected">#aac5d7</color>
     <color name="page_viewer_margin_color">#007800</color>
 
+    <color name="text_color_999">#999</color>
+    <color name="text_color_777">#777</color>
+    <color name="text_color_black">#3f484f</color>
 </resources>
