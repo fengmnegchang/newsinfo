@@ -117,7 +117,9 @@ public class PinDaoFragment extends Fragment {
 				
 				NewsBean intentBean = list.get((int) id);
 				intentBean.setTitle(intentBean.getName());
-				intentBean.setUrl(UrlUtils.YI_DIAN_ZI_XUN+"/home?page=channel&id="+intentBean.getId());
+				if(intentBean.getUrl()== null || "".equals(intentBean.getUrl())){
+					intentBean.setUrl(UrlUtils.YI_DIAN_ZI_XUN+"/home?page=channel&id="+intentBean.getId());
+				} 
 				
 				Intent intent = new Intent();
 				intent.setClass(getActivity(), SearchResultActivity.class);
