@@ -199,8 +199,14 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 			viewPager.setOnPageChangeListener(HomeFragment.this);
 			// 设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左滑动
 			viewPager.setCurrentItem((mImageViews.length) * 100);
-			viewPager.setVisibility(View.VISIBLE);
-			group.setVisibility(View.VISIBLE);
+			
+			if(pagerList.size()==1){
+				viewPager.setVisibility(View.GONE);
+				group.setVisibility(View.GONE);
+			}else{
+				viewPager.setVisibility(View.VISIBLE);
+				group.setVisibility(View.VISIBLE);
+			}
 			super.onPostExecute(result);
 		}
 	}
@@ -267,7 +273,7 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 			 * % 7 D
 			 */
 			Document doc = Jsoup.connect(href).userAgent(UrlUtils.userAgent)
-//					.cookies(UrlUtils.getCookies())
+					.cookies(UrlUtils.getCookies())
 					.timeout(10000).get();
 			try {
 

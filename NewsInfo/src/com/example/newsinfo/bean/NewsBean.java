@@ -63,6 +63,7 @@ public class NewsBean implements Serializable{
 	private String itemid;//跳转链接 http://www.yidianzixun.com/home?page=article&id=0Ehiw9j2&up=579
     private int up;
     private String keyword;
+    private String jsondataurl;
 	
 	public ArrayList<String> getImage_urls() {
 		return image_urls;
@@ -142,6 +143,14 @@ public class NewsBean implements Serializable{
 
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
+	}
+
+	public String getJsondataurl() {
+		return jsondataurl;
+	}
+
+	public void setJsondataurl(String jsondataurl) {
+		this.jsondataurl = jsondataurl;
 	}
 	
 	

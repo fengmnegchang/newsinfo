@@ -16,7 +16,9 @@ import com.example.newsinfo.indicator.TabPageIndicator;
 
 public class SampleTabsActivity extends CommonFragmentActivity {
 	public static final String[] CONTENT = new String[] { "首页", "热点", "社会", "股票", "美女", "漫画", "搞笑", "科技", "互联网", "财经", "军事", "体育", "趣图", "汽车", "健康", "时尚", "科学" };
-	public static final String[] URL = new String[] { "http://www.yidianzixun.com/home", "http://www.yidianzixun.com/home?page=channel&id=hot",
+	public static final String[] URL = new String[] { 
+		"http://www.yidianzixun.com/home",
+		"http://www.yidianzixun.com/home?page=channel&id=hot",
 			"http://www.yidianzixun.com/home?page=channel&keyword=%E7%A4%BE%E4%BC%9A", "http://www.yidianzixun.com/home?page=channel&keyword=%E8%82%A1%E7%A5%A8",
 			"http://www.yidianzixun.com/home?page=channel&keyword=%E7%BE%8E%E5%A5%B3", "http://www.yidianzixun.com/home?page=channel&keyword=%E6%BC%AB%E7%94%BB",
 			"http://www.yidianzixun.com/home?page=channel&keyword=%E6%90%9E%E7%AC%91", "http://www.yidianzixun.com/home?page=channel&keyword=%E7%A7%91%E6%8A%80",
@@ -28,7 +30,7 @@ public class SampleTabsActivity extends CommonFragmentActivity {
 			"http://www.yidianzixun.com/home?page=channel&keyword=%E7%A7%91%E5%AD%A6" };
 
 	public static final String[] JSON_DATA_URL = new String[] {
-			"http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword&display=%E7%83%AD%E7%82%B9&word_type=token&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&version=999999&infinite=true",
+		   "http://www.yidianzixun.com/api/q/?path=channel|news-list-for-best-channel&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=up&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&cstart=17&cend=27&version=999999&infinite=true",
 			"http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword&display=%E7%83%AD%E7%82%B9&word_type=token&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&version=999999&infinite=true",
 			"http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword&display=%E7%A4%BE%E4%BC%9A&word_type=token&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&version=999999&infinite=true",
 			"http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword&display=%E8%82%A1%E7%A5%A8&word_type=token&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&version=999999&infinite=true",

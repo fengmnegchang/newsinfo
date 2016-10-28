@@ -11,11 +11,10 @@
  */
 package com.example.newsinfo;
 
+import com.example.newsinfo.activity.DynamicTabsActivity;
 import com.example.newsinfo.activity.ManActivity;
 import com.example.newsinfo.activity.PinDaoTabsActivity;
-import com.example.newsinfo.activity.SampleTabsActivity;
 import com.example.newsinfo.activity.YiDianZiXunActivity;
-import com.example.padandphonedemo.MainActivity;
 
 /**
  *****************************************************************************************************************************************************************************
@@ -46,7 +45,7 @@ public class TabDb {
 //        return clz;  
 //    }  
     public static Class[] getActivitys(){  
-        Class[] clz={SampleTabsActivity.class,YiDianZiXunActivity.class,ManActivity.class,PinDaoTabsActivity.class};  
+        Class[] clz={DynamicTabsActivity.class,YiDianZiXunActivity.class,ManActivity.class,PinDaoTabsActivity.class};  
         return clz;  
     } 
 }
