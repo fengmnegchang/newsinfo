@@ -92,7 +92,7 @@ public class PinDaoAdapter extends BaseAdapter {
 		View view = LayoutInflater.from(mContext).inflate(R.layout.adapter_pindao, null);
 		TextView textview = (TextView) view.findViewById(R.id.textview);
 		ImageView image_pindao = (ImageView) view.findViewById(R.id.image_pindao);
-		textview.setText(getItem(position).getTitle());
+		textview.setText(getItem(position).getName());
 		mImageLoader.DisplayImage(getItem(position).getImage(), image_pindao);
 		return view;
 	}

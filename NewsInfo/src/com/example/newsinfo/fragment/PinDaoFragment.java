@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,6 +35,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.activity.PinDaoTabsActivity;
@@ -41,6 +48,8 @@ import com.example.newsinfo.activity.SearchResultActivity;
 import com.example.newsinfo.activity.SettingsActivity;
 import com.example.newsinfo.adapter.PinDaoAdapter;
 import com.example.newsinfo.bean.NewsBean;
+import com.example.newsinfo.json.NewsBeanJson;
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -63,7 +72,9 @@ public class PinDaoFragment extends Fragment {
 	PullToRefreshGridView gridview;
 	PinDaoAdapter pinDaoAdapter;
 	ArrayList<NewsBean> list = new ArrayList<NewsBean>();
-
+	int pageNo = 1;
+	String JSONDataUrl;
+	
 	public static PinDaoFragment newInstance(NewsBean newsBean) {
 		PinDaoFragment fragment = new PinDaoFragment();
 		fragment.newsBean = newsBean;
@@ -76,7 +87,7 @@ public class PinDaoFragment extends Fragment {
 
 		pinDaoAdapter = new PinDaoAdapter(getActivity(), list);
 		gridview.setAdapter(pinDaoAdapter);
-		gridview.setMode(Mode.PULL_FROM_START);
+		gridview.setMode(Mode.BOTH);
 		gridview.setOnRefreshListener(new OnRefreshListener<GridView>() {
 
 			@Override
@@ -87,6 +98,10 @@ public class PinDaoFragment extends Fragment {
 				// Do work to refresh the list here.
 				if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
 					new GetDataTask().execute();
+				}else if (gridview.getCurrentMode() == Mode.PULL_FROM_END) {
+					if(pageNo==1){
+						volleyJson();
+					}
 				}
 			}
 		});
@@ -98,10 +113,15 @@ public class PinDaoFragment extends Fragment {
 		        //http://www.yidianzixun.com/home?page=channel&id=t96
 				
 				String jsondataurl = "http://www.yidianzixun.com/api/q/?path=channel|news-list-for-channel&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&version=999999&infinite=true";
-				jsondataurl = jsondataurl + "&channel_id=" + list.get((int) id).getItemid();
+				jsondataurl = jsondataurl + "&channel_id=" + list.get((int) id).getId();
+				
+				NewsBean intentBean = list.get((int) id);
+				intentBean.setTitle(intentBean.getName());
+				intentBean.setUrl(UrlUtils.YI_DIAN_ZI_XUN+"/home?page=channel&id="+intentBean.getId());
+				
 				Intent intent = new Intent();
 				intent.setClass(getActivity(), SearchResultActivity.class);
-				intent.putExtra("NEWSBEAN", list.get((int) id));
+				intent.putExtra("NEWSBEAN", intentBean);
 				intent.putExtra("JSON_DATA_URL", jsondataurl);
 				startActivity(intent);
 			}
@@ -136,11 +156,50 @@ public class PinDaoFragment extends Fragment {
 			if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
 				list.clear();
 				list.addAll(Arrays.asList(result));
+				pageNo = 1;
 			}
 			pinDaoAdapter.notifyDataSetChanged();
 			// Call onRefreshComplete when the list has been refreshed.
 			gridview.onRefreshComplete();
 		}
+	}
+	
+	/**
+	 * 请求网络数据
+	 * **http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword
+	 * &display
+	 * =%E7%83%AD%E7%82%B9&word_type=token&fields=docid&fields=category&fields
+	 * =date
+	 * &fields=image&fields=image_urls&fields=like&fields=source&fields=title
+	 * &fields=url&fields=comment_count&fields=summary&fields=up
+	 * &cstart=10&cend=20&version=999999&infinite=true cstart=20&cend=30
+	 */
+	public void volleyJson() {
+		RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+		if (pageNo > 0) {
+			JSONDataUrl = newsBean.getJsondataurl();
+		}
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl,SettingsActivity.getHeaders(), null, new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				System.out.println("response=" + response);
+				Gson gson = new Gson();
+				NewsBeanJson mNewsBeanJson = gson.fromJson(response.toString(), NewsBeanJson.class);
+				if (mNewsBeanJson != null && mNewsBeanJson.getChannels() != null && mNewsBeanJson.getChannels().size() > 0) {
+					list.addAll(mNewsBeanJson.getChannels());
+					pageNo++;
+					pinDaoAdapter.notifyDataSetChanged();
+				}
+				gridview.onRefreshComplete();
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError arg0) {
+				System.out.println("sorry,Error");
+				gridview.onRefreshComplete();
+			}
+		});
+		requestQueue.add(jsonObjectRequest);
 	}
 
 	public ArrayList<NewsBean> parseList(String href) {
@@ -177,9 +236,9 @@ public class PinDaoFragment extends Fragment {
 						for (int y = 0; y < liElements.size(); y++) {
 							NewsBean bean = new NewsBean();
 							Element aElement = liElements.get(y).select("a").first();
-							bean.setTitle(aElement.text());
+							bean.setName(aElement.text());
 							
-							bean.setItemid(aElement.attr("href").replace("/home?page=channel&amp;id=", ""));
+							bean.setId(aElement.attr("href").replace("/home?page=channel&amp;id=", ""));
 							bean.setUrl(UrlUtils.YI_DIAN_ZI_XUN + aElement.attr("href"));
 
 							Element imgElement = liElements.get(y).select("img").first();

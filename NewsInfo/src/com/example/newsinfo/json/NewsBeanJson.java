@@ -28,6 +28,7 @@ import com.example.newsinfo.bean.NewsBean;
  */
 public class NewsBeanJson extends StatusJson {
 	private ArrayList<NewsBean> result;
+	private ArrayList<NewsBean> channels;
 
 	public ArrayList<NewsBean> getResult() {
 		return result;
@@ -35,6 +36,14 @@ public class NewsBeanJson extends StatusJson {
 
 	public void setResult(ArrayList<NewsBean> result) {
 		this.result = result;
+	}
+
+	public ArrayList<NewsBean> getChannels() {
+		return channels;
+	}
+
+	public void setChannels(ArrayList<NewsBean> channels) {
+		this.channels = channels;
 	}
 
 }
