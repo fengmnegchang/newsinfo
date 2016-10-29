@@ -455,10 +455,20 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 							Element astyle = aElements.get(y);
 							// 5=====0imageurl =
 							String imageurl = astyle.attr("style");
-							if (imageurl != null && imageurl.length() >= 0 && imageurl.contains("background-image")) {
-								Log.i(TAG, i + "=====" + y + "imageurl=" + imageurl);
-								imgurlList.add(imageurl.replace("background-image:url(", "").replace(");", "").replace("http://i1.go2yd.com/image.php?url=", ""));
+							//未登录<a style="background-image:url(http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/083pyOskXR2&amp;type=thumbnail_200x140);" href="/home?page=article&amp;id=0EmjqaLo&amp;up=20" target="_blank" class="article-img"></a>
+							//登录<a style="background-image:url(http://si1.go2yd.com/get-image/083pyOskXR2&amp;type=thumbnail_200x140);" href="/home?page=article&amp;id=0EmjqaLo&amp;up=20" target="_blank" class="article-img"></a>
+							if(SettingsActivity.getCookies()!=null&&SettingsActivity.getCookies().size()>0){
+								if (imageurl != null && imageurl.length() >= 0 && imageurl.contains("background-image")) {
+									Log.i(TAG, i + "=====" + y + "imageurl=" + imageurl);
+									imgurlList.add(imageurl.replace("background-image:url(", "").replace(");", "").replace("amp;", ""));
+								}
+							}else{
+								if (imageurl != null && imageurl.length() >= 0 && imageurl.contains("background-image")) {
+									Log.i(TAG, i + "=====" + y + "imageurl=" + imageurl);
+									imgurlList.add(imageurl.replace("background-image:url(", "").replace(");", "").replace("http://i1.go2yd.com/image.php?url=", "").replace("amp;", ""));
+								}
 							}
+							
 						}
 						bean.setImage_urls(imgurlList);
 						/**
