@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
+import com.example.newsinfo.BaseV4Fragment;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.activity.OwnerTabsActivity;
@@ -50,6 +50,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 /**
  ***************************************************************************************************************************************************************************** 
  * wo订阅
+ * 
  * @author :fengguangjing
  * @createTime:2016-10-21下午2:48:41
  * @version:4.2.4
@@ -58,14 +59,13 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class OwnerPinDaoFragment extends Fragment {
-	public static final String TAG = OwnerPinDaoFragment.class.getSimpleName();
+public class OwnerPinDaoFragment extends BaseV4Fragment {
 	NewsBean newsBean;
 	PullToRefreshGridView gridview;
 	PinDaoAdapter pinDaoAdapter;
 	ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 	String href = UrlUtils.PROFILE;
-	
+
 	public static OwnerPinDaoFragment newInstance(NewsBean newsBean) {
 		OwnerPinDaoFragment fragment = new OwnerPinDaoFragment();
 		fragment.newsBean = newsBean;
@@ -88,7 +88,8 @@ public class OwnerPinDaoFragment extends Fragment {
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 				// Do work to refresh the list here.
 				if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
-					new GetDataTask().execute();
+//					new GetDataTask().execute();
+					doAsync(OwnerPinDaoFragment.this, OwnerPinDaoFragment.this, OwnerPinDaoFragment.this);
 				}
 			}
 		});
@@ -96,7 +97,7 @@ public class OwnerPinDaoFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				//http://www.yidianzixun.com/api/q/?path=channel|news-list-for-channel&channel_id=4297898677&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&cstart=10&cend=20&version=999999&infinite=true
+				// http://www.yidianzixun.com/api/q/?path=channel|news-list-for-channel&channel_id=4297898677&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&cstart=10&cend=20&version=999999&infinite=true
 
 				String jsondataurl = "http://www.yidianzixun.com/api/q/?path=channel|news-list-for-channel&fields=docid&fields=category&fields=date&fields=image&fields=image_urls&fields=like&fields=source&fields=title&fields=url&fields=comment_count&fields=summary&fields=up&version=999999&infinite=true";
 				jsondataurl = jsondataurl + "&channel_id=" + list.get((int) id).getItemid();
@@ -117,31 +118,70 @@ public class OwnerPinDaoFragment extends Fragment {
 		return view;
 	}
 
-	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
-		@Override
-		protected NewsBean[] doInBackground(Void... params) {
-			// Simulates a background job.
-			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
-			try {
-				// 解析网络标签
-				list = parseList(UrlUtils.PROFILE);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return list.toArray(new NewsBean[0]);
-		}
+//	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
+//		@Override
+//		protected NewsBean[] doInBackground(Void... params) {
+//			// Simulates a background job.
+//			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+//			try {
+//				// 解析网络标签
+//				list = parseList(UrlUtils.PROFILE);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//			return list.toArray(new NewsBean[0]);
+//		}
+//
+//		@Override
+//		protected void onPostExecute(NewsBean[] result) {
+//			super.onPostExecute(result);
+//			if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
+//				list.clear();
+//				list.addAll(Arrays.asList(result));
+//			}
+//			pinDaoAdapter.notifyDataSetChanged();
+//			// Call onRefreshComplete when the list has been refreshed.
+//			gridview.onRefreshComplete();
+//		}
+//	}
 
-		@Override
-		protected void onPostExecute(NewsBean[] result) {
-			super.onPostExecute(result);
-			if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
-				list.clear();
-				list.addAll(Arrays.asList(result));
-			}
-			pinDaoAdapter.notifyDataSetChanged();
-			// Call onRefreshComplete when the list has been refreshed.
-			gridview.onRefreshComplete();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.example.newsinfo.BaseV4Fragment#call()
+	 */
+	@Override
+	public NewsBean[] call() throws Exception {
+		// TODO Auto-generated method stub
+		// Simulates a background job.
+		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+		try {
+			// 解析网络标签
+			list = parseList(UrlUtils.PROFILE);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return list.toArray(new NewsBean[0]);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.example.newsinfo.BaseV4Fragment#onCallback(com.example.newsinfo.bean
+	 * .NewsBean[])
+	 */
+	@Override
+	public void onCallback(NewsBean[] pCallbackValue) {
+		// TODO Auto-generated method stub
+		super.onCallback(pCallbackValue);
+		if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
+			list.clear();
+			list.addAll(Arrays.asList(pCallbackValue));
+		}
+		pinDaoAdapter.notifyDataSetChanged();
+		// Call onRefreshComplete when the list has been refreshed.
+		gridview.onRefreshComplete();
 	}
 
 	public ArrayList<NewsBean> parseList(String href) {
@@ -174,17 +214,17 @@ public class OwnerPinDaoFragment extends Fragment {
 					String title = imageElement.text();
 					Log.i(TAG, i + "title = " + title);
 					bean.setTitle(title);
-					
+
 					Element aElement = beanElements.get(i).select("a").first();
 					bean.setKeyword(aElement.attr("href").replace("/home?page=channel&amp;keyword=", ""));
-					bean.setUrl(UrlUtils.YI_DIAN_ZI_XUN + "/home?page=channel&keyword="+URLEncoder.encode(bean.getKeyword(), "UTF-8"));
+					bean.setUrl(UrlUtils.YI_DIAN_ZI_XUN + "/home?page=channel&keyword=" + URLEncoder.encode(bean.getKeyword(), "UTF-8"));
 
 					Element imgElement = aElement.select("img").first();
 					bean.setImage(imgElement.attr("src"));
-					
-					Element datacnidElement =  beanElements.get(i).select("span").first();
+
+					Element datacnidElement = beanElements.get(i).select("span").first();
 					bean.setItemid(datacnidElement.attr("data-cnid"));
-					
+
 					Log.i(TAG, i + "data-cnid = " + datacnidElement.attr("data-cnid"));
 					list.add(bean);
 				} catch (Exception e) {

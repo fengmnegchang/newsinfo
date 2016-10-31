@@ -3,7 +3,6 @@ package com.example.newsinfo.fragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -12,10 +11,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +28,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.newsinfo.BaseV4Fragment;
+import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.activity.SettingsActivity;
@@ -43,21 +42,21 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 /**
  * 
- *****************************************************************************************************************************************************************************
+ ***************************************************************************************************************************************************************************** 
  * 收藏
+ * 
  * @author :fengguangjing
  * @createTime:2016-10-28上午10:36:57
  * @version:4.2.4
  * @modifyTime:
  * @modifyAuthor:
  * @description:
- *****************************************************************************************************************************************************************************
+ ***************************************************************************************************************************************************************************** 
  */
-public class CollectionFragment extends Fragment {
-	private static final String TAG = CollectionFragment.class.getSimpleName();
-	private static final String KEY_CONTENT = "CollectionFragment:Content";
+public class CollectionFragment extends BaseV4Fragment {
 	PullToRefreshListView mPullRefreshListView;
 	ArrayList<NewsBean> newsBeanList = new ArrayList<NewsBean>();
 	NewsAdapter mNewsAdapter;
@@ -66,7 +65,7 @@ public class CollectionFragment extends Fragment {
 	// 热点
 	String href = UrlUtils.PROFILE;
 	int pageNo = 1;
-	String JSONDataUrl="http://www.yidianzixun.com/api/q?path=interact|get-like&fields=title&fields=image&fields=source&fields=date&fields=channel_name&&fields=summary&fields=comment_count&fields=url&fields=like&max-related=10&infinite=true&fields=is_like&always_summary=true&count=10&last_docid=0E0dtaGQ";
+	String JSONDataUrl = "http://www.yidianzixun.com/api/q?path=interact|get-like&fields=title&fields=image&fields=source&fields=date&fields=channel_name&&fields=summary&fields=comment_count&fields=url&fields=like&max-related=10&infinite=true&fields=is_like&always_summary=true&count=10&last_docid=0E0dtaGQ";
 
 	public static CollectionFragment newInstance(NewsBean newsBean) {
 		CollectionFragment fragment = new CollectionFragment();
@@ -75,14 +74,6 @@ public class CollectionFragment extends Fragment {
 	}
 
 	private String mContent = "";
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		if ((savedInstanceState != null) && savedInstanceState.containsKey(KEY_CONTENT)) {
-			mContent = savedInstanceState.getString(KEY_CONTENT);
-		}
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,7 +90,8 @@ public class CollectionFragment extends Fragment {
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 				// Do work to refresh the list here.
 				if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
-					new GetDataTask().execute();
+					// new GetDataTask().execute();
+					doAsync(CollectionFragment.this, CollectionFragment.this, CollectionFragment.this);
 				} else if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_END) {
 					volleyJson();
 				}
@@ -120,41 +112,87 @@ public class CollectionFragment extends Fragment {
 		return view;
 	}
 
-	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
-
-		@Override
-		protected NewsBean[] doInBackground(Void... params) {
-			// Simulates a background job.
-			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
-			try {
-				// 解析网络标签
-				list = parseList(href);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return list.toArray(new NewsBean[0]);
-		}
-
-		@Override
-		protected void onPostExecute(NewsBean[] result) {
-			Log.i(TAG, "getMode ===" + mPullRefreshListView.getCurrentMode());
-			if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
-				newsBeanList.clear();
-				newsBeanList.addAll(Arrays.asList(result));
-				pageNo = 1;
-			}
-			mNewsAdapter.notifyDataSetChanged();
-			// Call onRefreshComplete when the list has been refreshed.
-			mPullRefreshListView.onRefreshComplete();
-			super.onPostExecute(result);
-		}
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.example.newsinfo.BaseV4Fragment#call()
+	 */
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putString(KEY_CONTENT, mContent);
+	public NewsBean[] call() throws Exception {
+		// TODO Auto-generated method stub
+		// Simulates a background job.
+		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+		try {
+			// 解析网络标签
+			list = parseList(href);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list.toArray(new NewsBean[0]);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.example.newsinfo.BaseV4Fragment#onCallback(com.example.newsinfo.bean
+	 * .NewsBean[])
+	 */
+	@Override
+	public void onCallback(NewsBean[] result) {
+		// TODO Auto-generated method stub
+		super.onCallback(result);
+		Log.i(TAG, "getMode ===" + mPullRefreshListView.getCurrentMode());
+		if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
+			newsBeanList.clear();
+			newsBeanList.addAll(Arrays.asList(result));
+			pageNo = 1;
+		}
+		mNewsAdapter.notifyDataSetChanged();
+		// Call onRefreshComplete when the list has been refreshed.
+		mPullRefreshListView.onRefreshComplete();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.example.newsinfo.BaseV4Fragment#onCallEarliest()
+	 */
+	@Override
+	public void onCallEarliest() throws Exception {
+		// TODO Auto-generated method stub
+		super.onCallEarliest();
+	}
+
+	// private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
+	//
+	// @Override
+	// protected NewsBean[] doInBackground(Void... params) {
+	// // Simulates a background job.
+	// ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+	// try {
+	// // 解析网络标签
+	// list = parseList(href);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// return list.toArray(new NewsBean[0]);
+	// }
+	//
+	// @Override
+	// protected void onPostExecute(NewsBean[] result) {
+	// Log.i(TAG, "getMode ===" + mPullRefreshListView.getCurrentMode());
+	// if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
+	// newsBeanList.clear();
+	// newsBeanList.addAll(Arrays.asList(result));
+	// pageNo = 1;
+	// }
+	// mNewsAdapter.notifyDataSetChanged();
+	// // Call onRefreshComplete when the list has been refreshed.
+	// mPullRefreshListView.onRefreshComplete();
+	// super.onPostExecute(result);
+	// }
+	// }
 
 	/**
 	 * 请求网络数据
@@ -171,33 +209,49 @@ public class CollectionFragment extends Fragment {
 		if (pageNo > 0) {
 			JSONDataUrl = JSONDataUrl + "&cstart=" + pageNo * 10 + "&cend=" + (pageNo + 1) * 10;
 		}
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl, SettingsActivity.getHeaders(),null, new Response.Listener<JSONObject>() {
-			@Override
-			public void onResponse(JSONObject response) {
-				System.out.println("response=" + response);
-				Gson gson = new Gson();
-				NewsBeanJson mNewsBeanJson = gson.fromJson(response.toString(), NewsBeanJson.class);
-				if (mNewsBeanJson != null && mNewsBeanJson.getResult() != null && mNewsBeanJson.getResult().size() > 0) {
-					newsBeanList.addAll(mNewsBeanJson.getResult());
-					pageNo++;
-					mNewsAdapter.notifyDataSetChanged();
-				}
-				mPullRefreshListView.onRefreshComplete();
-			}
-		}, new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError arg0) {
-				System.out.println("sorry,Error");
-				mPullRefreshListView.onRefreshComplete();
-			}
-		});
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl, SettingsActivity.getHeaders(), null, this, this);
 		requestQueue.add(jsonObjectRequest);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.example.newsinfo.BaseV4Fragment#onResponse(org.json.JSONObject)
+	 */
+	@Override
+	public void onResponse(JSONObject response) {
+		// TODO Auto-generated method stub
+		super.onResponse(response);
+		System.out.println("response=" + response);
+		Gson gson = new Gson();
+		NewsBeanJson mNewsBeanJson = gson.fromJson(response.toString(), NewsBeanJson.class);
+		if (mNewsBeanJson != null && mNewsBeanJson.getResult() != null && mNewsBeanJson.getResult().size() > 0) {
+			newsBeanList.addAll(mNewsBeanJson.getResult());
+			pageNo++;
+			mNewsAdapter.notifyDataSetChanged();
+		}
+		mPullRefreshListView.onRefreshComplete();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.example.newsinfo.BaseV4Fragment#onErrorResponse(com.android.volley
+	 * .VolleyError)
+	 */
+	@Override
+	public void onErrorResponse(VolleyError error) {
+		// TODO Auto-generated method stub
+		super.onErrorResponse(error);
+		System.out.println("sorry,Error");
+		mPullRefreshListView.onRefreshComplete();
 	}
 
 	public ArrayList<NewsBean> parseList(String href) {
 		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 		try {
-			href = makeURL(href, new HashMap<String, Object>() {
+			href = ((CommonFragmentActivity) getActivity()).makeURL(href, new HashMap<String, Object>() {
 				{
 				}
 			});
@@ -221,8 +275,7 @@ public class CollectionFragment extends Fragment {
 			 * </div> </div> <div class="clear"></div> </div>
 			 */
 
-			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent).cookies(SettingsActivity.getCookies())
-					.timeout(10000).get();
+			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent).cookies(SettingsActivity.getCookies()).timeout(10000).get();
 			Element masthead = doc.select("div.main-section").first();
 			Elements beanElements = masthead.select("li.article");
 
@@ -358,22 +411,6 @@ public class CollectionFragment extends Fragment {
 		return list;
 	}
 
-	private String makeURL(String p_url, Map<String, Object> params) {
-		StringBuilder url = new StringBuilder(p_url);
-		if (url.indexOf("?") < 0)
-			url.append('?');
-		for (String name : params.keySet()) {
-			url.append('&');
-			url.append(name);
-			url.append('=');
-			url.append(String.valueOf(params.get(name)));
-			// 不做URLEncoder处理
-			// url.append(URLEncoder.encode(String.valueOf(params.get(name)),
-			// UTF_8));
-		}
-		return url.toString().replace("?&", "?");
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -386,7 +423,9 @@ public class CollectionFragment extends Fragment {
 		initUI(isVisibleToUser);
 	}
 
+	@Override
 	protected void initUI(final boolean isVisibleToUser) {
+		super.initUI(isVisibleToUser);
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
