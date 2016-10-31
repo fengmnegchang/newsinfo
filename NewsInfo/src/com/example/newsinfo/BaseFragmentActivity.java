@@ -32,6 +32,7 @@ import com.example.andenginetask.Callback;
 import com.example.andenginetask.IProgressListener;
 import com.example.andenginetask.ProgressCallable;
 import com.example.newsinfo.bean.CommonT;
+import com.example.newsinfo.bean.NewsBean;
 
 
 /**
@@ -181,7 +182,6 @@ Response.Listener<JSONObject>, Response.ErrorListener {
 	 * @see com.example.andenginetask.Callable#call()
 	 */
 	@Override
- 
 	public CommonT call() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
@@ -225,8 +225,7 @@ Response.Listener<JSONObject>, Response.ErrorListener {
 		return null;
 	}
  
-	 
-
+ 
 	/* 
 	 * json 请求 Error
 	 * (non-Javadoc)
