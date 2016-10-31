@@ -24,5 +24,9 @@ package com.example.andenginetask;
  ***************************************************************************************************************************************************************************** 
  */
 public interface CallEarliest<T> {
+	/**
+	 * 请求预加载 同于AsyncTask的onPreExecute
+	 * @throws Exception
+	 */
 	public void onCallEarliest() throws Exception;
 }

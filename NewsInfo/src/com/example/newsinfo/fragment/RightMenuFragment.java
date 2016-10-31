@@ -28,6 +28,7 @@ import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.activity.SettingsActivity;
 import com.example.newsinfo.activity.WebViewActivity;
 import com.example.newsinfo.adapter.RightMenuAdapter;
+import com.example.newsinfo.bean.CommonT;
 import com.example.newsinfo.bean.NewsBean;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -109,9 +110,10 @@ public class RightMenuFragment extends BaseV4Fragment {
 	}
 
 	@Override
-	public NewsBean[] call() throws Exception {
+	public CommonT call() throws Exception {
 		// TODO Auto-generated method stub
 		// Simulates a background job.
+		CommonT mCommonT = new CommonT();
 		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 		try {
 			// 解析网络标签
@@ -119,17 +121,18 @@ public class RightMenuFragment extends BaseV4Fragment {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return list.toArray(new NewsBean[0]);
+		mCommonT.setNewsBeanList(list);
+		return mCommonT;
 	}
 
 	@Override
-	public void onCallback(NewsBean[] pCallbackValue) {
+	public void onCallback(CommonT pCallbackValue) {
 		// TODO Auto-generated method stub
 		super.onCallback(pCallbackValue);
 		Log.i(TAG, "getMode ===" + mPullRefreshListView.getCurrentMode());
 		if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
 			newsBeanList.clear();
-			newsBeanList.addAll(Arrays.asList(pCallbackValue));
+			newsBeanList.addAll(pCallbackValue.getNewsBeanList());
 		}
 		mRightMenuAdapter.notifyDataSetChanged();
 		// Call onRefreshComplete when the list has been refreshed.

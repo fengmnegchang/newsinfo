@@ -1,7 +1,6 @@
 package com.example.newsinfo.activity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import org.jsoup.Jsoup;
@@ -20,6 +19,7 @@ import android.util.Log;
 import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
+import com.example.newsinfo.bean.CommonT;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.fragment.PinDaoFragment;
 import com.example.newsinfo.indicator.TabPageIndicator;
@@ -85,7 +85,8 @@ public class PinDaoTabsActivity extends CommonFragmentActivity {
 		indicator = (TabPageIndicator) findViewById(R.id.indicator);
 		indicator.setViewPager(pager);
 
-		new GetDataTask().execute();
+		// new GetDataTask().execute();
+		doAsync(this, this, this);
 	}
 
 	/*
@@ -120,27 +121,28 @@ public class PinDaoTabsActivity extends CommonFragmentActivity {
 		}
 	}
 
-	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
-		@Override
-		protected NewsBean[] doInBackground(Void... params) {
-			// Simulates a background job.
-			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
-			try {
-				// 解析网络标签
-				list = parseList(UrlUtils.CHANNEL_LIST);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return list.toArray(new NewsBean[0]);
+	@Override
+	public CommonT call() throws Exception {
+		// TODO Auto-generated method stub
+		CommonT mCommonT = new CommonT();
+		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+		try {
+			// 解析网络标签
+			list = parseList(UrlUtils.CHANNEL_LIST);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		mCommonT.setNewsBeanList(list);
+		return mCommonT;
+	}
 
-		@Override
-		protected void onPostExecute(NewsBean[] result) {
-			channelList.addAll(Arrays.asList(result));
-			adapter.notifyDataSetChanged();
-			indicator.notifyDataSetChanged();
-			super.onPostExecute(result);
-		}
+	@Override
+	public void onCallback(CommonT result) {
+		// TODO Auto-generated method stub
+		super.onCallback(result);
+		channelList.addAll(result.getNewsBeanList());
+		adapter.notifyDataSetChanged();
+		indicator.notifyDataSetChanged();
 	}
 
 	public ArrayList<NewsBean> parseList(String href) {

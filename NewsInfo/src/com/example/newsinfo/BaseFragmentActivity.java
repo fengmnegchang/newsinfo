@@ -13,11 +13,7 @@ package com.example.newsinfo;
 
 import java.util.Map;
 
-import com.example.andenginetask.AsyncTaskUtils;
-import com.example.andenginetask.CallEarliest;
-import com.example.andenginetask.Callable;
-import com.example.andenginetask.Callback;
-import com.example.andenginetask.ProgressCallable;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,6 +22,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.andenginetask.AsyncTaskUtils;
+import com.example.andenginetask.CallEarliest;
+import com.example.andenginetask.Callable;
+import com.example.andenginetask.Callback;
+import com.example.andenginetask.IProgressListener;
+import com.example.andenginetask.ProgressCallable;
+import com.example.newsinfo.bean.CommonT;
 
 
 /**
@@ -39,7 +45,9 @@ import android.view.View.OnClickListener;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class BaseFragmentActivity extends FragmentActivity implements OnClickListener {
+ 
+public class BaseFragmentActivity extends FragmentActivity implements OnClickListener,  CallEarliest<CommonT>, Callback<CommonT>, Callable<CommonT>, ProgressCallable<CommonT>,
+Response.Listener<JSONObject>, Response.ErrorListener {
 	public static final String SHARE_NAME = "NEWS_INFO_PROJECT";
 	public static final String IS_FIRST_IN = "is_first_in";
 	public SharedPreferences mSharedPreferences;
@@ -165,4 +173,79 @@ public class BaseFragmentActivity extends FragmentActivity implements OnClickLis
         AsyncTaskUtils.doProgressAsync(pContext, styleID, pTitleResID,  
                 pMessageResID, pCallEarliest, pCallable, pCallback);  
     }  
+    
+	/*
+	 * 请求预加载 同于AsyncTask的doInBackground
+	 * (non-Javadoc)
+	 * 
+	 * @see com.example.andenginetask.Callable#call()
+	 */
+	@Override
+ 
+	public CommonT call() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * 请求返回 同于AsyncTask的onPostExecute
+	 * (non-Javadoc)
+	 * 
+	 * @see com.example.andenginetask.Callback#onCallback(java.lang.Object)
+	 */
+	@Override
+	public void onCallback(CommonT result) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * 
+	 * 请求预加载 同于AsyncTask的onPreExecute
+	 * (non-Javadoc)
+	 * 
+	 * @see com.example.andenginetask.CallEarliest#onCallEarliest()
+	 */
+	@Override
+	public void onCallEarliest() throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * 请求预加载 同于AsyncTask的doInBackground
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.example.andenginetask.ProgressCallable#call(com.example.andenginetask
+	 * .IProgressListener)
+	 */
+	@Override
+	public CommonT call(IProgressListener pProgressListener) throws Exception {
+		return null;
+	}
+ 
+	 
+
+	/* 
+	 * json 请求 Error
+	 * (non-Javadoc)
+	 * @see com.android.volley.Response.ErrorListener#onErrorResponse(com.android.volley.VolleyError)
+	 */
+	@Override
+	public void onErrorResponse(VolleyError error) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* 
+	 * json 请求返回
+	 * (non-Javadoc)
+	 * @see com.android.volley.Response.Listener#onResponse(java.lang.Object)
+	 */
+	@Override
+	public void onResponse(JSONObject response) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -1,7 +1,6 @@
 package com.example.newsinfo.activity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import org.jsoup.Jsoup;
@@ -9,7 +8,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,11 +18,12 @@ import android.util.Log;
 import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
+import com.example.newsinfo.bean.CommonT;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.fragment.HomeFragment;
 import com.example.newsinfo.fragment.NewsFragment;
-import com.example.newsinfo.fragment.RightMenuFragment;
 import com.example.newsinfo.indicator.TabPageIndicator;
+
 /**
  * 
  *****************************************************************************************************************************************************************************
@@ -82,7 +81,8 @@ public class DynamicTabsActivity extends CommonFragmentActivity {
 		indicator = (TabPageIndicator) findViewById(R.id.indicator);
 		indicator.setViewPager(pager);
 
-		new GetDataTask().execute();
+		// new GetDataTask().execute();
+		doAsync(this, this, this);
 	}
 
 	/*
@@ -103,13 +103,18 @@ public class DynamicTabsActivity extends CommonFragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-//			if ("首页".equals(channelList.get(position).getTitle())) {
-//				return HomeFragment.newInstance(channelList.get(position).getTitle(), channelList.get(position).getUrl(), channelList.get(position).getJsondataurl());
-//			} else {
-//				return NewsFragment.newInstance(channelList.get(position).getTitle(), channelList.get(position).getUrl(), channelList.get(position).getJsondataurl());
-//			}
-			
-			return RightMenuFragment.newInstance(channelList.get(position).getTitle(), channelList.get(position).getUrl());
+			if ("首页".equals(channelList.get(position).getTitle())) {
+				return HomeFragment.newInstance(channelList.get(position)
+						.getTitle(), channelList.get(position).getUrl(),
+						channelList.get(position).getJsondataurl());
+			} else {
+				return NewsFragment.newInstance(channelList.get(position)
+						.getTitle(), channelList.get(position).getUrl(),
+						channelList.get(position).getJsondataurl());
+			}
+
+//			return RightMenuFragment.newInstance(channelList.get(position)
+//					.getTitle(), channelList.get(position).getUrl());
 		}
 
 		@Override
@@ -123,27 +128,53 @@ public class DynamicTabsActivity extends CommonFragmentActivity {
 		}
 	}
 
-	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
-		@Override
-		protected NewsBean[] doInBackground(Void... params) {
-			// Simulates a background job.
-			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
-			try {
-				// 解析网络标签
-				list = parseList(UrlUtils.YI_DIAN_ZI_XUN);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return list.toArray(new NewsBean[0]);
-		}
+	//
+	// private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
+	// @Override
+	// protected NewsBean[] doInBackground(Void... params) {
+	// // Simulates a background job.
+	// ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+	// try {
+	// // 解析网络标签
+	// list = parseList(UrlUtils.YI_DIAN_ZI_XUN);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// return list.toArray(new NewsBean[0]);
+	// }
+	//
+	// @Override
+	// protected void onPostExecute(NewsBean[] result) {
+	// channelList.addAll(Arrays.asList(result));
+	// adapter.notifyDataSetChanged();
+	// indicator.notifyDataSetChanged();
+	// super.onPostExecute(result);
+	// }
+	// }
 
-		@Override
-		protected void onPostExecute(NewsBean[] result) {
-			channelList.addAll(Arrays.asList(result));
-			adapter.notifyDataSetChanged();
-			indicator.notifyDataSetChanged();
-			super.onPostExecute(result);
+	@Override
+	public CommonT call() throws Exception {
+		// TODO Auto-generated method stub
+		// Simulates a background job.
+		CommonT mCommonT = new CommonT();
+		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+		try {
+			// 解析网络标签
+			list = parseList(UrlUtils.YI_DIAN_ZI_XUN);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		mCommonT.setNewsBeanList(list);
+		return mCommonT;
+	}
+
+	@Override
+	public void onCallback(CommonT result) {
+		// TODO Auto-generated method stub
+		super.onCallback(result);
+		channelList.addAll(result.getNewsBeanList());
+		adapter.notifyDataSetChanged();
+		indicator.notifyDataSetChanged();
 	}
 
 	public ArrayList<NewsBean> parseList(String href) {

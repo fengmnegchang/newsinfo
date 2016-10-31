@@ -45,6 +45,7 @@ import com.example.newsinfo.activity.PinDaoTabsActivity;
 import com.example.newsinfo.activity.SearchResultActivity;
 import com.example.newsinfo.activity.SettingsActivity;
 import com.example.newsinfo.adapter.PinDaoAdapter;
+import com.example.newsinfo.bean.CommonT;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.json.NewsBeanJson;
 import com.google.gson.Gson;
@@ -173,8 +174,9 @@ public class PinDaoFragment extends BaseV4Fragment {
 	 * @see com.example.newsinfo.BaseV4Fragment#call()
 	 */
 	@Override
-	public NewsBean[] call() throws Exception {
+	public CommonT call() throws Exception {
 		// TODO Auto-generated method stub
+		CommonT mCommonT = new CommonT();
 		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 		try {
 			// 解析网络标签
@@ -182,7 +184,8 @@ public class PinDaoFragment extends BaseV4Fragment {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return list.toArray(new NewsBean[0]);
+		mCommonT.setNewsBeanList(list);
+		return mCommonT;
 	}
 
 	/*
@@ -193,12 +196,12 @@ public class PinDaoFragment extends BaseV4Fragment {
 	 * .NewsBean[])
 	 */
 	@Override
-	public void onCallback(NewsBean[] pCallbackValue) {
+	public void onCallback(CommonT pCallbackValue) {
 		// TODO Auto-generated method stub
 		super.onCallback(pCallbackValue);
 		if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
 			list.clear();
-			list.addAll(Arrays.asList(pCallbackValue));
+			list.addAll(pCallbackValue.getNewsBeanList());
 			pageNo = 1;
 		}
 		pinDaoAdapter.notifyDataSetChanged();

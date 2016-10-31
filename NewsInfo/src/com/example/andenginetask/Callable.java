@@ -24,5 +24,10 @@ package com.example.andenginetask;
  ***************************************************************************************************************************************************************************** 
  */
 public interface Callable<T> {
+	/**
+	 * 请求预加载 同于AsyncTask的doInBackground
+	 * @return
+	 * @throws Exception
+	 */
 	public T call() throws Exception;
 }

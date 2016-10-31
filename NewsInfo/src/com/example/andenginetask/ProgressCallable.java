@@ -25,7 +25,7 @@ package com.example.andenginetask;
  */
 public interface ProgressCallable<T> {
 	/**
-	 * 注册观察者对象
+	 * 注册观察者对象 请求预加载 同于AsyncTask的doInBackground
 	 * 
 	 * @param pProgressListener
 	 * @return

@@ -36,6 +36,7 @@ import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.adapter.SearchAdapter;
+import com.example.newsinfo.bean.CommonT;
 import com.example.newsinfo.bean.NewsBean;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -184,13 +185,13 @@ public class SearchActivity extends CommonFragmentActivity{
 	 * @see com.example.newsinfo.CommonFragmentActivity#onCallback(com.example.newsinfo.bean.CommonBean[])
 	 */
 	@Override
-	public void onCallback(NewsBean[] result) {
+	public void onCallback(CommonT result) {
 		super.onCallback(result);
 		// TODO Auto-generated method stub
 		Log.i(TAG, "getMode ===" + gridview.getCurrentMode());
 		if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
 			list.clear();
-			list.addAll(Arrays.asList(result));
+			list.addAll(result.getNewsBeanList());
 		}
 		searchAdapter.notifyDataSetChanged();
 		// Call onRefreshComplete when the list has been refreshed.
@@ -201,10 +202,11 @@ public class SearchActivity extends CommonFragmentActivity{
 	 * @see com.example.newsinfo.CommonFragmentActivity#call()
 	 */
 	@Override
-	public NewsBean[] call() throws Exception {
+	public CommonT call() throws Exception {
 		super.call();
 		// TODO Auto-generated method stub
 		// Simulates a background job.
+		CommonT mCommonT = new CommonT();
 		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 		try {
 			// 解析网络标签
@@ -212,7 +214,8 @@ public class SearchActivity extends CommonFragmentActivity{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return list.toArray(new NewsBean[0]);
+		mCommonT.setNewsBeanList(list);
+		return mCommonT;
 	}
 	
 	 /* (non-Javadoc)

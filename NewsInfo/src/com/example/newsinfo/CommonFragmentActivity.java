@@ -11,8 +11,6 @@
  */
 package com.example.newsinfo;
 
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,16 +25,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.example.andenginetask.CallEarliest;
-import com.example.andenginetask.Callable;
-import com.example.andenginetask.Callback;
-import com.example.andenginetask.IProgressListener;
-import com.example.andenginetask.ProgressCallable;
 import com.example.newsinfo.activity.OwnerTabsActivity;
 import com.example.newsinfo.activity.SearchActivity;
-import com.example.newsinfo.bean.NewsBean;
 
 /**
  ***************************************************************************************************************************************************************************** 
@@ -49,8 +39,7 @@ import com.example.newsinfo.bean.NewsBean;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class CommonFragmentActivity extends BaseFragmentActivity implements CallEarliest<NewsBean[]>, Callback<NewsBean[]>, Callable<NewsBean[]>, ProgressCallable<NewsBean[]>,
-		Response.Listener<JSONObject>, Response.ErrorListener {
+public class CommonFragmentActivity extends BaseFragmentActivity  {
 	protected ImageView yidian_img;// 左边logo
 	protected EditText edit_search;// 搜索框
 	protected ImageView owner_logo;// 我logo
@@ -267,68 +256,6 @@ public class CommonFragmentActivity extends BaseFragmentActivity implements Call
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.example.andenginetask.Callable#call()
-	 */
-	@Override
-	public NewsBean[] call() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.example.andenginetask.Callback#onCallback(java.lang.Object)
-	 */
-	@Override
-	public void onCallback(NewsBean[] pCallbackValue) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.example.andenginetask.CallEarliest#onCallEarliest()
-	 */
-	@Override
-	public void onCallEarliest() throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.example.andenginetask.ProgressCallable#call(com.example.andenginetask
-	 * .IProgressListener)
-	 */
-	@Override
-	public NewsBean[] call(IProgressListener pProgressListener) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.android.volley.Response.ErrorListener#onErrorResponse(com.android.volley.VolleyError)
-	 */
-	@Override
-	public void onErrorResponse(VolleyError error) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see com.android.volley.Response.Listener#onResponse(java.lang.Object)
-	 */
-	@Override
-	public void onResponse(JSONObject response) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
