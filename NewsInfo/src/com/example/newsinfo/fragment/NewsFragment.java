@@ -34,6 +34,7 @@ import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.activity.SettingsActivity;
 import com.example.newsinfo.activity.WebViewActivity;
 import com.example.newsinfo.adapter.NewsAdapter;
+import com.example.newsinfo.bean.CommonT;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.json.NewsBeanJson;
 import com.google.gson.Gson;
@@ -145,9 +146,10 @@ public class NewsFragment extends BaseV4Fragment {
 	 * @see com.example.newsinfo.BaseV4Fragment#call()
 	 */
 	@Override
-	public NewsBean[] call() throws Exception {
+	public CommonT call() throws Exception {
 		// TODO Auto-generated method stub
 		// Simulates a background job.
+		CommonT mCommonT = new CommonT();
 		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 		try {
 			// 解析网络标签
@@ -155,7 +157,8 @@ public class NewsFragment extends BaseV4Fragment {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return list.toArray(new NewsBean[0]);
+		mCommonT.setNewsBeanList(list);
+		return mCommonT;
 	}
 
 	/*
@@ -166,13 +169,13 @@ public class NewsFragment extends BaseV4Fragment {
 	 * .NewsBean[])
 	 */
 	@Override
-	public void onCallback(NewsBean[] pCallbackValue) {
+	public void onCallback(CommonT pCallbackValue) {
 		// TODO Auto-generated method stub
 		super.onCallback(pCallbackValue);
 		Log.i(TAG, "getMode ===" + mPullRefreshListView.getCurrentMode());
 		if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
 			newsBeanList.clear();
-			newsBeanList.addAll(Arrays.asList(pCallbackValue));
+			newsBeanList.addAll(pCallbackValue.getNewsBeanList());
 			pageNo = 1;
 		}
 		mNewsAdapter.notifyDataSetChanged();

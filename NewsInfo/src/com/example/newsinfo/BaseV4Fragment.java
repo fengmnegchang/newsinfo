@@ -2,6 +2,10 @@ package com.example.newsinfo;
 
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.andenginetask.AsyncTaskUtils;
@@ -10,12 +14,9 @@ import com.example.andenginetask.Callable;
 import com.example.andenginetask.Callback;
 import com.example.andenginetask.IProgressListener;
 import com.example.andenginetask.ProgressCallable;
+import com.example.newsinfo.bean.CommonT;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.fragment.NewsFragment;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 /**
  * 
@@ -29,7 +30,7 @@ import android.support.v4.app.Fragment;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class BaseV4Fragment extends Fragment implements CallEarliest<NewsBean[]>, Callback<NewsBean[]>, Callable<NewsBean[]>, ProgressCallable<NewsBean[]> ,
+public class BaseV4Fragment extends Fragment implements CallEarliest<CommonT>, Callback<CommonT>, Callable<CommonT>, ProgressCallable<CommonT> ,
 Response.Listener<JSONObject>,Response.ErrorListener{
 	public static final String TAG = NewsFragment.class.getSimpleName();
 	public static final String KEY_CONTENT = BaseV4Fragment.class.getSimpleName()+":Content";
@@ -137,7 +138,7 @@ Response.Listener<JSONObject>,Response.ErrorListener{
 	 * .IProgressListener)
 	 */
 	@Override
-	public NewsBean[] call(IProgressListener pProgressListener) throws Exception {
+	public CommonT call(IProgressListener pProgressListener) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -148,7 +149,7 @@ Response.Listener<JSONObject>,Response.ErrorListener{
 	 * @see com.example.andenginetask.Callable#call()
 	 */
 	@Override
-	public NewsBean[] call() throws Exception {
+	public CommonT call() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -159,7 +160,7 @@ Response.Listener<JSONObject>,Response.ErrorListener{
 	 * @see com.example.andenginetask.Callback#onCallback(java.lang.Object)
 	 */
 	@Override
-	public void onCallback(NewsBean[] pCallbackValue) {
+	public void onCallback(CommonT pCallbackValue) {
 		// TODO Auto-generated method stub
 
 	}
