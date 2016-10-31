@@ -10,10 +10,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.example.newsinfo.BaseV4Fragment;
 import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
@@ -48,9 +47,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class RightMenuFragment extends Fragment {
-	private static final String TAG = RightMenuFragment.class.getSimpleName();
-	private static final String KEY_CONTENT = "RightMenuFragment:Content";
+public class RightMenuFragment extends BaseV4Fragment {
 	PullToRefreshListView mPullRefreshListView;
 	ArrayList<NewsBean> newsBeanList = new ArrayList<NewsBean>();
 	RightMenuAdapter mRightMenuAdapter;
@@ -62,17 +59,6 @@ public class RightMenuFragment extends Fragment {
 		fragment.mContent = content;
 		fragment.href = href;
 		return fragment;
-	}
-
-	private String mContent = "";
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		if ((savedInstanceState != null)
-				&& savedInstanceState.containsKey(KEY_CONTENT)) {
-			mContent = savedInstanceState.getString(KEY_CONTENT);
-		}
 	}
 
 	@Override
@@ -100,7 +86,9 @@ public class RightMenuFragment extends Fragment {
 								.setLastUpdatedLabel(label);
 						// Do work to refresh the list here.
 						if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
-							new GetDataTask().execute();
+							doAsync(RightMenuFragment.this,
+									RightMenuFragment.this,
+									RightMenuFragment.this);
 						}
 					}
 				});
@@ -120,39 +108,32 @@ public class RightMenuFragment extends Fragment {
 		return view;
 	}
 
-	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
-
-		@Override
-		protected NewsBean[] doInBackground(Void... params) {
-			// Simulates a background job.
-			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
-			try {
-				// 解析网络标签
-				list = parseList(href);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return list.toArray(new NewsBean[0]);
+	@Override
+	public NewsBean[] call() throws Exception {
+		// TODO Auto-generated method stub
+		// Simulates a background job.
+		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+		try {
+			// 解析网络标签
+			list = parseList(href);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		@Override
-		protected void onPostExecute(NewsBean[] result) {
-			Log.i(TAG, "getMode ===" + mPullRefreshListView.getCurrentMode());
-			if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
-				newsBeanList.clear();
-				newsBeanList.addAll(Arrays.asList(result));
-			}
-			mRightMenuAdapter.notifyDataSetChanged();
-			// Call onRefreshComplete when the list has been refreshed.
-			mPullRefreshListView.onRefreshComplete();
-			super.onPostExecute(result);
-		}
+		return list.toArray(new NewsBean[0]);
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putString(KEY_CONTENT, mContent);
+	public void onCallback(NewsBean[] pCallbackValue) {
+		// TODO Auto-generated method stub
+		super.onCallback(pCallbackValue);
+		Log.i(TAG, "getMode ===" + mPullRefreshListView.getCurrentMode());
+		if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
+			newsBeanList.clear();
+			newsBeanList.addAll(Arrays.asList(pCallbackValue));
+		}
+		mRightMenuAdapter.notifyDataSetChanged();
+		// Call onRefreshComplete when the list has been refreshed.
+		mPullRefreshListView.onRefreshComplete();
 	}
 
 	public ArrayList<NewsBean> parseList(String href) {
@@ -203,12 +184,13 @@ public class RightMenuFragment extends Fragment {
 					Element imageElement = beanElements.get(i);
 					Elements aElements = imageElement.select("a");
 					// 0=====imageurl=background-image:url('http://i1.go2yd.com/image.php?url=http://s.go2yd.com/b/iezaxely_770fd1d1.jpg&type=thumbnail_90x70');
-					//3=====imageurl=background-image:url('http://i1.go2yd.com/image.php?url=http://s.go2yd.com/b/icn4vll1_cl01d1d1.jpg&type=thumbnail_90x70');
+					// 3=====imageurl=background-image:url('http://i1.go2yd.com/image.php?url=http://s.go2yd.com/b/icn4vll1_cl01d1d1.jpg&type=thumbnail_90x70');
 					String imageurl = aElements.attr("style");
 					if (imageurl != null && imageurl.length() >= 0
 							&& imageurl.contains("background-image")) {
 						Log.i(TAG, i + "=====" + "imageurl=" + imageurl);
-						imageurl = imageurl.replace("background-image:url('", "").replace("');", "");
+						imageurl = imageurl.replace("background-image:url('",
+								"").replace("');", "");
 					}
 					bean.setImage(imageurl);
 
@@ -230,8 +212,7 @@ public class RightMenuFragment extends Fragment {
 				try {
 					// 内容
 					Element contentElement = beanElements.get(i);
-					Element p = contentElement.select("p.bookcount")
-							.first();
+					Element p = contentElement.select("p.bookcount").first();
 					String content = p.text();
 					Log.i(TAG, i + "content = " + content);
 					bean.setSummary(content);
@@ -272,7 +253,9 @@ public class RightMenuFragment extends Fragment {
 		initUI(isVisibleToUser);
 	}
 
+	@Override
 	protected void initUI(final boolean isVisibleToUser) {
+		super.initUI(isVisibleToUser);
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {

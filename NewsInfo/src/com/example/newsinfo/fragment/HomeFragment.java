@@ -12,10 +12,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -34,10 +32,11 @@ import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.newsinfo.BaseV4Fragment;
+import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.activity.SettingsActivity;
@@ -51,21 +50,22 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 /**
  * 
- *****************************************************************************************************************************************************************************
+ ***************************************************************************************************************************************************************************** 
  * 首页
+ * 
  * @author :fengguangjing
  * @createTime:2016-10-28上午10:37:13
  * @version:4.2.4
  * @modifyTime:
  * @modifyAuthor:
  * @description:
- *****************************************************************************************************************************************************************************
+ ***************************************************************************************************************************************************************************** 
  */
-public final class HomeFragment extends Fragment implements OnPageChangeListener {
-	private static final String TAG = HomeFragment.class.getSimpleName();
-	private static final String KEY_CONTENT = "HomeFragment:Content";
+public final class HomeFragment extends BaseV4Fragment implements
+		OnPageChangeListener {
 	PullToRefreshListView mPullRefreshListView;
 	ArrayList<NewsBean> newsBeanList = new ArrayList<NewsBean>();
 	NewsAdapter mNewsAdapter;
@@ -94,7 +94,8 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 	ImageLoader mImageLoader;
 	boolean isFirst = true;
 
-	public static HomeFragment newInstance(String content, String href, String JSONDataUrl) {
+	public static HomeFragment newInstance(String content, String href,
+			String JSONDataUrl) {
 		HomeFragment fragment = new HomeFragment();
 		fragment.mContent = content;
 		fragment.href = href;
@@ -102,47 +103,49 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 		return fragment;
 	}
 
-	private String mContent = "";
-
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		if ((savedInstanceState != null) && savedInstanceState.containsKey(KEY_CONTENT)) {
-			mContent = savedInstanceState.getString(KEY_CONTENT);
-		}
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_news_list, null);
-		mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.pull_refresh_list);
+		mPullRefreshListView = (PullToRefreshListView) view
+				.findViewById(R.id.pull_refresh_list);
 		group = (ViewGroup) view.findViewById(R.id.viewGroup);
 		viewPager = (ViewPager) view.findViewById(R.id.viewPager);
 		mImageLoader = new ImageLoader(getActivity());
-		mImageLoader.setRequiredSize(5 * (int) getActivity().getResources().getDimension(R.dimen.litpic_width));
+		mImageLoader.setRequiredSize(5 * (int) getActivity().getResources()
+				.getDimension(R.dimen.litpic_width));
 
 		mPullRefreshListView.setMode(Mode.BOTH);
 		mNewsAdapter = new NewsAdapter(getActivity(), newsBeanList, mContent);
 		// Set a listener to be invoked when the list should be refreshed.
-		mPullRefreshListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-				// Update the LastUpdatedLabel
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				// Do work to refresh the list here.
-//				new GetDataTask().execute();
-				if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
-					new GetDataTask().execute();
-				} else if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_END) {
-					volleyJson();
-				}
-			}
-		});
+		mPullRefreshListView
+				.setOnRefreshListener(new OnRefreshListener<ListView>() {
+					@Override
+					public void onRefresh(
+							PullToRefreshBase<ListView> refreshView) {
+						String label = DateUtils.formatDateTime(getActivity(),
+								System.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						// Update the LastUpdatedLabel
+						refreshView.getLoadingLayoutProxy()
+								.setLastUpdatedLabel(label);
+						// Do work to refresh the list here.
+						// new GetDataTask().execute();
+						if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
+//							new GetDataTask().execute();
+							doAsync(HomeFragment.this, HomeFragment.this, HomeFragment.this);
+						} else if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_END) {
+							volleyJson();
+						}
+					}
+				});
 		mPullRefreshListView.setAdapter(mNewsAdapter);
 		mPullRefreshListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
 				Intent intent = new Intent();
 				intent.setClass(getActivity(), WebViewActivity.class);
 				intent.putExtra("NEWSBEAN", newsBeanList.get((int) id));
@@ -154,7 +157,6 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 		return view;
 	}
 
-	
 	/**
 	 * 请求网络数据
 	 * **http://www.yidianzixun.com/api/q/?path=channel|news-list-for-keyword
@@ -168,124 +170,128 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 	public void volleyJson() {
 		RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 		if (pageNo > 0) {
-			JSONDataUrl = JSONDataUrl + "&cstart=" + pageNo * 10 + "&cend=" + (pageNo + 1) * 10;
+			JSONDataUrl = JSONDataUrl + "&cstart=" + pageNo * 10 + "&cend="
+					+ (pageNo + 1) * 10;
 		}
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, JSONDataUrl,SettingsActivity.getHeaders(), null, new Response.Listener<JSONObject>() {
-			@Override
-			public void onResponse(JSONObject response) {
-				System.out.println("response=" + response);
-				Gson gson = new Gson();
-				NewsBeanJson mNewsBeanJson = gson.fromJson(response.toString(), NewsBeanJson.class);
-				if (mNewsBeanJson != null && mNewsBeanJson.getResult() != null && mNewsBeanJson.getResult().size() > 0) {
-					newsBeanList.addAll(mNewsBeanJson.getResult());
-					pageNo++;
-					mNewsAdapter.notifyDataSetChanged();
-				}
-				mPullRefreshListView.onRefreshComplete();
-			}
-		}, new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError arg0) {
-				System.out.println("sorry,Error");
-				mPullRefreshListView.onRefreshComplete();
-			}
-		});
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+				Request.Method.GET, JSONDataUrl, SettingsActivity.getHeaders(),
+				null, this, this);
 		requestQueue.add(jsonObjectRequest);
-	}
-	
-	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
-
-		@Override
-		protected NewsBean[] doInBackground(Void... params) {
-			// Simulates a background job.
-			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
-			try {
-				// 解析网络标签
-				list = parseList(href);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return list.toArray(new NewsBean[0]);
-		}
-
-		@Override
-		protected void onPostExecute(NewsBean[] result) {
-			Log.i(TAG, "getMode ===" + mPullRefreshListView.getCurrentMode());
-			if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
-				newsBeanList.clear();
-				newsBeanList.addAll(Arrays.asList(result));
-				pageNo = 1;
-			}
-			mNewsAdapter.notifyDataSetChanged();
-			// Call onRefreshComplete when the list has been refreshed.
-			mPullRefreshListView.onRefreshComplete();
-
-			// 将点点加入到ViewGroup中
-			group.removeAllViews();
-			tips = new ImageView[pagerList.size()];
-			for (int i = 0; i < tips.length; i++) {
-				ImageView imageView = new ImageView(getActivity());
-				imageView.setLayoutParams(new LayoutParams(10, 10));
-				tips[i] = imageView;
-				if (i == 0) {
-					tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
-				} else {
-					tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
-				}
-
-				LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-				layoutParams.leftMargin = 5;
-				layoutParams.rightMargin = 5;
-				group.addView(imageView, layoutParams);
-			}
-
-			// 将图片装载到数组中
-			mImageViews = new ImageView[pagerList.size()];
-			for (int i = 0; i < mImageViews.length; i++) {
-				ImageView imageView = new ImageView(getActivity());
-				mImageViews[i] = imageView;
-				final NewsBean bean = pagerList.get(i);
-				imageView.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent intent = new Intent();
-						intent.setClass(getActivity(), WebViewActivity.class);
-						intent.putExtra("NEWSBEAN", bean);
-						startActivity(intent);
-					}
-				});
-				// imageView.setBackgroundResource(imgIdArray[i]);
-				mImageLoader.DisplayImage(bean.getImage(), imageView);
-			}
-
-			// 设置Adapter
-			viewPager.setAdapter(new ViewPagerAdapter());
-			// 设置监听，主要是设置点点的背景
-			viewPager.setOnPageChangeListener(HomeFragment.this);
-			// 设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左滑动
-			viewPager.setCurrentItem((mImageViews.length) * 100);
-			
-			if(pagerList.size()==1){
-				viewPager.setVisibility(View.GONE);
-				group.setVisibility(View.GONE);
-			}else{
-				viewPager.setVisibility(View.VISIBLE);
-				group.setVisibility(View.VISIBLE);
-			}
-			super.onPostExecute(result);
-		}
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putString(KEY_CONTENT, mContent);
+	public void onResponse(JSONObject response) {
+		// TODO Auto-generated method stub
+		super.onResponse(response);
+		System.out.println("response=" + response);
+		Gson gson = new Gson();
+		NewsBeanJson mNewsBeanJson = gson.fromJson(response.toString(),
+				NewsBeanJson.class);
+		if (mNewsBeanJson != null && mNewsBeanJson.getResult() != null
+				&& mNewsBeanJson.getResult().size() > 0) {
+			newsBeanList.addAll(mNewsBeanJson.getResult());
+			pageNo++;
+			mNewsAdapter.notifyDataSetChanged();
+		}
+		mPullRefreshListView.onRefreshComplete();
+	}
+
+	@Override
+	public void onErrorResponse(VolleyError error) {
+		// TODO Auto-generated method stub
+		super.onErrorResponse(error);
+		System.out.println("sorry,Error");
+		mPullRefreshListView.onRefreshComplete();
+	}
+
+	@Override
+	public NewsBean[] call() throws Exception {
+		// TODO Auto-generated method stub
+		// Simulates a background job.
+		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+		try {
+			// 解析网络标签
+			list = parseList(href);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list.toArray(new NewsBean[0]);
+	}
+
+	@Override
+	public void onCallback(NewsBean[] pCallbackValue) {
+		// TODO Auto-generated method stub
+		super.onCallback(pCallbackValue);
+		Log.i(TAG, "getMode ===" + mPullRefreshListView.getCurrentMode());
+		if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
+			newsBeanList.clear();
+			newsBeanList.addAll(Arrays.asList(pCallbackValue));
+			pageNo = 1;
+		}
+		mNewsAdapter.notifyDataSetChanged();
+		// Call onRefreshComplete when the list has been refreshed.
+		mPullRefreshListView.onRefreshComplete();
+
+		// 将点点加入到ViewGroup中
+		group.removeAllViews();
+		tips = new ImageView[pagerList.size()];
+		for (int i = 0; i < tips.length; i++) {
+			ImageView imageView = new ImageView(getActivity());
+			imageView.setLayoutParams(new LayoutParams(10, 10));
+			tips[i] = imageView;
+			if (i == 0) {
+				tips[i].setBackgroundResource(R.drawable.page_indicator_focused);
+			} else {
+				tips[i].setBackgroundResource(R.drawable.page_indicator_unfocused);
+			}
+
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+					new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT,
+							LayoutParams.WRAP_CONTENT));
+			layoutParams.leftMargin = 5;
+			layoutParams.rightMargin = 5;
+			group.addView(imageView, layoutParams);
+		}
+
+		// 将图片装载到数组中
+		mImageViews = new ImageView[pagerList.size()];
+		for (int i = 0; i < mImageViews.length; i++) {
+			ImageView imageView = new ImageView(getActivity());
+			mImageViews[i] = imageView;
+			final NewsBean bean = pagerList.get(i);
+			imageView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent();
+					intent.setClass(getActivity(), WebViewActivity.class);
+					intent.putExtra("NEWSBEAN", bean);
+					startActivity(intent);
+				}
+			});
+			// imageView.setBackgroundResource(imgIdArray[i]);
+			mImageLoader.DisplayImage(bean.getImage(), imageView);
+		}
+
+		// 设置Adapter
+		viewPager.setAdapter(new ViewPagerAdapter());
+		// 设置监听，主要是设置点点的背景
+		viewPager.setOnPageChangeListener(HomeFragment.this);
+		// 设置ViewPager的默认项, 设置为长度的100倍，这样子开始就能往左滑动
+		viewPager.setCurrentItem((mImageViews.length) * 100);
+
+		if (pagerList.size() == 1) {
+			viewPager.setVisibility(View.GONE);
+			group.setVisibility(View.GONE);
+		} else {
+			viewPager.setVisibility(View.VISIBLE);
+			group.setVisibility(View.VISIBLE);
+		}
 	}
 
 	public ArrayList<NewsBean> parseList(String href) {
 		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 		try {
-			href = makeURL(href, new HashMap<String, Object>() {
+			href = ((CommonFragmentActivity)getActivity()).makeURL(href, new HashMap<String, Object>() {
 				{
 				}
 			});
@@ -334,17 +340,19 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 			 * %2594%25E7%25BD%2591%22%2C%22
 			 * %24initial_referring_domain%22%3A%20%
 			 * 22www.yidianzixun.com%22%2C%22%
-			 * 24_sessionid%22%3A%200%2C%22%24_sessionTime%22%3A%201477538873%2C%22%24dp%22%3A%200%2C%22%24_sessionPVTime%22%3A%201477538873%2C%22initial_view_time%22%3A%20%221468565764%22%2C%22initial_referrer%22%3A%20%22http%3A%2F%2Fwww.yidianzixun.com%2Fhome%22%2C%22initial_referrer_domain%22%3A%20%22www.yidianzixun.com%22%2C%22%24recent_outside_referrer%22%3A%20%22%24direct%22
-			 * % 7 D
+			 * 24_sessionid%22%3A%200%2C%22%24_sessionTime%22%3A%201477538873%2C%22%24dp%22%3A%200%2C%22%24_sessionPVTime%22%3A%201477538873%2C%22initial_view_time%22%3A%20%221468565764%22%2C%22initial_referrer%22%3A%20%22http%3A%2F%2Fwww.yidianzixun.com%2Fhome%22%2C%22initial_referrer_domain%22%3A%20%22www.yidianzixun.com%22%2C%22%24recent_outside_referrer%22%3A%20%22%24direct
+			 * % 2 2 % 7 D
 			 */
-			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent)
-					.cookies(SettingsActivity.getCookies())
-					.timeout(10000).get();
+			Document doc = Jsoup.connect(href)
+					.userAgent(SettingsActivity.userAgent)
+					.cookies(SettingsActivity.getCookies()).timeout(10000)
+					.get();
 			try {
 
 				Element tabcontent = doc.select("div.tab-content").first();
 				// 图片导航
-				Elements tabpannelElements = tabcontent.select("div.tab-pannel");
+				Elements tabpannelElements = tabcontent
+						.select("div.tab-pannel");
 				/**
 				 * <div class="tab-pannel"><a
 				 * href="http://download.yidianzixun.com" target="_blank"
@@ -422,9 +430,11 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 			 * class="clear"></div></div></div><div class="clear"></div></div>
 			 */
 
-			Elements sectionArticlesElements = sections.select("div.section-articles");
+			Elements sectionArticlesElements = sections
+					.select("div.section-articles");
 			for (int k = 0; k < sectionArticlesElements.size(); k++) {
-				Elements beanElements = sectionArticlesElements.get(k).select("div.article");
+				Elements beanElements = sectionArticlesElements.get(k).select(
+						"div.article");
 				// 其他标签
 				// 解析文件
 				for (int i = 0; i < beanElements.size(); i++) {
@@ -433,7 +443,8 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 						// 图片
 						Element imageElement = beanElements.get(i);
 						Element astyle = imageElement.select("a").first();
-						String nexthref = UrlUtils.YI_DIAN_ZI_XUN + astyle.attr("href");
+						String nexthref = UrlUtils.YI_DIAN_ZI_XUN
+								+ astyle.attr("href");
 						/**
 						 * <a style=
 						 * "background-image:url(http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/07r6NzSCPmy&amp;type=thumbnail_200x140);"
@@ -455,20 +466,47 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 							Element astyle = aElements.get(y);
 							// 5=====0imageurl =
 							String imageurl = astyle.attr("style");
-							//未登录<a style="background-image:url(http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/083pyOskXR2&amp;type=thumbnail_200x140);" href="/home?page=article&amp;id=0EmjqaLo&amp;up=20" target="_blank" class="article-img"></a>
-							//登录<a style="background-image:url(http://si1.go2yd.com/get-image/083pyOskXR2&amp;type=thumbnail_200x140);" href="/home?page=article&amp;id=0EmjqaLo&amp;up=20" target="_blank" class="article-img"></a>
-							if(SettingsActivity.getCookies()!=null&&SettingsActivity.getCookies().size()>0){
-								if (imageurl != null && imageurl.length() >= 0 && imageurl.contains("background-image")) {
-									Log.i(TAG, i + "=====" + y + "imageurl=" + imageurl);
-									imgurlList.add(imageurl.replace("background-image:url(", "").replace(");", "").replace("amp;", ""));
+							// 未登录<a
+							// style="background-image:url(http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/083pyOskXR2&amp;type=thumbnail_200x140);"
+							// href="/home?page=article&amp;id=0EmjqaLo&amp;up=20"
+							// target="_blank" class="article-img"></a>
+							// 登录<a
+							// style="background-image:url(http://si1.go2yd.com/get-image/083pyOskXR2&amp;type=thumbnail_200x140);"
+							// href="/home?page=article&amp;id=0EmjqaLo&amp;up=20"
+							// target="_blank" class="article-img"></a>
+							if (SettingsActivity.getCookies() != null
+									&& SettingsActivity.getCookies().size() > 0) {
+								if (imageurl != null
+										&& imageurl.length() >= 0
+										&& imageurl
+												.contains("background-image")) {
+									Log.i(TAG, i + "=====" + y + "imageurl="
+											+ imageurl);
+									imgurlList.add(imageurl
+											.replace("background-image:url(",
+													"").replace(");", "")
+											.replace("amp;", ""));
 								}
-							}else{
-								if (imageurl != null && imageurl.length() >= 0 && imageurl.contains("background-image")) {
-									Log.i(TAG, i + "=====" + y + "imageurl=" + imageurl);
-									imgurlList.add(imageurl.replace("background-image:url(", "").replace(");", "").replace("http://i1.go2yd.com/image.php?url=", "").replace("amp;", ""));
+							} else {
+								if (imageurl != null
+										&& imageurl.length() >= 0
+										&& imageurl
+												.contains("background-image")) {
+									Log.i(TAG, i + "=====" + y + "imageurl="
+											+ imageurl);
+									imgurlList
+											.add(imageurl
+													.replace(
+															"background-image:url(",
+															"")
+													.replace(");", "")
+													.replace(
+															"http://i1.go2yd.com/image.php?url=",
+															"")
+													.replace("amp;", ""));
 								}
 							}
-							
+
 						}
 						bean.setImage_urls(imgurlList);
 						/**
@@ -504,7 +542,8 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 					try {
 						// 内容
 						Element contentElement = beanElements.get(i);
-						Element p = contentElement.select("div.article-nofloat p").first();
+						Element p = contentElement.select(
+								"div.article-nofloat p").first();
 						String content = p.text();
 						Log.i(TAG, i + "content = " + content);
 						bean.setSummary(content);
@@ -515,7 +554,8 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 					try {
 						// 其他
 						Element otherElement = beanElements.get(i);
-						Element otherE = otherElement.select("div.article-info").first();
+						Element otherE = otherElement
+								.select("div.article-info").first();
 						String other = otherE.text();
 						Log.i(TAG, i + "other = " + other);
 						bean.setOther(other);
@@ -532,21 +572,7 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 		return list;
 	}
 
-	private String makeURL(String p_url, Map<String, Object> params) {
-		StringBuilder url = new StringBuilder(p_url);
-		if (url.indexOf("?") < 0)
-			url.append('?');
-		for (String name : params.keySet()) {
-			url.append('&');
-			url.append(name);
-			url.append('=');
-			url.append(String.valueOf(params.get(name)));
-			// 不做URLEncoder处理
-			// url.append(URLEncoder.encode(String.valueOf(params.get(name)),
-			// UTF_8));
-		}
-		return url.toString().replace("?&", "?");
-	}
+  
 
 	/*
 	 * (non-Javadoc)
@@ -560,12 +586,14 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 		isVisibleToUser = true;
 		initUI(isVisibleToUser);
 	}
-
+	@Override
 	protected void initUI(final boolean isVisibleToUser) {
+		super.initUI(isVisibleToUser);
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				if (mPullRefreshListView == null || getActivity() == null || !isVisibleToUser) {
+				if (mPullRefreshListView == null || getActivity() == null
+						|| !isVisibleToUser) {
 					initUI(isVisibleToUser);
 				} else {
 					mPullRefreshListView.setRefreshing(true);
@@ -652,7 +680,8 @@ public final class HomeFragment extends Fragment implements OnPageChangeListener
 		@Override
 		public Object instantiateItem(View container, int position) {
 			try {
-				((ViewPager) container).addView(mImageViews[position % mImageViews.length], 0);
+				((ViewPager) container).addView(mImageViews[position
+						% mImageViews.length], 0);
 			} catch (Exception e) {
 				// handler something
 			}
