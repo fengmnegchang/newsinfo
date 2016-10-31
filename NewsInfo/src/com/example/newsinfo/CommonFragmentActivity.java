@@ -11,27 +11,28 @@
  */
 package com.example.newsinfo;
 
-import java.util.Map;
-
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.andenginetask.CallEarliest;
+import com.example.andenginetask.Callable;
+import com.example.andenginetask.Callback;
+import com.example.andenginetask.IProgressListener;
+import com.example.andenginetask.ProgressCallable;
 import com.example.newsinfo.activity.OwnerTabsActivity;
 import com.example.newsinfo.activity.SearchActivity;
+import com.example.newsinfo.bean.NewsBean;
 
 /**
  ***************************************************************************************************************************************************************************** 
@@ -44,7 +45,7 @@ import com.example.newsinfo.activity.SearchActivity;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class CommonFragmentActivity extends BaseFragmentActivity {
+public class CommonFragmentActivity extends BaseFragmentActivity  implements CallEarliest<NewsBean[]>,Callback<NewsBean[]>,Callable<NewsBean[]>,ProgressCallable<NewsBean[]>{
 	protected ImageView yidian_img;// 左边logo
 	protected EditText edit_search;// 搜索框
 	protected ImageView owner_logo;// 我logo
@@ -90,7 +91,7 @@ public class CommonFragmentActivity extends BaseFragmentActivity {
 	/**
 	 * 添加view
 	 */
-	public void addContentView(int layoutResID,int topMargin) {
+	public void addContentView(int layoutResID, int topMargin) {
 		if (isExtendsCommonActivity) {
 			LayoutInflater mLayoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			lay_content = mLayoutInflater.inflate(layoutResID, null);
@@ -195,7 +196,7 @@ public class CommonFragmentActivity extends BaseFragmentActivity {
 			startActivity(intent);
 			break;
 		case R.id.owner_logo:// 我
-		    intent = new Intent();
+			intent = new Intent();
 			intent.setClass(CommonFragmentActivity.this, OwnerTabsActivity.class);
 			startActivity(intent);
 			break;
@@ -250,7 +251,7 @@ public class CommonFragmentActivity extends BaseFragmentActivity {
 			search_btn.setVisibility(View.GONE);
 		}
 	}
-	
+
 	/***
 	 * 隐藏左边按钮
 	 */
@@ -259,6 +260,42 @@ public class CommonFragmentActivity extends BaseFragmentActivity {
 			back_img.setVisibility(View.GONE);
 			yidian_img.setVisibility(View.GONE);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.example.andenginetask.Callable#call()
+	 */
+	@Override
+	public NewsBean[] call() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.example.andenginetask.Callback#onCallback(java.lang.Object)
+	 */
+	@Override
+	public void onCallback(NewsBean[] pCallbackValue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.example.andenginetask.CallEarliest#onCallEarliest()
+	 */
+	@Override
+	public void onCallEarliest() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.example.andenginetask.ProgressCallable#call(com.example.andenginetask.IProgressListener)
+	 */
+	@Override
+	public NewsBean[] call(IProgressListener pProgressListener) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

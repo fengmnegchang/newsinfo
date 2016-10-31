@@ -23,7 +23,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
@@ -54,7 +53,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
  * @description:
  ***************************************************************************************************************************************************************************** 
  */
-public class SearchActivity extends CommonFragmentActivity {
+public class SearchActivity extends CommonFragmentActivity{
 	private static final String TAG = SearchActivity.class.getSimpleName();
 	PullToRefreshGridView gridview;
 	SearchAdapter searchAdapter;
@@ -116,7 +115,8 @@ public class SearchActivity extends CommonFragmentActivity {
 				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
 				// Do work to refresh the list here.
 				if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
-					new GetDataTask().execute();
+//					new GetDataTask().execute();
+					doAsync(SearchActivity.this, SearchActivity.this,SearchActivity.this);
 				}
 			}
 		});
@@ -140,6 +140,9 @@ public class SearchActivity extends CommonFragmentActivity {
 				gridview.setRefreshing(true);
 			}
 		}, 500);
+		
+		
+		
 	}
 	
 	/* (non-Javadoc)
@@ -176,35 +179,80 @@ public class SearchActivity extends CommonFragmentActivity {
 			break;
 		}
 	}
-
-	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
-
-		@Override
-		protected NewsBean[] doInBackground(Void... params) {
-			// Simulates a background job.
-			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
-			try {
-				// 解析网络标签
-				list = parseList(UrlUtils.YI_DIAN_ZI_XUN);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return list.toArray(new NewsBean[0]);
+	
+	 /* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonFragmentActivity#onCallback(com.example.newsinfo.bean.CommonBean[])
+	 */
+	@Override
+	public void onCallback(NewsBean[] result) {
+		super.onCallback(result);
+		// TODO Auto-generated method stub
+		Log.i(TAG, "getMode ===" + gridview.getCurrentMode());
+		if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
+			list.clear();
+			list.addAll(Arrays.asList(result));
 		}
-
-		@Override
-		protected void onPostExecute(NewsBean[] result) {
-			Log.i(TAG, "getMode ===" + gridview.getCurrentMode());
-			if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
-				list.clear();
-				list.addAll(Arrays.asList(result));
-			}
-			searchAdapter.notifyDataSetChanged();
-			// Call onRefreshComplete when the list has been refreshed.
-			gridview.onRefreshComplete();
-			super.onPostExecute(result);
-		}
+		searchAdapter.notifyDataSetChanged();
+		// Call onRefreshComplete when the list has been refreshed.
+		gridview.onRefreshComplete();
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonFragmentActivity#call()
+	 */
+	@Override
+	public NewsBean[] call() throws Exception {
+		super.call();
+		// TODO Auto-generated method stub
+		// Simulates a background job.
+		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+		try {
+			// 解析网络标签
+			list = parseList(UrlUtils.YI_DIAN_ZI_XUN);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list.toArray(new NewsBean[0]);
+	}
+	
+	 /* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonFragmentActivity#onCallEarliest()
+	 */
+	@Override
+	public void onCallEarliest() throws Exception {
+		// TODO Auto-generated method stub
+		super.onCallEarliest();
+	}
+	 
+
+//	private class GetDataTask extends AsyncTask<Void, Void, NewsBean[]> {
+//
+//		@Override
+//		protected NewsBean[] doInBackground(Void... params) {
+//			// Simulates a background job.
+//			ArrayList<NewsBean> list = new ArrayList<NewsBean>();
+//			try {
+//				// 解析网络标签
+//				list = parseList(UrlUtils.YI_DIAN_ZI_XUN);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//			return list.toArray(new NewsBean[0]);
+//		}
+//
+//		@Override
+//		protected void onPostExecute(NewsBean[] result) {
+//			Log.i(TAG, "getMode ===" + gridview.getCurrentMode());
+//			if (gridview.getCurrentMode() == Mode.PULL_FROM_START) {
+//				list.clear();
+//				list.addAll(Arrays.asList(result));
+//			}
+//			searchAdapter.notifyDataSetChanged();
+//			// Call onRefreshComplete when the list has been refreshed.
+//			gridview.onRefreshComplete();
+//			super.onPostExecute(result);
+//		}
+//	}
 
 	public ArrayList<NewsBean> parseList(String href) {
 		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
