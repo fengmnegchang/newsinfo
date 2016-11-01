@@ -63,41 +63,28 @@ public class RightMenuFragment extends BaseV4Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_news_list, null);
-		mPullRefreshListView = (PullToRefreshListView) view
-				.findViewById(R.id.pull_refresh_list);
+		mPullRefreshListView = (PullToRefreshListView) view.findViewById(R.id.pull_refresh_list);
 		mPullRefreshListView.setMode(Mode.BOTH);
-		mRightMenuAdapter = new RightMenuAdapter(getActivity(), newsBeanList,
-				mContent);
+		mRightMenuAdapter = new RightMenuAdapter(getActivity(), newsBeanList, mContent);
 		// Set a listener to be invoked when the list should be refreshed.
-		mPullRefreshListView
-				.setOnRefreshListener(new OnRefreshListener<ListView>() {
-					@Override
-					public void onRefresh(
-							PullToRefreshBase<ListView> refreshView) {
-						String label = DateUtils.formatDateTime(getActivity(),
-								System.currentTimeMillis(),
-								DateUtils.FORMAT_SHOW_TIME
-										| DateUtils.FORMAT_SHOW_DATE
-										| DateUtils.FORMAT_ABBREV_ALL);
-						// Update the LastUpdatedLabel
-						refreshView.getLoadingLayoutProxy()
-								.setLastUpdatedLabel(label);
-						// Do work to refresh the list here.
-						if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
-							doAsync(RightMenuFragment.this,
-									RightMenuFragment.this,
-									RightMenuFragment.this);
-						}
-					}
-				});
+		mPullRefreshListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+				// Update the LastUpdatedLabel
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+				// Do work to refresh the list here.
+				if (mPullRefreshListView.getCurrentMode() == Mode.PULL_FROM_START) {
+					doAsync(RightMenuFragment.this, RightMenuFragment.this, RightMenuFragment.this);
+				}
+			}
+		});
 		mPullRefreshListView.setAdapter(mRightMenuAdapter);
 		mPullRefreshListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent();
 				intent.setClass(getActivity(), WebViewActivity.class);
 				intent.putExtra("NEWSBEAN", newsBeanList.get((int) id));
@@ -142,17 +129,97 @@ public class RightMenuFragment extends BaseV4Fragment {
 	public ArrayList<NewsBean> parseList(String href) {
 		ArrayList<NewsBean> list = new ArrayList<NewsBean>();
 		try {
-			href = ((CommonFragmentActivity) getActivity()).makeURL(href,
-					new HashMap<String, Object>() {
-						{
-						}
-					});
+			href = ((CommonFragmentActivity) getActivity()).makeURL(href, new HashMap<String, Object>() {
+				{
+				}
+			});
 			Log.i("url", "url = " + href);
 
-			Document doc = Jsoup.connect(href)
-					.userAgent(SettingsActivity.userAgent)
-					.cookies(SettingsActivity.getCookies()).timeout(10000)
-					.get();
+			Document doc = Jsoup.connect(href).userAgent(SettingsActivity.userAgent).cookies(SettingsActivity.getCookies()).timeout(10000).get();
+
+			// 图片导航
+			Element sideElement = doc.select("div.side-section").first();
+			Elements saElements = sideElement.select("a");
+			/**
+			 * <div class="side-section"><a href="//mp.yidianzixun.com"
+			 * class="media-ad"><div class="media-ad-front"></div></a> <a
+			 * href="http://toptest.yidianzixun.com/LocalService/computer/"
+			 * target="_blank" class="local-service"><img src=
+			 * "http://staticimg.yidianzixun.com/s/editor/201601/Bn21stoMz.jpg"
+			 * ></a> <a href="/campus" class="campus"><img src=
+			 * "http://static.yidianzixun.com/modules/images/home/campus.png"
+			 * ></a>
+			 */
+			for (int i = 0; i < saElements.size(); i++) {
+				Element imageElement = saElements.get(i);
+				if (imageElement != null && (imageElement.attr("class").equals("media-ad") || imageElement.attr("class").equals("local-service") || imageElement.attr("class").equals("campus"))) {
+					NewsBean bean = new NewsBean();
+					try {
+						String nexthref = null;
+						Element astyle = imageElement.select("a").first();
+						if (imageElement.attr("class").equals("media-ad")) {
+							  nexthref = "http:" + astyle.attr("href").replace("amp;", "");
+						}
+
+						if (imageElement.attr("class").equals("local-service")) {
+							  nexthref =   astyle.attr("href").replace("amp;", "");
+						}
+
+						if (imageElement.attr("class").equals("campus")) {
+							  nexthref = UrlUtils.YI_DIAN_ZI_XUN + astyle.attr("href").replace("amp;", "");
+						}
+						Log.i(TAG, i + "nexthref = " + nexthref);
+						bean.setUrl(nexthref);
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					try {
+						// 图片
+						Elements aElements = imageElement.select("img");
+						String imageurl = aElements.attr("src");
+						if (imageurl != null && imageurl.length() > 0) {
+							Log.i(TAG, i + "=====" + "imageurl=" + imageurl);
+							bean.setImage(imageurl);
+						}
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					bean.setType("image");
+					list.add(bean);
+				}
+			}
+
+			// 今日热搜
+			Element sectionElement = doc.select("div.section-hotwords").first();
+			Elements liElements = sectionElement.select("li");
+			/**
+			 * <li><a href=
+			 * "/home?page=channel&amp;keyword=%E8%9B%87%E7%B2%BE%E7%94%B7%E7%BA%AF%E5%A4%A9%E7%84%B6%E6%97%A7%E7%85%A7"
+			 * style="background-color: rgb(248, 236, 230);">蛇精男纯天然旧照</a></li>
+			 */
+			for (int i = 0; i < liElements.size(); i++) {
+				NewsBean bean = new NewsBean();
+				try {
+					Element imageElement = liElements.get(i);
+					Element astyle = imageElement.select("a").first();
+					String nexthref = UrlUtils.YI_DIAN_ZI_XUN + astyle.attr("href").replace("amp;", "");
+					Log.i(TAG, i + "nexthref = " + nexthref);
+					bean.setUrl(nexthref);
+					String title = imageElement.text();
+					Log.i(TAG, i + "title = " + title);
+					bean.setTitle(title);
+					bean.setType("hot");
+					list.add(bean);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			// 热门频道
 			Element masthead = doc.select("div.hotchannels").first();
 			Elements beanElements = masthead.select("div.hotchannel");
 
@@ -174,8 +241,7 @@ public class RightMenuFragment extends BaseV4Fragment {
 				try {
 					Element imageElement = beanElements.get(i);
 					Element astyle = imageElement.select("a").first();
-					String nexthref = UrlUtils.YI_DIAN_ZI_XUN
-							+ astyle.attr("href");
+					String nexthref = UrlUtils.YI_DIAN_ZI_XUN + astyle.attr("href");
 					Log.i(TAG, i + "nexthref = " + nexthref);
 					bean.setUrl(nexthref);
 				} catch (Exception e) {
@@ -189,11 +255,9 @@ public class RightMenuFragment extends BaseV4Fragment {
 					// 0=====imageurl=background-image:url('http://i1.go2yd.com/image.php?url=http://s.go2yd.com/b/iezaxely_770fd1d1.jpg&type=thumbnail_90x70');
 					// 3=====imageurl=background-image:url('http://i1.go2yd.com/image.php?url=http://s.go2yd.com/b/icn4vll1_cl01d1d1.jpg&type=thumbnail_90x70');
 					String imageurl = aElements.attr("style");
-					if (imageurl != null && imageurl.length() >= 0
-							&& imageurl.contains("background-image")) {
+					if (imageurl != null && imageurl.length() >= 0 && imageurl.contains("background-image")) {
 						Log.i(TAG, i + "=====" + "imageurl=" + imageurl);
-						imageurl = imageurl.replace("background-image:url('",
-								"").replace("');", "");
+						imageurl = imageurl.replace("background-image:url('", "").replace("');", "");
 					}
 					bean.setImage(imageurl);
 
@@ -262,8 +326,7 @@ public class RightMenuFragment extends BaseV4Fragment {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				if (mPullRefreshListView == null || getActivity() == null
-						|| !isVisibleToUser) {
+				if (mPullRefreshListView == null || getActivity() == null || !isVisibleToUser) {
 					initUI(isVisibleToUser);
 				} else {
 					mPullRefreshListView.setRefreshing(true);

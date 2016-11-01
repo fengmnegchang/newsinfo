@@ -100,14 +100,25 @@ public class RightMenuAdapter extends BaseAdapter {
 			view = LayoutInflater.from(mContext).inflate(
 					R.layout.adapter_item_right_menu_image, null);
 			ImageView img_icon = (ImageView) view.findViewById(R.id.img_icon);
-			mImageLoader.DisplayImage(bean.getImage(), img_icon);
+			if(bean.getImage()==null ){
+				mImageLoader.DisplayImage("http://staticimg.yidianzixun.com/modules/images/home/media_new.png?t=2016092311", img_icon);
+			}else{
+				mImageLoader.DisplayImage(bean.getImage(), img_icon);
+			}
 		} else if (bean.getType().equals("hot")) {
 			view = LayoutInflater.from(mContext).inflate(
 					R.layout.adapter_item_right_menu_hot, null);
 			TextView txt_left = (TextView) view.findViewById(R.id.txt_left);
 			TextView txt_right = (TextView) view.findViewById(R.id.txt_right);
-			txt_left.setText(bean.getTitle());
-			txt_right.setText(bean.getTitle());
+			if(position%2==0){
+				txt_left.setText(bean.getTitle());
+				txt_right.setVisibility(View.GONE);
+				txt_left.setVisibility(View.VISIBLE);
+			}else{
+				txt_right.setText(bean.getTitle());
+				txt_right.setVisibility(View.VISIBLE);
+				txt_left.setVisibility(View.GONE);
+			}
 		} else if (bean.getType().equals("pindao")) {
 			view = LayoutInflater.from(mContext).inflate(
 					R.layout.adapter_item_right_menu_pindao, null);

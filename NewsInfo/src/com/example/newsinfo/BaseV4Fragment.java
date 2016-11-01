@@ -160,7 +160,7 @@ Response.Listener<JSONObject>,Response.ErrorListener{
 	 * @see com.example.andenginetask.Callback#onCallback(java.lang.Object)
 	 */
 	@Override
-	public void onCallback(CommonT pCallbackValue) {
+	public void onCallback(CommonT result) {
 		// TODO Auto-generated method stub
 
 	}

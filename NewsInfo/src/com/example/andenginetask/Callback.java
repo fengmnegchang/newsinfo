@@ -28,5 +28,5 @@ public interface Callback<T> {
 	 * 请求返回 同于AsyncTask的onPostExecute
 	 * @param pCallbackValue
 	 */
-	public void onCallback(final T pCallbackValue);
+	public void onCallback(final T result);
 }
