@@ -55,7 +55,9 @@ public class MainTabActivity extends  TabActivity implements  OnCheckedChangeLis
 		String tabs[] = TabDb.getTabsTxt();
 		for (int i = 0; i < tabs.length; i++) {
 			TabSpec tabSpec = tabHost.newTabSpec(tabs[i]).setIndicator(getTabView(i));
-			tabSpec.setContent(new Intent(this,  TabDb.getActivitys()[i])).setIndicator(getTabView(i));
+			Intent intent = new Intent(this,  TabDb.getActivitys()[i]);
+			intent.putExtra("TITLE_TAB", tabs[i]);
+			tabSpec.setContent(intent).setIndicator(getTabView(i));
 			tabHost.addTab(tabSpec);
 			tabHost.setTag(i);
 		}
@@ -92,6 +94,9 @@ public class MainTabActivity extends  TabActivity implements  OnCheckedChangeLis
 			break;
 		case R.id.radio4:
 			tabHost.setCurrentTab(3);
+			break;
+		case R.id.radio5:
+			tabHost.setCurrentTab(4);
 			break;
 		default:
 			break;

@@ -58,5 +58,10 @@
             style="@style/tab_child"
             android:drawableTop="@drawable/selector_tab_main2"
             android:text="频道" />
+         <RadioButton
+            android:id="@+id/radio5"
+            style="@style/tab_child"
+            android:drawableTop="@drawable/selector_tab_main2"
+            android:text="订阅" />
     </RadioGroup>
 </RelativeLayout>
