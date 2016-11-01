@@ -158,15 +158,15 @@ public class RightMenuFragment extends BaseV4Fragment {
 						String nexthref = null;
 						Element astyle = imageElement.select("a").first();
 						if (imageElement.attr("class").equals("media-ad")) {
-							  nexthref = "http:" + astyle.attr("href").replace("amp;", "");
+							nexthref = "http:" + astyle.attr("href").replace("amp;", "");
 						}
 
 						if (imageElement.attr("class").equals("local-service")) {
-							  nexthref =   astyle.attr("href").replace("amp;", "");
+							nexthref = astyle.attr("href").replace("amp;", "");
 						}
 
 						if (imageElement.attr("class").equals("campus")) {
-							  nexthref = UrlUtils.YI_DIAN_ZI_XUN + astyle.attr("href").replace("amp;", "");
+							nexthref = UrlUtils.YI_DIAN_ZI_XUN + astyle.attr("href").replace("amp;", "");
 						}
 						Log.i(TAG, i + "nexthref = " + nexthref);
 						bean.setUrl(nexthref);
@@ -235,6 +235,8 @@ public class RightMenuFragment extends BaseV4Fragment {
 			 * </p>
 			 * </div></div>
 			 */
+
+			
 			// 解析文件
 			for (int i = 0; i < beanElements.size(); i++) {
 				NewsBean bean = new NewsBean();
@@ -288,10 +290,28 @@ public class RightMenuFragment extends BaseV4Fragment {
 				}
 
 				try {
+					/**
+					 * <a href="/home?page=channel&amp;id=u13537">芈月传</a></h3><a
+					 * href="#" data-cname="芈月传" data-cnid="5127697413"
+					 * class="unsubscribe">已订</a>
+					 * <p class="bookcount">
+					 * 18.7万人订阅
+					 * </p>
+					 * </div>
+					 */
 					// 其他
 					Element otherElement = beanElements.get(i);
 					Element otherE = otherElement.select("a.subscribe").first();
-					String other = otherE.text();
+					String other;
+					if(otherE==null){
+						//已订
+						Element unsubscribeE = otherElement.select("a.unsubscribe").first();
+						other = unsubscribeE.text();
+						bean.setId(unsubscribeE.attr("data-cnid"));
+					}else{
+						//订阅
+						other = otherE.text();
+					}
 					Log.i(TAG, i + "other = " + other);
 					bean.setOther(other);
 				} catch (Exception e) {

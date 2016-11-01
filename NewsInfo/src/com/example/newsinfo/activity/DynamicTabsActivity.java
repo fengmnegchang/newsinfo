@@ -20,8 +20,7 @@ import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.CommonT;
 import com.example.newsinfo.bean.NewsBean;
-import com.example.newsinfo.fragment.HomeFragment;
-import com.example.newsinfo.fragment.NewsFragment;
+import com.example.newsinfo.fragment.RightMenuFragment;
 import com.example.newsinfo.indicator.TabPageIndicator;
 
 /**
@@ -103,18 +102,18 @@ public class DynamicTabsActivity extends CommonFragmentActivity {
 
 		@Override
 		public Fragment getItem(int position) {
-			if ("首页".equals(channelList.get(position).getTitle())) {
-				return HomeFragment.newInstance(channelList.get(position)
-						.getTitle(), channelList.get(position).getUrl(),
-						channelList.get(position).getJsondataurl());
-			} else {
-				return NewsFragment.newInstance(channelList.get(position)
-						.getTitle(), channelList.get(position).getUrl(),
-						channelList.get(position).getJsondataurl());
-			}
+//			if ("首页".equals(channelList.get(position).getTitle())) {
+//				return HomeFragment.newInstance(channelList.get(position)
+//						.getTitle(), channelList.get(position).getUrl(),
+//						channelList.get(position).getJsondataurl());
+//			} else {
+//				return NewsFragment.newInstance(channelList.get(position)
+//						.getTitle(), channelList.get(position).getUrl(),
+//						channelList.get(position).getJsondataurl());
+//			}
 
-//			return RightMenuFragment.newInstance(channelList.get(position)
-//					.getTitle(), channelList.get(position).getUrl());
+			return RightMenuFragment.newInstance(channelList.get(position)
+					.getTitle(), channelList.get(position).getUrl());
 		}
 
 		@Override
