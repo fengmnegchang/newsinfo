@@ -564,6 +564,20 @@ public final class HomeFragment extends BaseV4Fragment implements
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					
+					try {
+						// data-docid
+						Element idElement = beanElements.get(i);
+						Element idE = idElement.select("div.slide-like").first();
+						String id = idE.attr("data-docid");
+						String datatype = idE.attr("data-datatype");
+						Log.i(TAG, i + "id = " + id+";datatype="+datatype);
+						bean.setDocid(id);
+						bean.setDtype(datatype);
+						bean.setPath("interact|like-news");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					list.add(bean);
 				}
 			}

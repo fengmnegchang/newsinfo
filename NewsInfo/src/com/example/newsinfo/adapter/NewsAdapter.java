@@ -129,25 +129,7 @@ public class NewsAdapter extends BaseAdapter {
 			img_collection.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					// path:interact|like-news
-					// docid:V_00VXmVLl
-					// data_type:0
-					// http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=V_00VXmVLl&data_type=0
-					String urlget = "http://www.yidianzixun.com/api/q/?path=interact|like-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
-					RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-					JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
-							new Response.Listener<JSONObject>() {
-								@Override
-								public void onResponse(JSONObject response) {
-									System.out.println(response);
-								}
-							}, new Response.ErrorListener() {
-								@Override
-								public void onErrorResponse(VolleyError error) {
-									System.out.println(error);
-								}
-							});
-					requestQueue.add(jsonObjectRequest);
+					colletion(bean);
 				}
 			});
 		} else {
@@ -199,25 +181,7 @@ public class NewsAdapter extends BaseAdapter {
 					img_collection.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							// path:interact|like-news
-							// docid:V_00VXmVLl
-							// data_type:0
-							// http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=V_00VXmVLl&data_type=0
-							String urlget = "http://www.yidianzixun.com/api/q/?path=interact|like-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
-							RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-							JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
-									new Response.Listener<JSONObject>() {
-										@Override
-										public void onResponse(JSONObject response) {
-											System.out.println(response);
-										}
-									}, new Response.ErrorListener() {
-										@Override
-										public void onErrorResponse(VolleyError error) {
-											System.out.println(error);
-										}
-									});
-							requestQueue.add(jsonObjectRequest);
+							colletion(bean);
 						}
 					});
 				} catch (Exception e) {
@@ -250,31 +214,38 @@ public class NewsAdapter extends BaseAdapter {
 				img_collection.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						// path:interact|like-news
-						// docid:V_00VXmVLl
-						// data_type:0
-						// http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=V_00VXmVLl&data_type=0
-						String urlget = "http://www.yidianzixun.com/api/q/?path=interact|like-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
-						RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-						JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
-								new Response.Listener<JSONObject>() {
-									@Override
-									public void onResponse(JSONObject response) {
-										System.out.println(response);
-									}
-								}, new Response.ErrorListener() {
-									@Override
-									public void onErrorResponse(VolleyError error) {
-										System.out.println(error);
-									}
-								});
-						requestQueue.add(jsonObjectRequest);
+						colletion(bean);
 					}
 				});
 
 			}
 		}
 		return view;
+	}
+	
+	/**
+	 * 收藏
+	 */
+	protected void colletion(NewsBean bean){
+		// path:interact|like-news
+		// docid:V_00VXmVLl
+		// data_type:0
+		// http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=V_00VXmVLl&data_type=0
+		String urlget = "http://www.yidianzixun.com/api/q/?path=interact|like-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
+		RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						System.out.println(response);
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						System.out.println(error);
+					}
+				});
+		requestQueue.add(jsonObjectRequest);
 	}
 
 }
