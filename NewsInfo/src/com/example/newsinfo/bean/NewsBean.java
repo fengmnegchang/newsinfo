@@ -72,7 +72,13 @@ public class NewsBean implements Serializable{
     private String name;
     private String type;
     
-    
+    //收藏
+    //path:interact|like-news
+	//docid:V_00VXmVLl
+	//data_type:0
+    private String path;
+    private String docid;
+    private String dtype;
 	
 	public ArrayList<String> getImage_urls() {
 		return image_urls;
@@ -193,6 +199,32 @@ public class NewsBean implements Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getDocid() {
+		return docid;
+	}
+
+	public void setDocid(String docid) {
+		this.docid = docid;
+	}
+
+	public String getDtype() {
+		return dtype;
+	}
+
+	public void setDtype(String dtype) {
+		this.dtype = dtype;
+	}
+
+ 
 	
 	
 

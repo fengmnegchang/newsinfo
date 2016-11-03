@@ -377,6 +377,19 @@ public class NewsFragment extends BaseV4Fragment {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					try {
+						// data-docid
+						Element idElement = beanElements.get(i);
+						Element idE = idElement.select("div.slide-like").first();
+						String id = idE.attr("data-docid");
+						String datatype = idE.attr("data-datatype");
+						Log.i(TAG, i + "id = " + id+";datatype="+datatype);
+						bean.setDocid(id);
+						bean.setDtype(datatype);
+						bean.setPath("interact|like-news");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					list.add(bean);
 				}
 			} else {
@@ -462,6 +475,47 @@ public class NewsFragment extends BaseV4Fragment {
 						String other = otherE.text();
 						Log.i(TAG, i + "other = " + other);
 						bean.setOther(other);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					/**
+					 * 
+					 * <div data-docid="0Eq56xfT" class="article"><a style=
+					 * "background-image:url('http://i1.go2yd.com/image.php?url=http://si1.go2yd.com/get-image/08EI8cONL6m&amp;type=thumbnail_200x140');"
+					 * href="/home?page=article&amp;id=0Eq56xfT&amp;up=143"
+					 * target="_blank" class="article-img"></a><div
+					 * class="article-nofloat "><h3><a
+					 * href="/home?page=article&amp;id=0Eq56xfT&amp;up=143"
+					 * target="_blank">乐视被指拖欠供货商货款致股价大跌 回应：传言不实</a></h3>
+					 * <p>
+					 * 昨日乐视网午后暴跌7.49%，有媒体猜测此次大跳水和某家大型机构在不计成本地的抛售有关，
+					 * 有传闻指出乐视网拖欠供应商巨额货
+					 * </p>
+					 * <div class="article-info"><div class="article-opts"><div
+					 * data-docid="0Eq56xfT" data-datatype="0"
+					 * class="slide-del"></div><div data-docid="0Eq56xfT"
+					 * data-datatype="0" class="slide-like ">8</div><a href=
+					 * "/home?page=article&amp;id=0Eq56xfT&amp;up=143#comment"
+					 * target="_blank" class="slide-comment">5</a><div
+					 * data-sharetitle="乐视被指拖欠供货商货款致股价大跌 回应：传言不实"
+					 * data-shareimage="" data-shareurl=
+					 * "http://www.yidianzixun.com/article/0Eq56xfT?s=4"
+					 * class="slide-share">转发</div></div><span
+					 * class="article-source">凤凰科技</span><span
+					 * class="article-date">2016-11-03 17:31:42</span><div
+					 * class="clear"></div></div></div><div
+					 * class="clear"></div></div>
+					 */
+					try {
+						// data-docid
+						Element idElement = beanElements.get(i);
+						Element idE = idElement.select("div.slide-like").first();
+						String id = idE.attr("data-docid");
+						String datatype = idE.attr("data-datatype");
+						Log.i(TAG, i + "id = " + id+";datatype="+datatype);
+						bean.setDocid(id);
+						bean.setDtype(datatype);
+						bean.setPath("interact|like-news");
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

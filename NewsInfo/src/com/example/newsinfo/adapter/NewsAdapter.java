@@ -13,21 +13,33 @@ package com.example.newsinfo.adapter;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.newsinfo.R;
+import com.example.newsinfo.activity.SettingsActivity;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.imageloader.ImageLoader;
 
 /**
  ***************************************************************************************************************************************************************************** 
  * 子tab 适配器
+ * 
  * @author :fengguangjing
  * @createTime:2016-10-18下午3:45:48
  * @version:4.2.4
@@ -91,20 +103,53 @@ public class NewsAdapter extends BaseAdapter {
 	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		NewsBean bean = (NewsBean) getItem(position);
+		final NewsBean bean = (NewsBean) getItem(position);
 		View view;
+
+		// 收藏
+		// path:interact|like-news
+		// docid:V_00VXmVLl
+		// data_type:0
+
+		// http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=V_00VXmVLl&data_type=0
+
 		if (mContent.equals("美女")) {
 			view = LayoutInflater.from(mContext).inflate(R.layout.adapter_item_meinv_news, null);
 			ImageView img_icon = (ImageView) view.findViewById(R.id.img_icon);
 			TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
+			ImageView img_collection = (ImageView) view.findViewById(R.id.img_collection);
 			txt_other.setText(bean.getOther());
 			if (bean.getImage_urls().size() > 0) {
 				if (bean.getImage_urls().get(0).contains("http:") || bean.getImage_urls().get(0).contains("https:")) {
 					mImageLoader.DisplayImage(bean.getImage_urls().get(0), img_icon);
-				} 
+				}
 			} else {
 				mImageLoader.DisplayImage(bean.getImage(), img_icon);
 			}
+			img_collection.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// path:interact|like-news
+					// docid:V_00VXmVLl
+					// data_type:0
+					// http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=V_00VXmVLl&data_type=0
+					String urlget = "http://www.yidianzixun.com/api/q/?path=interact|like-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
+					RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+					JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
+							new Response.Listener<JSONObject>() {
+								@Override
+								public void onResponse(JSONObject response) {
+									System.out.println(response);
+								}
+							}, new Response.ErrorListener() {
+								@Override
+								public void onErrorResponse(VolleyError error) {
+									System.out.println(error);
+								}
+							});
+					requestQueue.add(jsonObjectRequest);
+				}
+			});
 		} else {
 			if (bean.getImage_urls().size() > 1) {
 				view = LayoutInflater.from(mContext).inflate(R.layout.adapter_item_imgs_news, null);
@@ -114,6 +159,7 @@ public class NewsAdapter extends BaseAdapter {
 				TextView txt_title = (TextView) view.findViewById(R.id.txt_title);
 				TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
 				TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
+				ImageView img_collection = (ImageView) view.findViewById(R.id.img_collection);
 
 				txt_title.setText(bean.getTitle());
 				txt_content.setText(bean.getSummary());
@@ -149,6 +195,31 @@ public class NewsAdapter extends BaseAdapter {
 						img_icon2.setVisibility(View.INVISIBLE);
 						img_icon1.setVisibility(View.INVISIBLE);
 					}
+					
+					img_collection.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							// path:interact|like-news
+							// docid:V_00VXmVLl
+							// data_type:0
+							// http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=V_00VXmVLl&data_type=0
+							String urlget = "http://www.yidianzixun.com/api/q/?path=interact|like-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
+							RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+							JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
+									new Response.Listener<JSONObject>() {
+										@Override
+										public void onResponse(JSONObject response) {
+											System.out.println(response);
+										}
+									}, new Response.ErrorListener() {
+										@Override
+										public void onErrorResponse(VolleyError error) {
+											System.out.println(error);
+										}
+									});
+							requestQueue.add(jsonObjectRequest);
+						}
+					});
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -159,6 +230,7 @@ public class NewsAdapter extends BaseAdapter {
 				TextView txt_title = (TextView) view.findViewById(R.id.txt_title);
 				TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
 				TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
+				ImageView img_collection = (ImageView) view.findViewById(R.id.img_collection);
 
 				txt_title.setText(bean.getTitle());
 				txt_content.setText(bean.getSummary());
@@ -175,6 +247,31 @@ public class NewsAdapter extends BaseAdapter {
 				} else {
 					img_icon.setVisibility(View.GONE);
 				}
+				img_collection.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// path:interact|like-news
+						// docid:V_00VXmVLl
+						// data_type:0
+						// http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=V_00VXmVLl&data_type=0
+						String urlget = "http://www.yidianzixun.com/api/q/?path=interact|like-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
+						RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+						JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
+								new Response.Listener<JSONObject>() {
+									@Override
+									public void onResponse(JSONObject response) {
+										System.out.println(response);
+									}
+								}, new Response.ErrorListener() {
+									@Override
+									public void onErrorResponse(VolleyError error) {
+										System.out.println(error);
+									}
+								});
+						requestQueue.add(jsonObjectRequest);
+					}
+				});
+
 			}
 		}
 		return view;

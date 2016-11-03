@@ -15,11 +15,24 @@
         android:layout_marginRight="5dp"
         android:scaleType="fitCenter" />
 
+    
+    <ImageView
+        android:id="@+id/img_collection"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/selector_tab_main1"
+        android:scaleType="fitXY"
+        android:layout_below="@+id/img_icon"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        />
+    
     <TextView
         android:id="@+id/txt_other"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/img_icon"
+        android:layout_toRightOf="@+id/img_collection"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:text="拍者2016-10-18 14:11:00"

@@ -62,11 +62,23 @@
         android:text="10月18日下午，王宝强起诉马蓉离婚，以及马蓉起诉王宝强名誉侵权两个案件相继在朝阳法院开庭审理。王宝强不仅提出要求孩子抚"
         android:textSize="14sp" />
 
+    <ImageView
+        android:id="@+id/img_collection"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/selector_tab_main1"
+        android:scaleType="fitXY"
+        android:layout_below="@+id/txt_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        />
+    
     <TextView
         android:id="@+id/txt_other"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_below="@+id/txt_content"
+        android:layout_toRightOf="@+id/img_collection"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:textColor="@color/text_color_999"
