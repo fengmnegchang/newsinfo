@@ -66,8 +66,21 @@
         android:id="@+id/img_collection"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/selector_tab_main1"
+        android:src="@drawable/share_interest_h"
         android:scaleType="fitXY"
+        android:layout_below="@+id/txt_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        />
+    
+    
+    <ImageView
+        android:id="@+id/img_dislike"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/popup_beauty_close"
+        android:scaleType="fitXY"
+        android:layout_toRightOf="@+id/img_collection"
         android:layout_below="@+id/txt_content"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
@@ -78,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_below="@+id/txt_content"
-        android:layout_toRightOf="@+id/img_collection"
+        android:layout_toRightOf="@+id/img_dislike"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:textColor="@color/text_color_999"

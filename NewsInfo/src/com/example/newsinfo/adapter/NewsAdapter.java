@@ -118,6 +118,8 @@ public class NewsAdapter extends BaseAdapter {
 			ImageView img_icon = (ImageView) view.findViewById(R.id.img_icon);
 			TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
 			ImageView img_collection = (ImageView) view.findViewById(R.id.img_collection);
+			ImageView img_dislike = (ImageView) view.findViewById(R.id.img_dislike);
+			
 			txt_other.setText(bean.getOther());
 			if (bean.getImage_urls().size() > 0) {
 				if (bean.getImage_urls().get(0).contains("http:") || bean.getImage_urls().get(0).contains("https:")) {
@@ -132,6 +134,12 @@ public class NewsAdapter extends BaseAdapter {
 					colletion(bean);
 				}
 			});
+			img_dislike.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dislike(bean);
+				}
+			});
 		} else {
 			if (bean.getImage_urls().size() > 1) {
 				view = LayoutInflater.from(mContext).inflate(R.layout.adapter_item_imgs_news, null);
@@ -142,7 +150,8 @@ public class NewsAdapter extends BaseAdapter {
 				TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
 				TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
 				ImageView img_collection = (ImageView) view.findViewById(R.id.img_collection);
-
+				ImageView img_dislike = (ImageView) view.findViewById(R.id.img_dislike);
+				
 				txt_title.setText(bean.getTitle());
 				txt_content.setText(bean.getSummary());
 				txt_other.setText(bean.getOther());
@@ -184,6 +193,12 @@ public class NewsAdapter extends BaseAdapter {
 							colletion(bean);
 						}
 					});
+					img_dislike.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							dislike(bean);
+						}
+					});
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -195,7 +210,8 @@ public class NewsAdapter extends BaseAdapter {
 				TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
 				TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
 				ImageView img_collection = (ImageView) view.findViewById(R.id.img_collection);
-
+				ImageView img_dislike = (ImageView) view.findViewById(R.id.img_dislike);
+				
 				txt_title.setText(bean.getTitle());
 				txt_content.setText(bean.getSummary());
 				txt_other.setText(bean.getOther());
@@ -217,6 +233,12 @@ public class NewsAdapter extends BaseAdapter {
 						colletion(bean);
 					}
 				});
+				img_dislike.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dislike(bean);
+					}
+				});
 
 			}
 		}
@@ -232,6 +254,27 @@ public class NewsAdapter extends BaseAdapter {
 		// data_type:0
 		// http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=V_00VXmVLl&data_type=0
 		String urlget = "http://www.yidianzixun.com/api/q/?path=interact|like-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
+		RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						System.out.println(response);
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						System.out.println(error);
+					}
+				});
+		requestQueue.add(jsonObjectRequest);
+	}
+	
+	/**
+	 * http://www.yidianzixun.com/api/q/?path=interact|dislike-news&docid=0Eqcp8xD&data_type=0
+	 */
+	protected void dislike(NewsBean bean){
+		String urlget = "http://www.yidianzixun.com/api/q/?path=interact|dislike-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
 		RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
 				new Response.Listener<JSONObject>() {
