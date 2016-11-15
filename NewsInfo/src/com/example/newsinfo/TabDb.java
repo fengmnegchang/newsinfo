@@ -11,6 +11,7 @@
  */
 package com.example.newsinfo;
 
+import com.example.newsinfo.activity.AVActivity;
 import com.example.newsinfo.activity.DynamicTabsActivity;
 import com.example.newsinfo.activity.ManActivity;
 import com.example.newsinfo.activity.PinDaoTabsActivity;
@@ -29,15 +30,15 @@ import com.example.newsinfo.activity.YiDianZiXunActivity;
  */
 public class TabDb {
 	public static String[] getTabsTxt(){  
-        String[] tabs={"首页","一点资讯","男人装","频道","订阅"};  
+        String[] tabs={"首页","一点资讯","男人装","频道","订阅","AV"};  
         return tabs;  
     }  
     public static int[] getTabsImg(){  
-        int[] ids={R.drawable.returnhome,R.drawable.tab_app_new,R.drawable.tab_app_new,R.drawable.tab_app_new,R.drawable.tab_app_new};  
+        int[] ids={R.drawable.returnhome,R.drawable.tab_app_new,R.drawable.tab_app_new,R.drawable.tab_app_new,R.drawable.tab_app_new,R.drawable.tab_app_new};  
         return ids;  
     }  
     public static int[] getTabsImgLight(){  
-        int[] ids={R.drawable.returnhome_h,R.drawable.tab_app_new_h,R.drawable.tab_app_new_h,R.drawable.tab_app_new_h,R.drawable.tab_app_new_h};  
+        int[] ids={R.drawable.returnhome_h,R.drawable.tab_app_new_h,R.drawable.tab_app_new_h,R.drawable.tab_app_new_h,R.drawable.tab_app_new_h,R.drawable.tab_app_new_h};  
         return ids;  
     }  
 //    public static Class[] getFragments(){  
@@ -45,7 +46,7 @@ public class TabDb {
 //        return clz;  
 //    }  
     public static Class[] getActivitys(){  
-        Class[] clz={DynamicTabsActivity.class,YiDianZiXunActivity.class,ManActivity.class,PinDaoTabsActivity.class,DynamicTabsActivity.class};  
+        Class[] clz={DynamicTabsActivity.class,YiDianZiXunActivity.class,ManActivity.class,PinDaoTabsActivity.class,DynamicTabsActivity.class,AVActivity.class};  
         return clz;  
     } 
 }
