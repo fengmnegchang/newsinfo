@@ -88,7 +88,7 @@ public class AVActivity extends CommonFragmentActivity {
 		webSettings.setLoadWithOverviewMode(true);
 		webview.setWebViewClient(mWebViewClientBase);
 		webview.setWebChromeClient(mWebChromeClientBase);
-//		webSettings.setUserAgentString(UrlUtils.userAgent);
+		webSettings.setUserAgentString(UrlUtils.userAgent);
 		webview.loadUrl(UrlUtils.AV);
 	}
 

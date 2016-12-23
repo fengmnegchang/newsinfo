@@ -11,9 +11,11 @@
  */
 package com.example.newsinfo.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -24,6 +26,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebSettings.LayoutAlgorithm;
 import android.widget.TextView;
 
 import com.example.newsinfo.CommonFragmentActivity;
@@ -84,7 +87,7 @@ public class WebViewActivity extends CommonFragmentActivity {
 	/* (non-Javadoc)
 	 * @see com.example.newsinfo.CommonActivity#initValue()
 	 */
-	@Override
+	@SuppressLint("NewApi") @Override
 	protected void initValue() {
 		// TODO Auto-generated method stub
 		super.initValue();
@@ -96,9 +99,20 @@ public class WebViewActivity extends CommonFragmentActivity {
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setSupportZoom(true);
 		webSettings.setUseWideViewPort(true);
+		// 设置出现缩放工具
+		webSettings.setBuiltInZoomControls(true);
+		// 扩大比例的缩放
+		webSettings.setUseWideViewPort(true);
+		// 自适应屏幕
+		if (Build.VERSION.SDK_INT >= 21) {
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW );
+        }
+		webSettings.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+		webSettings.setLoadWithOverviewMode(true);
+		
 		webview.setWebViewClient(mWebViewClientBase);
 		webview.setWebChromeClient(mWebChromeClientBase);
-//		webSettings.setUserAgentString(UrlUtils.userAgent);
+		webSettings.setUserAgentString(UrlUtils.userAgent);
 		
 		setRightNone();
 		if (bean != null) {
