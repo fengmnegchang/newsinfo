@@ -95,12 +95,6 @@ public class MainTabActivity extends  TabActivity implements  OnCheckedChangeLis
 		case R.id.radio4:
 			tabHost.setCurrentTab(3);
 			break;
-		case R.id.radio5:
-			tabHost.setCurrentTab(4);
-			break;
-		case R.id.radio6:
-			tabHost.setCurrentTab(5);
-			break;
 		default:
 			break;
 		}
