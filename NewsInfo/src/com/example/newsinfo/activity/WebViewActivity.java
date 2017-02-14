@@ -12,7 +12,9 @@
 package com.example.newsinfo.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -24,15 +26,16 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
+import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.webkit.WebSettings.LayoutAlgorithm;
 import android.widget.TextView;
 
 import com.example.newsinfo.CommonFragmentActivity;
 import com.example.newsinfo.R;
 import com.example.newsinfo.UrlUtils;
 import com.example.newsinfo.bean.NewsBean;
+import com.example.newsinfo.utils.DownLoadAsyncTask;
 
 /**
  ***************************************************************************************************************************************************************************** 
@@ -135,6 +138,38 @@ public class WebViewActivity extends CommonFragmentActivity {
 			}
 		}
 		
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.example.newsinfo.CommonFragmentActivity#bindEvent()
+	 */
+	@Override
+	protected void bindEvent() {
+		// TODO Auto-generated method stub
+		super.bindEvent();
+		webview.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+            	WebView.HitTestResult result = ((WebView) v).getHitTestResult();
+            	int type = result.getType();
+            	switch (type) {
+				case WebView.HitTestResult.IMAGE_TYPE:
+					final String imgurl = result.getExtra();
+					AlertDialog.Builder builder = new AlertDialog.Builder(WebViewActivity.this);  
+		               builder.setItems(new String[]{WebViewActivity.this.getResources().getString(R.string.save_picture)}, new DialogInterface.OnClickListener() {  
+		                   @Override  
+		                   public void onClick(DialogInterface dialog, int which) {  
+		                       new DownLoadAsyncTask(WebViewActivity.this,imgurl).execute();  
+		                   }  
+		               });  
+		               builder.show();  
+					break;
+				default:
+					break;
+				}
+				return false;
+                }
+            });
 	}
 
 	private WebViewClientBase mWebViewClientBase = new WebViewClientBase();
