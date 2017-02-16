@@ -264,5 +264,12 @@ public class WebViewActivity extends CommonFragmentActivity {
 			break;
 		}
 	}
+	
+	public  static void startWebViewActivity(Context context,NewsBean bean){
+		Intent intent = new Intent();
+		intent.putExtra("NEWSBEAN", bean);
+		intent.setClass(context, WebViewActivity.class);
+		context.startActivity(intent);
+	}
 
 }

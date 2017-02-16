@@ -16,11 +16,14 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,8 +36,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.newsinfo.R;
 import com.example.newsinfo.activity.SettingsActivity;
+import com.example.newsinfo.activity.WebViewActivity;
 import com.example.newsinfo.bean.NewsBean;
 import com.example.newsinfo.imageloader.ImageLoader;
+import com.example.newsinfo.utils.DownLoadAsyncTask;
 
 /**
  ***************************************************************************************************************************************************************************** 
@@ -119,7 +124,33 @@ public class NewsAdapter extends BaseAdapter {
 			TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
 			ImageView img_collection = (ImageView) view.findViewById(R.id.img_collection);
 			ImageView img_dislike = (ImageView) view.findViewById(R.id.img_dislike);
-			
+
+			img_icon.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					NewsBean imgbean = new NewsBean();
+					imgbean.setUrl(bean.getImage_urls().get(0));
+					WebViewActivity.startWebViewActivity(mContext, imgbean);
+				}
+			});
+
+			img_icon.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					final String imgurl = bean.getImage_urls().get(0);
+					AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+					builder.setItems(new String[] { mContext.getResources().getString(R.string.save_picture) }, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new DownLoadAsyncTask(mContext, imgurl).execute();
+						}
+					});
+					builder.show();
+
+					return false;
+				}
+			});
 			txt_other.setText(bean.getOther());
 			if (bean.getImage_urls().size() > 0) {
 				if (bean.getImage_urls().get(0).contains("http:") || bean.getImage_urls().get(0).contains("https:")) {
@@ -151,7 +182,7 @@ public class NewsAdapter extends BaseAdapter {
 				TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
 				ImageView img_collection = (ImageView) view.findViewById(R.id.img_collection);
 				ImageView img_dislike = (ImageView) view.findViewById(R.id.img_dislike);
-				
+
 				txt_title.setText(bean.getTitle());
 				txt_content.setText(bean.getSummary());
 				txt_other.setText(bean.getOther());
@@ -186,7 +217,7 @@ public class NewsAdapter extends BaseAdapter {
 						img_icon2.setVisibility(View.INVISIBLE);
 						img_icon1.setVisibility(View.INVISIBLE);
 					}
-					
+
 					img_collection.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -211,7 +242,7 @@ public class NewsAdapter extends BaseAdapter {
 				TextView txt_other = (TextView) view.findViewById(R.id.txt_other);
 				ImageView img_collection = (ImageView) view.findViewById(R.id.img_collection);
 				ImageView img_dislike = (ImageView) view.findViewById(R.id.img_dislike);
-				
+
 				txt_title.setText(bean.getTitle());
 				txt_content.setText(bean.getSummary());
 				txt_other.setText(bean.getOther());
@@ -244,50 +275,49 @@ public class NewsAdapter extends BaseAdapter {
 		}
 		return view;
 	}
-	
+
 	/**
 	 * 收藏
 	 */
-	protected void colletion(NewsBean bean){
+	protected void colletion(NewsBean bean) {
 		// path:interact|like-news
 		// docid:V_00VXmVLl
 		// data_type:0
 		// http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=V_00VXmVLl&data_type=0
-		String urlget = "http://www.yidianzixun.com/api/q/?path=interact|like-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
+		String urlget = "http://www.yidianzixun.com/api/q/?path=interact|like-news&docid=" + bean.getDocid() + "&data_type=" + bean.getDtype();
 		RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
-				new Response.Listener<JSONObject>() {
-					@Override
-					public void onResponse(JSONObject response) {
-						System.out.println(response);
-					}
-				}, new Response.ErrorListener() {
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						System.out.println(error);
-					}
-				});
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null, new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				System.out.println(response);
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				System.out.println(error);
+			}
+		});
 		requestQueue.add(jsonObjectRequest);
 	}
-	
+
 	/**
-	 * http://www.yidianzixun.com/api/q/?path=interact|dislike-news&docid=0Eqcp8xD&data_type=0
+	 * http://www.yidianzixun.com/api/q/?path=interact|dislike-news&docid=
+	 * 0Eqcp8xD&data_type=0
 	 */
-	protected void dislike(NewsBean bean){
-		String urlget = "http://www.yidianzixun.com/api/q/?path=interact|dislike-news&docid="+bean.getDocid()+"&data_type="+bean.getDtype();
+	protected void dislike(NewsBean bean) {
+		String urlget = "http://www.yidianzixun.com/api/q/?path=interact|dislike-news&docid=" + bean.getDocid() + "&data_type=" + bean.getDtype();
 		RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null,
-				new Response.Listener<JSONObject>() {
-					@Override
-					public void onResponse(JSONObject response) {
-						System.out.println(response);
-					}
-				}, new Response.ErrorListener() {
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						System.out.println(error);
-					}
-				});
+		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlget, SettingsActivity.getHeaders(), null, new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				System.out.println(response);
+			}
+		}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				System.out.println(error);
+			}
+		});
 		requestQueue.add(jsonObjectRequest);
 	}
 
